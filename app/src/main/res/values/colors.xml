@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="blue_primary">#4A90E2</color>
+    <color name="blue_secondary">#357ABD</color>
+
+    <!-- Background -->
+    <color name="background_dark">#1A1A1A</color>
+    <color name="background_card">#2A2A2A</color>
+
+    <!-- Text Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="gray_light">#CCCCCC</color>
+    <color name="gray_dark">#404040</color>
+
+    <!-- Status Colors -->
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="orange">#FF9800</color>
+    <color name="yellow">#FFC107</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
 </resources>
