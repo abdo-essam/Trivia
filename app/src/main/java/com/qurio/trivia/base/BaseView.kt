@@ -1,4 +1,8 @@
 package com.qurio.trivia.base
 
-class BaseView {
+interface BaseView {
+    fun showLoading()
+    fun hideLoading()
+    fun showError(message: String)
+    fun showNoConnection()
 }
