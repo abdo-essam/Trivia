@@ -10,13 +10,13 @@
         android:pathData="M35,30L85,30L85,85L35,85Z"
         android:fillColor="@color/white"/>
     <circle
-        android:cx="50"
-        android:cy="50"
-        android:radius="3"
+        android:centerX="50"
+        android:centerY="50"
+        android:radius="3dp"
         android:fillColor="@color/background_dark"/>
     <circle
-        android:cx="70"
-        android:cy="50"
-        android:radius="3"
+        android:centerX="70"
+        android:centerY="50"
+        android:radius="3dp"
         android:fillColor="@color/background_dark"/>
 </vector>
