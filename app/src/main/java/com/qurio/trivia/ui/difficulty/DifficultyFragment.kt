@@ -1,60 +1,105 @@
 package com.qurio.trivia.ui.difficulty
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.qurio.trivia.R
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.data.model.Difficulty
+import com.qurio.trivia.databinding.FragmentDifficultyBinding
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class DifficultyFragment : BaseFragment<FragmentDifficultyBinding, DifficultyPresenter>(), DifficultyView {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [DifficultyFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class DifficultyFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    @Inject
+    override lateinit var presenter: DifficultyPresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override val binding: FragmentDifficultyBinding by lazy {
+        FragmentDifficultyBinding.inflate(layoutInflater)
+    }
+
+    private val args: DifficultyFragmentArgs by navArgs()
+    private var selectedDifficulty: Difficulty = Difficulty.MEDIUM
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        return binding.root
+    }
+
+    override fun setupViews() {
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.btnStartGame.setOnClickListener {
+            presenter.startGame(args.categoryId, selectedDifficulty.value)
+        }
+
+        setupDifficultySelection()
+
+        // Default to Medium difficulty
+        selectDifficulty(Difficulty.MEDIUM)
+    }
+
+    override fun setupObservers() {
+        // No observers needed
+    }
+
+    private fun setupDifficultySelection() {
+        binding.btnEasy.setOnClickListener { selectDifficulty(Difficulty.EASY) }
+        binding.btnMedium.setOnClickListener { selectDifficulty(Difficulty.MEDIUM) }
+        binding.btnHard.setOnClickListener { selectDifficulty(Difficulty.HARD) }
+    }
+
+    private fun selectDifficulty(difficulty: Difficulty) {
+        selectedDifficulty = difficulty
+
+        // Reset all buttons
+        binding.btnEasy.isSelected = false
+        binding.btnMedium.isSelected = false
+        binding.btnHard.isSelected = false
+
+        // Select current difficulty
+        when (difficulty) {
+            Difficulty.EASY -> binding.btnEasy.isSelected = true
+            Difficulty.MEDIUM -> binding.btnMedium.isSelected = true
+            Difficulty.HARD -> binding.btnHard.isSelected = true
+        }
+
+        updateButtonStyles()
+    }
+
+    private fun updateButtonStyles() {
+        listOf(binding.btnEasy, binding.btnMedium, binding.btnHard).forEach { button ->
+            if (button.isSelected) {
+                button.backgroundTintList = android.content.res.ColorStateList.valueOf(
+                    requireContext().getColor(com.qurio.trivia.R.color.blue_primary)
+                )
+                button.setTextColor(requireContext().getColor(com.qurio.trivia.R.color.white))
+            } else {
+                button.backgroundTintList = android.content.res.ColorStateList.valueOf(
+                    requireContext().getColor(com.qurio.trivia.R.color.gray_dark)
+                )
+                button.setTextColor(requireContext().getColor(com.qurio.trivia.R.color.gray_light))
+            }
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_difficulty, container, false)
+    override fun navigateToGame() {
+        val action = DifficultyFragmentDirections.actionDifficultyToGame(
+            args.categoryId,
+            args.categoryName,
+            selectedDifficulty.value
+        )
+        findNavController().navigate(action)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DifficultyFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DifficultyFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun showNotEnoughLives() {
+        // Navigate to buy lives screen
+        val action = DifficultyFragmentDirections.actionDifficultyToBuyLife()
+        findNavController().navigate(action)
     }
 }
