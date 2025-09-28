@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_logo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="150dp"
+        android:layout_height="110dp"
         android:src="@drawable/ic_qurio_logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
