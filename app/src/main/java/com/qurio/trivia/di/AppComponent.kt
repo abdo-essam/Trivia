@@ -5,6 +5,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.ui.achievements.AchievementsFragment
 import com.qurio.trivia.ui.buylife.BuyLifeFragment
 import com.qurio.trivia.ui.character.CharacterSelectionFragment
+import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import com.qurio.trivia.ui.difficulty.DifficultyFragment
 import com.qurio.trivia.ui.game.GameFragment
 import com.qurio.trivia.ui.home.HomeFragment
@@ -41,4 +42,6 @@ interface AppComponent {
     fun inject(fragment: GameResultFragment)
     fun inject(fragment: BuyLifeFragment)
     fun inject(fragment: AchievementsFragment)
+    fun inject(dialog: SettingsDialogFragment)
+
 }

@@ -13,17 +13,17 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SplashFragment : BaseFragment<FragmentSplashBinding, SplashPresenter>() {
+class SplashFragment : BaseFragment<FragmentSplashBinding, SplashPresenter>(), SplashView {
+
+    private var _binding: FragmentSplashBinding? = null
+    override val binding get() = _binding!!
 
     @Inject
     override lateinit var presenter: SplashPresenter
 
-    override val binding: FragmentSplashBinding by lazy {
-        FragmentSplashBinding.inflate(layoutInflater)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
+        _binding = FragmentSplashBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -37,6 +37,11 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashPresenter>() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun setupViews() {
         // Splash screen doesn't need setup
     }
@@ -45,12 +50,13 @@ class SplashFragment : BaseFragment<FragmentSplashBinding, SplashPresenter>() {
         // No observers needed
     }
 
-    fun navigateToOnboarding() {
+    // Implementing SplashView interface
+    override fun navigateToOnboarding() {
         val action = SplashFragmentDirections.actionSplashToOnboarding()
         findNavController().navigate(action)
     }
 
-    fun navigateToHome() {
+    override fun navigateToHome() {
         val action = SplashFragmentDirections.actionSplashToHome()
         findNavController().navigate(action)
     }

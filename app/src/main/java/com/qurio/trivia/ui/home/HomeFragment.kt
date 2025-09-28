@@ -1,60 +1,113 @@
 package com.qurio.trivia.ui.home
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
+import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.UserProgress
+import com.qurio.trivia.databinding.FragmentHomeBinding
+import com.qurio.trivia.ui.adapters.CategoryAdapter
+import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeView {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    @Inject
+    override lateinit var presenter: HomePresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override val binding: FragmentHomeBinding by lazy {
+        FragmentHomeBinding.inflate(layoutInflater)
+    }
+
+    private lateinit var categoryAdapter: CategoryAdapter
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        return binding.root
+    }
+
+    override fun setupViews() {
+        setupRecyclerView()
+
+        binding.btnSettings.setOnClickListener {
+            showSettings()
+        }
+
+        binding.btnGames.setOnClickListener {
+         // Navigate to category selection (which is already displayed)
+        }
+        presenter.loadUserProgress()
+        presenter.loadCategories()
+    }
+
+    override fun setupObservers() {
+        // No observers needed for MVP
+    }
+
+    private fun setupRecyclerView() {
+        categoryAdapter = CategoryAdapter { category ->
+            navigateToCharacterSelection(category)
+        }
+
+        binding.rvCategories.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = categoryAdapter
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+    private fun showSettings() {
+        val settingsDialog = SettingsDialogFragment()
+        settingsDialog.show(childFragmentManager, "settings")
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun navigateToCharacterSelection(category: Category) {
+        val action =
+            HomeFragmentDirections.actionHomeToCharacterSelection(category.id, category.displayName)
+        findNavController().navigate(action)
+    }
+
+    override fun displayUserProgress(userProgress: UserProgress) {
+        binding.tvLives.text = userProgress.lives.toString()
+        binding.tvCoins.text = userProgress.totalCoins.toString()
+        binding.tvWelcomeMessage.text =
+            "Welcome Curio explorer\n${getCharacterDisplayName(userProgress.selectedCharacter)}"
+
+        // Load character image
+        val characterImageRes = getCharacterImageRes(userProgress.selectedCharacter)
+        binding.ivCharacter.setImageResource(characterImageRes)
+    }
+
+    override fun displayCategories(categories: List<Category>) {
+        categoryAdapter.submitList(categories)
+    }
+
+    private fun getCharacterDisplayName(characterName: String): String {
+        return characterName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+    }
+
+    private fun getCharacterImageRes(characterName: String): Int {
+        // This would map to actual drawable resources
+        return when (characterName) {
+            "rika" -> R.drawable.character_rika
+            "kaiyo" -> R.drawable.character_kaiyo
+            "mimi" -> R.drawable.character_mimi
+            "yoru" -> R.drawable.character_yoru
+            "kuro" -> R.drawable.character_kuro
+            "miko" -> R.drawable.character_miko
+            "aori" -> R.drawable.character_aori
+            "nara" -> R.drawable.character_nara
+            "renji" -> R.drawable.character_renji
+            else -> R.drawable.character_rika
+        }
     }
 }
