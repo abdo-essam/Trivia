@@ -1,60 +1,88 @@
 package com.qurio.trivia.ui.buylife
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
+import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.data.model.UserProgress
+import com.qurio.trivia.databinding.FragmentBuyLifeBinding
+import javax.inject.Inject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class BuyLifeFragment : BaseFragment<FragmentBuyLifeBinding, BuyLifePresenter>(), BuyLifeView {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [BuyLifeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class BuyLifeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    @Inject
+    override lateinit var presenter: BuyLifePresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    override val binding: FragmentBuyLifeBinding by lazy {
+        FragmentBuyLifeBinding.inflate(layoutInflater)
+    }
+
+    private val lifeCost = 100 // 100 coins per life
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        return binding.root
+    }
+
+    override fun setupViews() {
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        binding.btnBuyLife.setOnClickListener {
+            presenter.buyLife(lifeCost)
+        }
+
+        binding.btnWatchAd.setOnClickListener {
+            presenter.watchAdForLife()
+        }
+
+        presenter.loadUserProgress()
+    }
+
+    override fun setupObservers() {
+        // No observers needed
+    }
+
+    override fun displayUserProgress(userProgress: UserProgress) {
+        binding.tvCurrentLives.text = userProgress.lives.toString()
+        binding.tvCurrentCoins.text = userProgress.totalCoins.toString()
+
+        // Enable/disable buy button based on coins
+        binding.btnBuyLife.isEnabled = userProgress.totalCoins >= lifeCost
+
+        if (userProgress.totalCoins < lifeCost) {
+            binding.btnBuyLife.text = "Not enough coins"
+            binding.btnBuyLife.backgroundTintList = android.content.res.ColorStateList.valueOf(
+                requireContext().getColor(R.color.gray_dark)
+            )
+        } else {
+            binding.btnBuyLife.text = "Buy Life - $lifeCost coins"
+            binding.btnBuyLife.backgroundTintList = android.content.res.ColorStateList.valueOf(
+                requireContext().getColor(R.color.blue_primary)
+            )
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_buy_life, container, false)
+    override fun showPurchaseSuccess() {
+        showError("Life purchased successfully!")
+        presenter.loadUserProgress() // Refresh UI
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment BuyLifeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            BuyLifeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun showInsufficientCoins() {
+        showError("Not enough coins to buy a life!")
+    }
+
+    override fun showAdReward() {
+        showError("Life earned from watching ad!")
+        presenter.loadUserProgress() // Refresh UI
+    }
+
+    override fun navigateBack() {
+        findNavController().navigateUp()
     }
 }
