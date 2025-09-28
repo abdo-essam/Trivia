@@ -70,3 +70,13 @@ enum class Difficulty(val value: String, val displayName: String) {
     MEDIUM("medium", "Medium"),
     HARD("hard", "Hard")
 }
+
+data class Achievement(
+    val id: String,
+    val title: String,
+    val description: String,
+    val iconRes: Int,
+    val isUnlocked: Boolean,
+    val progress: Int,
+    val maxProgress: Int
+)
