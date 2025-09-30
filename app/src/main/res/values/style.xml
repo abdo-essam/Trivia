@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Parent Styles (Add these to fix the error) -->
+    <style name="TextAppearance.App" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/fredoka</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline" parent="TextAppearance.App">
+        <!-- Default to Large if no size is specified -->
+        <item name="android:textSize">42sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Title" parent="TextAppearance.App">
+        <!-- Default to Large if no size is specified -->
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Body" parent="TextAppearance.App">
+        <!-- Default to Medium if no size is specified -->
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Label" parent="TextAppearance.App">
+        <!-- Default to Medium if no size is specified -->
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Headline Styles -->
+    <style name="TextAppearance.App.Headline.Large" parent="TextAppearance.App.Headline">
+        <item name="android:textSize">42sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline.Medium" parent="TextAppearance.App.Headline">
+        <item name="android:textSize">36sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Headline.Small" parent="TextAppearance.App.Headline">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <!-- Title Styles -->
+    <style name="TextAppearance.App.Title.Large" parent="TextAppearance.App.Title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Title.Medium" parent="TextAppearance.App.Title">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Title.Small" parent="TextAppearance.App.Title">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Body Styles -->
+    <style name="TextAppearance.App.Body.Large" parent="TextAppearance.App.Body">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Body.Medium" parent="TextAppearance.App.Body">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Body.Small" parent="TextAppearance.App.Body">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <!-- Label Styles -->
+    <style name="TextAppearance.App.Label.Large" parent="TextAppearance.App.Label">
+        <item name="android:textSize">13sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.Medium" parent="TextAppearance.App.Label">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.Small" parent="TextAppearance.App.Label">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextAppearance.App.Label.XSmall" parent="TextAppearance.App.Label">
+        <item name="android:textSize">10sp</item>
+    </style>
+</resources>

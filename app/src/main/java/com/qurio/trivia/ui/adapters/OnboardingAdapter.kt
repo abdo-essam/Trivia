@@ -31,9 +31,12 @@ class OnboardingAdapter(
 
         fun bind(item: OnboardingItem) {
             binding.apply {
-                ivImage.setImageResource(item.imageRes)
+                // Set both titles with the same text
                 tvTitle.text = item.title
+                tvTitleBackground.text = item.title
+
                 tvDescription.text = item.description
+                ivImage.setImageResource(item.imageRes)
             }
         }
     }

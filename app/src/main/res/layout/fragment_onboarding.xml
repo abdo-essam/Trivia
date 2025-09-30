@@ -15,37 +15,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Left Arrow -->
-    <ImageView
-        android:id="@+id/arrow_left"
+    <!-- Left Arrow (Group 10) -->
+    <FrameLayout
+        android:id="@+id/arrow_left_container"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_arrow_left"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
         android:layout_marginStart="24dp"
         android:visibility="visible"
-        android:elevation="15dp"
-        app:tint="#808080"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/swipe_up_container"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <!-- Right Arrow -->
-    <ImageView
-        android:id="@+id/arrow_right"
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/arrow_background"
+            android:alpha="0.1" />
+
+        <ImageView
+            android:id="@+id/arrow_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_left"
+            android:padding="12dp"
+            app:tint="#808080" />
+    </FrameLayout>
+
+    <!-- Right Arrow (Group 9) -->
+    <FrameLayout
+        android:id="@+id/arrow_right_container"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:src="@drawable/ic_arrow_right"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:padding="12dp"
         android:layout_marginEnd="24dp"
         android:visibility="visible"
-        android:elevation="15dp"
-        app:tint="#808080"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/swipe_up_container"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/arrow_background"
+            android:alpha="0.1" />
+
+        <ImageView
+            android:id="@+id/arrow_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_right"
+            android:padding="12dp"
+            app:tint="#808080" />
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/swipe_up_container"
@@ -108,9 +128,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Swipe up to PLAY!"
+            android:fontFamily="@font/fredoka_medium"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -97,17 +97,17 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
 
 
     private fun setupArrows() {
-        binding.arrowLeft.setOnClickListener {
+        binding.arrowLeftContainer.setOnClickListener {
             if (currentPage > 0) {
-                animateArrowPress(binding.arrowLeft) {
+                animateArrowPress(binding.arrowLeftContainer) {
                     binding.viewPager.currentItem = currentPage - 1
                 }
             }
         }
 
-        binding.arrowRight.setOnClickListener {
+        binding.arrowRightContainer.setOnClickListener {
             if (currentPage < totalPages - 1) {
-                animateArrowPress(binding.arrowRight) {
+                animateArrowPress(binding.arrowRightContainer) {
                     binding.viewPager.currentItem = currentPage + 1
                 }
             }
@@ -115,8 +115,8 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
     }
 
     private fun updateArrowVisibility() {
-        binding.arrowLeft.alpha = if (currentPage > 0) 1f else 0.3f
-        binding.arrowRight.alpha = if (currentPage < totalPages - 1) 1f else 0.3f
+        binding.arrowLeftContainer.alpha = if (currentPage > 0) 1f else 0.3f
+        binding.arrowRightContainer.alpha = if (currentPage < totalPages - 1) 1f else 0.3f
     }
 
     private fun animateArrowPress(arrow: View, onComplete: () -> Unit) {
