@@ -67,6 +67,7 @@
             app:tint="#808080" />
     </FrameLayout>
 
+    <!-- In fragment_onboarding.xml, update the swipe up container section -->
     <!-- Swipe Up Container (Frame 141) -->
     <LinearLayout
         android:id="@+id/swipe_up_container"
@@ -109,8 +110,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/arrow_up_01"
-                    app:tint="@color/shade_secondary"
-                    />
+                    app:tint="@color/shade_secondary" />
 
                 <!-- Arrow 3 -->
                 <ImageView
@@ -122,12 +122,14 @@
 
                 <!-- Avatar Container (Frame 134) -->
                 <FrameLayout
+                    android:id="@+id/avatar_container"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginTop="4dp">
 
                     <!-- Avatar Image -->
                     <ImageView
+                        android:id="@+id/avatar_image"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:src="@drawable/character_avatar"
@@ -139,6 +141,7 @@
 
         <!-- Swipe up to PLAY! Text -->
         <TextView
+            android:id="@+id/swipe_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Swipe up to PLAY!"

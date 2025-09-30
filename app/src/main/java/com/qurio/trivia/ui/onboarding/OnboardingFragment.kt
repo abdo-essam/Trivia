@@ -2,10 +2,18 @@ package com.qurio.trivia.ui.onboarding
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.*
+import android.view.GestureDetector
+import android.view.HapticFeedbackConstants
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
 import android.view.animation.AnimationUtils
+import android.view.animation.OvershootInterpolator
 import androidx.core.view.GestureDetectorCompat
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -34,6 +42,12 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
     private var currentPage = 0
     private val totalPages = 4
 
+    // Drag gesture variables
+    private var initialY = 0f
+    private var isDragging = false
+    private var dragThreshold = 200f // pixels to trigger navigation
+    private var initialAvatarY = 0f
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
         return binding.root
@@ -43,11 +57,8 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
         setupViewPager()
         setupArrows()
         setupSwipeGesture()
+        setupDragGesture()
         startArrowAnimations()
-
-        binding.swipeUpContainer.setOnClickListener {
-            presenter.completeOnboarding()
-        }
     }
 
     override fun setupObservers() {
@@ -94,8 +105,123 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
         updateArrowVisibility()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private fun setupDragGesture() {
+        // Set touch listener on the entire container but move only the avatar
+        binding.swipeUpContainer.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    initialY = event.rawY
+                    initialAvatarY = binding.avatarContainer.translationY
+                    isDragging = true
 
+                    // Add haptic feedback
+                    binding.avatarContainer.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
 
+                    // Scale up avatar slightly when touched
+                    binding.avatarContainer.animate()
+                        .scaleX(1.1f)
+                        .scaleY(1.1f)
+                        .setDuration(100)
+                        .start()
+
+                    // Pause arrow animations
+                    binding.arrow1.clearAnimation()
+                    binding.arrow2.clearAnimation()
+                    binding.arrow3.clearAnimation()
+
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    if (isDragging) {
+                        val deltaY = event.rawY - initialY
+
+                        // Only allow upward movement
+                        if (deltaY < 0) {
+                            // Apply some resistance
+                            val translation = deltaY * 0.8f
+                            binding.avatarContainer.translationY = initialAvatarY + translation
+
+                            // Rotate avatar slightly as it moves
+                            val rotation = (translation / dragThreshold) * -15f
+                            binding.avatarContainer.rotation = rotation
+
+                            // Update alpha based on drag distance
+                            val progress = abs(translation) / dragThreshold
+                            binding.avatarContainer.alpha = 1f - (progress * 0.2f)
+
+                            // Update text alpha to fade as avatar moves up
+                            binding.swipeText.alpha = 1f - progress
+                        }
+                    }
+                    true
+                }
+                MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
+                    if (isDragging) {
+                        isDragging = false
+                        val deltaY = event.rawY - initialY
+
+                        if (deltaY < -dragThreshold) {
+                            // Trigger navigation with animation
+                            animateAvatarAndNavigate()
+                        } else {
+                            // Snap avatar back to original position
+                            animateAvatarBack()
+                            // Resume arrow animations
+                            startArrowAnimations()
+                        }
+                    }
+                    true
+                }
+                else -> false
+            }
+        }
+    }
+
+    private fun animateAvatarAndNavigate() {
+        // Animate avatar flying up
+        binding.avatarContainer.animate()
+            .translationY(-binding.root.height.toFloat())
+            .alpha(0f)
+            .scaleX(0.5f)
+            .scaleY(0.5f)
+            .rotation(-30f)
+            .setDuration(400)
+            .setInterpolator(AccelerateInterpolator())
+            .withEndAction {
+                presenter.completeOnboarding()
+            }
+            .start()
+
+        // Fade out other elements
+        binding.swipeText.animate()
+            .alpha(0f)
+            .setDuration(200)
+            .start()
+
+        binding.arrow1.animate().alpha(0f).setDuration(200).start()
+        binding.arrow2.animate().alpha(0f).setDuration(200).start()
+        binding.arrow3.animate().alpha(0f).setDuration(200).start()
+    }
+
+    private fun animateAvatarBack() {
+        // Animate avatar back to position with bounce
+        binding.avatarContainer.animate()
+            .translationY(0f)
+            .alpha(1f)
+            .scaleX(1f)
+            .scaleY(1f)
+            .rotation(0f)
+            .setDuration(400)
+            .setInterpolator(OvershootInterpolator(2f))
+            .start()
+
+        // Restore text alpha
+        binding.swipeText.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+    }
     private fun setupArrows() {
         binding.arrowLeftContainer.setOnClickListener {
             if (currentPage > 0) {
@@ -143,6 +269,7 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
         arrow.postDelayed(onComplete, 200)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setupSwipeGesture() {
         gestureDetector = GestureDetectorCompat(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(
@@ -153,7 +280,10 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
             ): Boolean {
                 e1?.let {
                     if (e1.y - e2.y > 100 && abs(velocityY) > 100) {
-                        presenter.completeOnboarding()
+                        // Don't trigger if we're already dragging
+                        if (!isDragging) {
+                            animateSwipeUpAndNavigate(binding.swipeUpContainer)
+                        }
                         return true
                     }
                 }
@@ -165,6 +295,19 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
             gestureDetector.onTouchEvent(event)
             false
         }
+    }
+
+    private fun animateSwipeUpAndNavigate(view: View) {
+        view.animate()
+            .translationY(-view.height.toFloat() - 100f)
+            .alpha(0f)
+            .scaleX(0.8f)
+            .scaleY(0.8f)
+            .setDuration(300)
+            .withEndAction {
+                presenter.completeOnboarding()
+            }
+            .start()
     }
 
     private fun startArrowAnimations() {
