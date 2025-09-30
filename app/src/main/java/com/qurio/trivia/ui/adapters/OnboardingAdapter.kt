@@ -23,16 +23,18 @@ class OnboardingAdapter(
         holder.bind(items[position])
     }
 
-    override fun getItemCount(): Int = items.size
+    override fun getItemCount() = items.size
 
-    class OnboardingViewHolder(
+    inner class OnboardingViewHolder(
         private val binding: ItemOnboardingBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: OnboardingItem) {
-            binding.ivOnboarding.setImageResource(item.imageRes)
-            binding.tvTitle.text = item.title
-            binding.tvDescription.text = item.description
+            binding.apply {
+                ivImage.setImageResource(item.imageRes)
+                tvTitle.text = item.title
+                tvDescription.text = item.description
+            }
         }
     }
 }
