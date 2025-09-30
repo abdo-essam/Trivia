@@ -1,5 +1,6 @@
 package com.qurio.trivia.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -76,11 +77,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         findNavController().navigate(action)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun displayUserProgress(userProgress: UserProgress) {
         binding.tvLives.text = userProgress.lives.toString()
         binding.tvCoins.text = userProgress.totalCoins.toString()
-        binding.tvWelcomeMessage.text =
-            "Welcome Curio explorer\n${getCharacterDisplayName(userProgress.selectedCharacter)}"
+
+        // Update the split text views
+        binding.tvWelcome.text = "Welcome Qurio explorer"
+        binding.tvCharacterName.text = getCharacterDisplayName(userProgress.selectedCharacter)
 
         // Load character image
         val characterImageRes = getCharacterImageRes(userProgress.selectedCharacter)
