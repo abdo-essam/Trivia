@@ -67,9 +67,10 @@
             app:tint="#808080" />
     </FrameLayout>
 
+    <!-- Swipe Up Container (Frame 141) -->
     <LinearLayout
         android:id="@+id/swipe_up_container"
-        android:layout_width="wrap_content"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
@@ -80,57 +81,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginBottom="16dp">
+        <!-- Frame 132 - Pill shaped container with arrows and avatar -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="132dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_pill_container">
 
-            <ImageView
-                android:id="@+id/arrow1"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_up"
-                app:tint="#40FFFFFF" />
-
-            <ImageView
-                android:id="@+id/arrow2"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_up"
-                android:layout_marginTop="-8dp"
-                app:tint="#60FFFFFF" />
-
-            <ImageView
-                android:id="@+id/arrow3"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_arrow_up"
-                android:layout_marginTop="-8dp"
-                app:tint="#80FFFFFF" />
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            app:cardCornerRadius="30dp"
-            app:cardElevation="0dp"
-            android:layout_marginBottom="8dp">
-
-            <ImageView
+            <!-- Arrow Container -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/character_avatar"
-                android:scaleType="centerCrop" />
-        </androidx.cardview.widget.CardView>
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
 
+                <!-- Arrow 1 -->
+                <ImageView
+                    android:id="@+id/arrow1"
+                    android:layout_width="24dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_up"
+                    app:tint="#40FFFFFF" />
+
+                <!-- Arrow 2 -->
+                <ImageView
+                    android:id="@+id/arrow2"
+                    android:layout_width="24dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_up"
+                    android:layout_marginTop="-4dp"
+                    app:tint="#60FFFFFF" />
+
+                <!-- Arrow 3 -->
+                <ImageView
+                    android:id="@+id/arrow3"
+                    android:layout_width="24dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_arrow_up"
+                    android:layout_marginTop="-4dp"
+                    app:tint="#80FFFFFF" />
+
+                <!-- Avatar Container (Frame 134) -->
+                <FrameLayout
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp">
+
+                    <!-- Avatar Image -->
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/character_avatar"
+                        android:scaleType="centerCrop"
+                        android:padding="2dp" />
+                </FrameLayout>
+
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Swipe up to PLAY! Text -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Swipe up to PLAY!"
-            android:fontFamily="@font/fredoka_medium"
+            android:textAppearance="@style/TextAppearance.App.Label.Medium"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:shadowColor="#FFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
