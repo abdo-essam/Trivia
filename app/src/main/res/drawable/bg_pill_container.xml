@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Inner shadow -->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="100dp" />
+            <gradient
+                android:startColor="#0649BAF2"
+                android:endColor="#0C206A8E"
+                android:angle="270"
+                android:type="linear" />
+            <stroke
+                android:width="1dp"
+                android:color="#0C49BAF2" />
+            <padding
+                android:top="4dp"
+                android:bottom="4dp"
+                android:left="4dp"
+                android:right="4dp" />
+        </shape>
+    </item>
+</layer-list>

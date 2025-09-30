@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base Material Design 3 Typography Styles -->
+    <style name="TextAppearance.Headline" parent="TextAppearance.Material3.HeadlineLarge"/>
+    <style name="TextAppearance.Title" parent="TextAppearance.Material3.TitleLarge"/>
+    <style name="TextAppearance.Body" parent="TextAppearance.Material3.BodyLarge"/>
+    <style name="TextAppearance.Label" parent="TextAppearance.Material3.LabelLarge"/>
+
+    <!-- Headline Styles -->
+    <style name="TextAppearance.Headline.Large" parent="TextAppearance.Headline">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_headline_large</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_headline_large</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Headline.Medium" parent="TextAppearance.Headline">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_headline_medium</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_headline_medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Headline.Small" parent="TextAppearance.Headline">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_headline_small</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_headline_small</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- Title Styles -->
+    <style name="TextAppearance.Title.Large" parent="TextAppearance.Title">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_title_large</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_title_large</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Title.Medium" parent="TextAppearance.Title">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_title_medium</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_title_medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Title.Small" parent="TextAppearance.Title">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_title_small</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_title_small</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- Body Styles -->
+    <style name="TextAppearance.Body.Large" parent="TextAppearance.Body">
+        <item name="fontFamily">@font/fredoka</item>
+        <item name="android:textSize">@dimen/text_body_large</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_body_large</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Body.Medium" parent="TextAppearance.Body">
+        <item name="fontFamily">@font/fredoka</item>
+        <item name="android:textSize">@dimen/text_body_medium</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_body_medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Body.Small" parent="TextAppearance.Body">
+        <item name="fontFamily">@font/fredoka</item>
+        <item name="android:textSize">@dimen/text_body_small</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_body_small</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- Label Styles -->
+    <style name="TextAppearance.Label.Large" parent="TextAppearance.Label">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_label_large</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_label_large</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Label.Medium" parent="TextAppearance.Label">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_label_medium</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_label_medium</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Label.Small" parent="TextAppearance.Label">
+        <item name="fontFamily">@font/fredoka_one</item>
+        <item name="android:textSize">@dimen/text_label_small</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_label_small</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Label.XSmall" parent="TextAppearance.Label">
+        <item name="fontFamily">@font/fredoka</item>
+        <item name="android:textSize">@dimen/text_label_xsmall</item>
+        <item name="android:lineHeight" tools:targetApi="28">@dimen/line_height_label_xsmall</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>
