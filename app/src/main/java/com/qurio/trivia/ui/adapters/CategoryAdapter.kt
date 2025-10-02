@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.databinding.ItemCategoryBinding
 
@@ -33,13 +31,13 @@ class CategoryAdapter(
 
         fun bind(category: Category) {
             binding.tvCategoryName.text = category.displayName
-
-            Glide.with(binding.ivCategory.context)
-                .load(category.imageRes)
-                //.placeholder(R.drawable.placeholder_image)
-                .into(binding.ivCategory)
+            binding.ivCategoryImage.setImageResource(category.imageRes)
 
             binding.btnPlayNow.setOnClickListener {
+                onCategoryClick(category)
+            }
+
+            binding.root.setOnClickListener {
                 onCategoryClick(category)
             }
         }

@@ -1,12 +1,15 @@
 package com.qurio.trivia.ui.home
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
@@ -44,11 +47,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
             showSettings()
         }
 
-        binding.btnGames.setOnClickListener {
-         // Navigate to category selection (which is already displayed)
-        }
+        // Load data
         presenter.loadUserProgress()
-        presenter.loadCategories()
+        // Don't call loadCategories here since it's called in setupRecyclerView
     }
 
     override fun setupObservers() {
@@ -61,9 +62,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         }
 
         binding.rvCategories.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
             adapter = categoryAdapter
+            setHasFixedSize(true)
         }
+
+        // Load categories immediately after setup
+        presenter.loadCategories()
     }
 
     private fun showSettings() {
@@ -72,8 +81,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun navigateToCharacterSelection(category: Category) {
-        val action =
-            HomeFragmentDirections.actionHomeToCharacterSelection(category.id, category.displayName)
+        val action = HomeFragmentDirections.actionHomeToCharacterSelection(
+            categoryId = category.id,
+            categoryName = category.displayName
+        )
         findNavController().navigate(action)
     }
 
@@ -124,9 +135,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     override fun displayCategories(categories: List<Category>) {
+        Log.d("HomeFragment", "Categories loaded: ${categories.size}")
+        categories.forEach {
+            Log.d("HomeFragment", "Category: ${it.displayName}")
+        }
         categoryAdapter.submitList(categories)
     }
-
     private fun getCharacterDisplayName(characterName: String): String {
         return characterName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
     }
