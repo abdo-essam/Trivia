@@ -1,5 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Primary Colors -->
+    <color name="blue_primary">#4A90E2</color>
+    <color name="blue_secondary">#357ABD</color>
+    <color name="primary">#30ABE8</color>
+    <color name="primary_variant">#49BAF2</color>
+    <color name="secondary">#393397</color>
+
+    <!-- Background -->
+    <color name="background_dark">#1A1A1A</color>
+    <color name="background_card">#2A2A2A</color>
+    <color name="surface">#050C10</color>
+    <color name="surface_high">#090F1A</color>
+
+    <!-- Text Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="gray_light">#CCCCCC</color>
+    <color name="gray_dark">#404040</color>
+    <color name="shade_primary">#DEFFFFFF</color>
+    <color name="shade_secondary">#99FFFFFF</color>
+    <color name="shade_tertiary">#61FFFFFF</color>
+    <color name="shade_quad">#0AFFFFFF</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="on_image_surface">#14FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="orange">#FF9800</color>
+    <color name="yellow">#FFC107</color>
+
+    <!-- Additional Colors from Guide -->
+    <color name="disable">#2A2A2A</color>
+    <color name="orange_accent">#DC6A43</color>
+    <color name="orange_variant">#170C08</color>
+    <color name="yellow_accent">#FFC3A3</color>
+    <color name="green_accent">#739E61</color>
+    <color name="red_accent">#E12F32</color>
+
+    <!-- Transparent -->
+    <color name="transparent">#00000000</color>
 </resources>

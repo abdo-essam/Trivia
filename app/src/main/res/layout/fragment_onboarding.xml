@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/swipe_up_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left Arrow (Group 10) -->
+    <FrameLayout
+        android:id="@+id/arrow_left_container"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="24dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/swipe_up_container"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/arrow_background"
+            android:alpha="0.1" />
+
+        <ImageView
+            android:id="@+id/arrow_left"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_left"
+            android:padding="12dp"
+            app:tint="#808080" />
+    </FrameLayout>
+
+    <!-- Right Arrow (Group 9) -->
+    <FrameLayout
+        android:id="@+id/arrow_right_container"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="24dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/swipe_up_container"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/arrow_background"
+            android:alpha="0.1" />
+
+        <ImageView
+            android:id="@+id/arrow_right"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_arrow_right"
+            android:padding="12dp"
+            app:tint="#808080" />
+    </FrameLayout>
+
+    <!-- In fragment_onboarding.xml, update the swipe up container section -->
+    <!-- Swipe Up Container (Frame 141) -->
+    <LinearLayout
+        android:id="@+id/swipe_up_container"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="40dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Frame 132 - Pill shaped container with arrows and avatar -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="132dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_pill_container">
+
+            <!-- Arrow Container -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+                <!-- Arrow 1 -->
+                <ImageView
+                    android:id="@+id/arrow1"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/arrow_up_01"
+                    app:tint="@color/shade_primary" />
+
+                <!-- Arrow 2 -->
+                <ImageView
+                    android:id="@+id/arrow2"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/arrow_up_01"
+                    app:tint="@color/shade_secondary" />
+
+                <!-- Arrow 3 -->
+                <ImageView
+                    android:id="@+id/arrow3"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/arrow_up_01"
+                    app:tint="@color/shade_tertiary" />
+
+                <!-- Avatar Container (Frame 134) -->
+                <FrameLayout
+                    android:id="@+id/avatar_container"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="4dp">
+
+                    <!-- Avatar Image -->
+                    <ImageView
+                        android:id="@+id/avatar_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/character_avatar"
+                        android:scaleType="centerCrop"
+                        android:padding="2dp" />
+                </FrameLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Swipe up to PLAY! Text -->
+        <TextView
+            android:id="@+id/swipe_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Swipe up to PLAY!"
+            style="@style/TextAppearance.Label.Medium"
+            android:textColor="@color/white"
+            android:shadowColor="#FFFFFF"
+            android:shadowDx="0"
+            android:shadowDy="4"
+            android:shadowRadius="8" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
