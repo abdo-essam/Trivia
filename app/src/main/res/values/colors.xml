@@ -40,4 +40,8 @@
 
     <!-- Transparent -->
     <color name="transparent">#00000000</color>
+
+
+    <color name="card_background">#1A1F2E</color>
+    <color name="card_stroke">#2D3548</color>
 </resources>
