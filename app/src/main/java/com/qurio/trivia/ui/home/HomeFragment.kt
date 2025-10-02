@@ -82,13 +82,45 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         binding.tvLives.text = userProgress.lives.toString()
         binding.tvCoins.text = userProgress.totalCoins.toString()
 
-        // Update the split text views
+        // Update welcome text
         binding.tvWelcome.text = "Welcome Qurio explorer"
         binding.tvCharacterName.text = getCharacterDisplayName(userProgress.selectedCharacter)
 
         // Load character image
         val characterImageRes = getCharacterImageRes(userProgress.selectedCharacter)
         binding.ivCharacter.setImageResource(characterImageRes)
+
+        // Update streak
+        updateStreakDisplay(userProgress)
+    }
+
+    private fun updateStreakDisplay(userProgress: UserProgress) {
+        val streak = userProgress.currentStreak
+
+        // Update streak text
+        if (streak == 0) {
+            binding.layoutStreak.tvStreakTitle.text = "0 day streak, start make a series"
+            binding.layoutStreak.tvStreakSubtitle.text = "Every day count!"
+        } else {
+            binding.layoutStreak.tvStreakTitle.text = "$streak day streak, make a big series"
+            binding.layoutStreak.tvStreakSubtitle.text = "KEEP IT UP!"
+        }
+
+        // Update fire icons for days
+        val streakDays = userProgress.streakDays.split(",").mapNotNull { it.toIntOrNull() }
+        val fireViews = listOf(
+            binding.layoutStreak.ivFireSunday,
+            binding.layoutStreak.ivFireMonday,
+            binding.layoutStreak.ivFireTuesday,
+            binding.layoutStreak.ivFireWednesday,
+            binding.layoutStreak.ivFireThursday,
+            binding.layoutStreak.ivFireFriday,
+            binding.layoutStreak.ivFireSaturday
+        )
+
+        fireViews.forEachIndexed { index, imageView ->
+            imageView.visibility = if (streakDays.contains(index)) View.VISIBLE else View.GONE
+        }
     }
 
     override fun displayCategories(categories: List<Category>) {
