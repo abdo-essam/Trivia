@@ -1,7 +1,6 @@
 package com.qurio.trivia.ui.home
 
 import android.annotation.SuppressLint
-import android.graphics.Rect
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,14 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
+import com.qurio.trivia.ui.adapters.LastGamesAdapter
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import javax.inject.Inject
 
@@ -30,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private lateinit var categoryAdapter: CategoryAdapter
+    private lateinit var lastGamesAdapter: LastGamesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,22 +42,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     override fun setupViews() {
-        setupRecyclerView()
+        setupCategoriesRecyclerView()
+        setupLastGamesRecyclerView()
 
         binding.btnSettings.setOnClickListener {
             showSettings()
         }
 
+        binding.tvAllLastGames.setOnClickListener {
+            navigateToAllLastGames()
+        }
+
+        // Initialize fake data first (for testing)
+        presenter.initializeData()
+
         // Load data
         presenter.loadUserProgress()
-        // Don't call loadCategories here since it's called in setupRecyclerView
+        presenter.loadCategories()
+        presenter.loadLastGames(3) // Show only 3 games in home screen
     }
 
     override fun setupObservers() {
         // No observers needed for MVP
     }
 
-    private fun setupRecyclerView() {
+    private fun setupCategoriesRecyclerView() {
         categoryAdapter = CategoryAdapter { category ->
             navigateToCharacterSelection(category)
         }
@@ -69,10 +79,23 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
             )
             adapter = categoryAdapter
             setHasFixedSize(true)
-        }
 
+        }
         // Load categories immediately after setup
         presenter.loadCategories()
+    }
+
+    private fun setupLastGamesRecyclerView() {
+        lastGamesAdapter = LastGamesAdapter { gameResult ->
+            // Handle click on game result if needed
+            // Could show game details or replay
+        }
+
+        binding.rvLastGames.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = lastGamesAdapter
+            isNestedScrollingEnabled = false
+        }
     }
 
     private fun showSettings() {
@@ -88,27 +111,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         findNavController().navigate(action)
     }
 
+    private fun navigateToAllLastGames() {
+        // TODO: Navigate to all last games screen
+        // val action = HomeFragmentDirections.actionHomeToLastGames()
+        // findNavController().navigate(action)
+    }
+
     @SuppressLint("SetTextI18n")
     override fun displayUserProgress(userProgress: UserProgress) {
         binding.tvLives.text = userProgress.lives.toString()
         binding.tvCoins.text = userProgress.totalCoins.toString()
 
-        // Update welcome text
         binding.tvWelcome.text = "Welcome Qurio explorer"
         binding.tvCharacterName.text = getCharacterDisplayName(userProgress.selectedCharacter)
 
-        // Load character image
         val characterImageRes = getCharacterImageRes(userProgress.selectedCharacter)
         binding.ivCharacter.setImageResource(characterImageRes)
 
-        // Update streak
         updateStreakDisplay(userProgress)
     }
 
     private fun updateStreakDisplay(userProgress: UserProgress) {
         val streak = userProgress.currentStreak
 
-        // Update streak text
         if (streak == 0) {
             binding.layoutStreak.tvStreakTitle.text = "0 day streak, start make a series"
             binding.layoutStreak.tvStreakSubtitle.text = "Every day count!"
@@ -117,7 +142,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
             binding.layoutStreak.tvStreakSubtitle.text = "KEEP IT UP!"
         }
 
-        // Update fire icons for days
         val streakDays = userProgress.streakDays.split(",").mapNotNull { it.toIntOrNull() }
         val fireViews = listOf(
             binding.layoutStreak.ivFireSunday,
@@ -136,17 +160,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun displayCategories(categories: List<Category>) {
         Log.d("HomeFragment", "Categories loaded: ${categories.size}")
-        categories.forEach {
-            Log.d("HomeFragment", "Category: ${it.displayName}")
-        }
         categoryAdapter.submitList(categories)
     }
+
+    override fun displayLastGames(games: List<GameResult>) {
+        Log.d("HomeFragment", "Last games loaded: ${games.size}")
+        lastGamesAdapter.submitList(games)
+
+        // Show/hide last games section based on availability
+        if (games.isEmpty()) {
+            binding.layoutLastGamesHeader.visibility = View.GONE
+            binding.rvLastGames.visibility = View.GONE
+        } else {
+            binding.layoutLastGamesHeader.visibility = View.VISIBLE
+            binding.rvLastGames.visibility = View.VISIBLE
+        }
+    }
+
     private fun getCharacterDisplayName(characterName: String): String {
-        return characterName.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+        return characterName.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase() else it.toString()
+        }
     }
 
     private fun getCharacterImageRes(characterName: String): Int {
-        // This would map to actual drawable resources
         return when (characterName) {
             "rika" -> R.drawable.character_rika
             "kaiyo" -> R.drawable.character_kaiyo
