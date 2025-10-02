@@ -96,7 +96,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <!-- Rest of your layout remains the same... -->
 
     <!-- Stats Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -202,6 +201,17 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+    <include
+        android:id="@+id/layout_streak"
+        layout="@layout/item_streak"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_stats" />
+
+
     <!-- Games Section -->
     <LinearLayout
         android:id="@+id/layout_games_header"
@@ -213,7 +223,7 @@
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_stats">
+        app:layout_constraintTop_toBottomOf="@id/layout_streak">
 
         <ImageView
             android:layout_width="24dp"
