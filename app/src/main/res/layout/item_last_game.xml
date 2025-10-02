@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="16dp"
+    android:paddingBottom="12dp">
+
+    <!-- Notched Background Shape -->
+    <ImageView
+        android:id="@+id/iv_notched_background"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="11dp"
+        android:contentDescription="@string/card_background"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_last_game_notched"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="328:108"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left Gradient Line -->
+    <View
+        android:id="@+id/view_gradient_left"
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:rotation="180"
+        android:translationX="5dp"
+        app:layout_constraintEnd_toStartOf="@id/layout_date_badge"
+        app:layout_constraintTop_toTopOf="@id/iv_notched_background" />
+
+    <!-- Right Gradient Line -->
+    <View
+        android:id="@+id/view_gradient_right"
+        android:layout_width="56dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:translationX="-5dp"
+        app:layout_constraintStart_toEndOf="@id/layout_date_badge"
+        app:layout_constraintTop_toTopOf="@id/iv_notched_background" />
+
+    <!-- Date Badge (Heptagon) -->
+    <FrameLayout
+        android:id="@+id/layout_date_badge"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginHorizontal="91dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_category"
+        app:layout_constraintDimensionRatio="145:40"
+        app:layout_constraintEnd_toEndOf="@id/iv_notched_background"
+        app:layout_constraintStart_toStartOf="@id/iv_notched_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="spread_inside">
+
+        <!-- Heptagon Shape -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="@string/date_badge"
+            android:scaleType="center"
+
+            android:src="@drawable/heptagon_shape" />
+
+        <!-- Date Text -->
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:elevation="6dp"
+            android:textColor="@color/on_primary"
+            tools:text="03-08-2025" />
+    </FrameLayout>
+
+    <!-- Category Title -->
+    <TextView
+        android:id="@+id/tv_category"
+        style="@style/TextAppearance.Body.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toTopOf="@id/layout_stats"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_date_badge"
+        tools:text="Science &amp; Natural" />
+
+    <!-- Stats Container -->
+    <LinearLayout
+        android:id="@+id/layout_stats"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="17dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_notched_background"
+        app:layout_constraintStart_toStartOf="@id/iv_notched_background"
+        app:layout_constraintTop_toBottomOf="@id/tv_category">
+
+        <!-- Coins Section -->
+        <LinearLayout
+            android:id="@+id/layout_coins"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp">
+
+                <!-- Coin Glow Effect -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="19dp"
+                    android:layout_height="19dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/transparent"
+                    android:outlineSpotShadowColor="@color/orange_accent"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="6dp" />
+
+                <!-- Coin Icon -->
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/coins"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_coin_stack" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_coins"
+                style="@style/TextAppearance.Label.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/shade_primary"
+                tools:text="304" />
+        </LinearLayout>
+
+        <!-- Divider 1 -->
+        <View
+            android:id="@+id/divider_1"
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/bg_divider_rounded" />
+
+        <!-- Stars Section -->
+        <LinearLayout
+            android:id="@+id/layout_stars"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp">
+
+                <!-- Star Glow Effect -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/transparent"
+                    android:outlineSpotShadowColor="@color/primary_variant"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="6dp" />
+
+                <!-- Star Icon -->
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/stars"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_star_blue" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_stars"
+                style="@style/TextAppearance.Label.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/shade_primary"
+                tools:text="0" />
+        </LinearLayout>
+
+        <!-- Divider 2 -->
+        <View
+            android:id="@+id/divider_2"
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_marginHorizontal="8dp"
+            android:background="@drawable/bg_divider_rounded" />
+
+        <!-- Time Section -->
+        <LinearLayout
+            android:id="@+id/layout_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <FrameLayout
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginEnd="4dp">
+
+                <!-- Clock Glow Effect -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/transparent"
+                    android:outlineSpotShadowColor="@color/primary_variant"
+                    app:cardCornerRadius="50dp"
+                    app:cardElevation="6dp" />
+
+                <!-- Clock Icon -->
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/time"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_clock" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_time"
+                style="@style/TextAppearance.Label.Medium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/shade_primary"
+                tools:text="1m 33sec" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
