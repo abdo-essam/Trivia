@@ -1,0 +1,24 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="145dp"
+    android:height="40dp"
+    android:viewportWidth="145"
+    android:viewportHeight="40">
+
+    <!-- Heptagon Shape with Gradient -->
+    <path
+        android:pathData="M20,0 L125,0 C135,0 145,10 145,20 C145,30 135,40 125,40 L20,40 C10,40 0,30 0,20 C0,10 10,0 20,0 Z"
+        android:fillColor="@color/primary" />
+
+    <!-- Optional: Add gradient overlay -->
+    <path
+        android:pathData="M20,0 L125,0 C135,0 145,10 145,20 C145,30 135,40 125,40 L20,40 C10,40 0,30 0,20 C0,10 10,0 20,0 Z">
+        <aapt:attr name="android:fillColor" xmlns:aapt="http://schemas.android.com/aapt">
+            <gradient
+                android:startY="0"
+                android:endY="40"
+                android:startColor="#30ABE8"
+                android:endColor="#49BAF2"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+</vector>

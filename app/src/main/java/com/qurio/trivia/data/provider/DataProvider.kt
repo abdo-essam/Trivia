@@ -3,7 +3,11 @@ package com.qurio.trivia.data.provider
 import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.Character
+import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 object DataProvider {
 
@@ -145,6 +149,144 @@ object DataProvider {
                 name = "art",
                 displayName = "Arts & Literature",
                 imageRes = R.drawable.category_art
+            )
+        )
+    }
+
+    fun getFakeGameResults(): List<GameResult> {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val calendar = Calendar.getInstance()
+
+        return listOf(
+            GameResult(
+                id = 1,
+                date = dateFormat.format(calendar.time), // Today: 03-08-2025
+                category = "Science & Natural",
+                difficulty = "Easy",
+                totalQuestions = 10,
+                correctAnswers = 8,
+                incorrectAnswers = 2,
+                skippedAnswers = 0,
+                stars = 3,
+                coins = 304,
+                timeTaken = 93000 // 1m 33sec
+            ),
+            GameResult(
+                id = 2,
+                date = dateFormat.format(calendar.apply { add(Calendar.DAY_OF_MONTH, -2) }.time), // 01-08-2025
+                category = "Mythology",
+                difficulty = "Medium",
+                totalQuestions = 10,
+                correctAnswers = 4,
+                incorrectAnswers = 6,
+                skippedAnswers = 0,
+                stars = 0,
+                coins = -12,
+                timeTaken = 56000 // 56sec
+            ),
+            GameResult(
+                id = 3,
+                date = dateFormat.format(calendar.apply { add(Calendar.DAY_OF_MONTH, -1) }.time), // 31-07-2025
+                category = "Video Games",
+                difficulty = "Hard",
+                totalQuestions = 10,
+                correctAnswers = 7,
+                incorrectAnswers = 2,
+                skippedAnswers = 1,
+                stars = 0,
+                coins = 304,
+                timeTaken = 182000 // 3m 02sec
+            ),
+            GameResult(
+                id = 4,
+                date = dateFormat.format(calendar.apply { add(Calendar.DAY_OF_MONTH, -26) }.time), // 05-07-2025
+                category = "Video Games",
+                difficulty = "Easy",
+                totalQuestions = 10,
+                correctAnswers = 9,
+                incorrectAnswers = 1,
+                skippedAnswers = 0,
+                stars = 1,
+                coins = 568,
+                timeTaken = 182000 // 3m 02sec
+            ),
+            GameResult(
+                id = 5,
+                date = dateFormat.format(calendar.apply { add(Calendar.DAY_OF_MONTH, -2) }.time), // 03-07-2025
+                category = "Video Games",
+                difficulty = "Medium",
+                totalQuestions = 10,
+                correctAnswers = 7,
+                incorrectAnswers = 3,
+                skippedAnswers = 0,
+                stars = 0,
+                coins = 304,
+                timeTaken = 182000 // 3m 02sec
+            ),
+            GameResult(
+                id = 6,
+                date = "2025-06-28",
+                category = "History",
+                difficulty = "Easy",
+                totalQuestions = 10,
+                correctAnswers = 10,
+                incorrectAnswers = 0,
+                skippedAnswers = 0,
+                stars = 3,
+                coins = 450,
+                timeTaken = 120000 // 2m
+            ),
+            GameResult(
+                id = 7,
+                date = "2025-06-25",
+                category = "Geography",
+                difficulty = "Medium",
+                totalQuestions = 10,
+                correctAnswers = 5,
+                incorrectAnswers = 5,
+                skippedAnswers = 0,
+                stars = 1,
+                coins = 120,
+                timeTaken = 150000 // 2m 30sec
+            ),
+            GameResult(
+                id = 8,
+                date = "2025-06-20",
+                category = "Music",
+                difficulty = "Hard",
+                totalQuestions = 10,
+                correctAnswers = 3,
+                incorrectAnswers = 7,
+                skippedAnswers = 0,
+                stars = 0,
+                coins = -50,
+                timeTaken = 200000 // 3m 20sec
+            ),
+            GameResult(
+                id = 9,
+                date = "2025-06-18",
+                category = "Food & Drink",
+                difficulty = "Easy",
+                totalQuestions = 10,
+                correctAnswers = 8,
+                incorrectAnswers = 1,
+                skippedAnswers = 1,
+                stars = 2,
+                coins = 280,
+                timeTaken = 95000 // 1m 35sec
+            ),
+            GameResult(
+                id = 10,
+                date = "2025-06-15",
+                category = "General Knowledge",
+                difficulty = "Medium",
+                totalQuestions = 10,
+                correctAnswers = 6,
+                incorrectAnswers = 4,
+                skippedAnswers = 0,
+                stars = 1,
+                coins = 180,
+                timeTaken = 165000 // 2m 45sec
             )
         )
     }
