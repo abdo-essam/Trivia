@@ -65,7 +65,6 @@
             android:layout_gravity="center"
             android:contentDescription="@string/date_badge"
             android:scaleType="center"
-
             android:src="@drawable/heptagon_shape" />
 
         <!-- Date Text -->
