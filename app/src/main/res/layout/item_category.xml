@@ -7,11 +7,12 @@
     android:layout_height="344dp"
     android:layout_marginEnd="16dp">
 
-    <!-- Card Background with Border -->
+    <!-- Card Background with Border (Contains Image + Text Only) -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/card_category"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginBottom="22dp"
         app:cardBackgroundColor="@color/on_image_surface"
         app:cardCornerRadius="24dp"
         app:cardElevation="0dp"
@@ -24,7 +25,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="16dp">
 
             <!-- Category Image -->
             <ImageView
@@ -32,11 +34,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="fitCenter"
-                android:padding="16dp"
                 app:layout_constraintBottom_toTopOf="@+id/tv_category_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
                 tools:src="@drawable/category_geography" />
 
             <!-- Category Name -->
@@ -44,45 +46,49 @@
                 android:id="@+id/tv_category_name"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Title.Large"
                 android:textColor="@color/shade_primary"
-                app:layout_constraintBottom_toTopOf="@+id/btn_play_now"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:text="Geography" />
-
-            <!-- Play Now Button Background -->
-            <View
-                android:id="@+id/btn_background"
-                android:layout_width="165dp"
-                android:layout_height="44dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_category_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-
-            <!-- Play Now Button -->
-            <TextView
-                android:id="@+id/btn_play_now"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="center"
-                android:text="@string/play_now"
-                android:textAppearance="@style/TextAppearance.Label.Medium"
-                android:textColor="@color/shade_primary"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_background"
-                app:layout_constraintEnd_toEndOf="@+id/btn_background"
-                app:layout_constraintStart_toStartOf="@+id/btn_background"
-                app:layout_constraintTop_toTopOf="@+id/btn_background" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_category_image"
+                tools:text="Geography" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
+    <!-- Play Now Button (OUTSIDE the card, overlapping bottom) -->
+    <FrameLayout
+        android:id="@+id/btn_play_now_container"
+        android:layout_width="165dp"
+        android:layout_height="44dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Button Background Shape -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg_category_button" />
+
+        <!-- Button Text -->
+        <TextView
+            android:id="@+id/btn_play_now"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/play_now"
+            android:textAppearance="@style/TextAppearance.Label.Medium"
+            android:textColor="@color/shade_primary"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
