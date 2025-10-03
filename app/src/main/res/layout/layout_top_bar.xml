@@ -1,80 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/layout_top_bar"
+    android:id="@+id/top_bar_container"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:layout_marginHorizontal="20dp"
-    android:layout_marginTop="20dp"
-    android:background="@drawable/bg_top_bar_gradient"
-    android:paddingHorizontal="16dp">
+    android:background="@color/surface">
 
-    <!-- Character Image -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_character"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- Content Container -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_border"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Back Arrow (Hidden by default) -->
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back_arrow"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/shade_secondary"/>
+
+        <!-- Character Image (Visible by default) -->
         <ImageView
             android:id="@+id/iv_character"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/character_rika"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/character_image"
+            android:scaleType="fitCenter"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/character_rika" />
 
-    </androidx.cardview.widget.CardView>
-
-    <!-- Welcome Text Container -->
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_settings"
-        app:layout_constraintStart_toEndOf="@+id/card_character"
-        app:layout_constraintTop_toTopOf="parent">
-
+        <!-- Title (Hidden by default - for inner screens) -->
         <TextView
-            android:id="@+id/tv_welcome"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Welcome Qurio explorer"
-            android:textAppearance="@style/TextAppearance.Body.Small"
-            android:textColor="@color/shade_secondary"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tv_character_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Rika"
-            android:textAppearance="@style/TextAppearance.Label.Medium"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:textAppearance="@style/TextAppearance.Title.Medium"
             android:textColor="@color/shade_primary"
-            android:textSize="14sp" />
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_settings"
+            app:layout_constraintStart_toEndOf="@id/btn_back"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Games" />
 
-    </LinearLayout>
+        <!-- Welcome Section (Visible by default - for home) -->
+        <LinearLayout
+            android:id="@+id/layout_welcome"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_settings"
+            app:layout_constraintStart_toEndOf="@id/iv_character"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Settings Button -->
-    <ImageButton
-        android:id="@+id/btn_settings"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="10dp"
-        android:src="@drawable/ic_settings"
+            <TextView
+                android:id="@+id/tv_welcome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/fredoka"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:text="@string/welcome_qurio_explorer"
+                android:textColor="@color/shade_secondary"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tv_character_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/fredoka_one"
+                android:includeFontPadding="false"
+                android:maxLines="1"
+                android:textColor="@color/shade_primary"
+                android:textSize="16sp"
+                tools:text="Rika" />
+
+        </LinearLayout>
+
+        <!-- Settings Button -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btn_settings"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardBackgroundColor="@color/surface_high"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeWidth="0dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/settings"
+                android:src="@drawable/ic_settings"
+                app:tint="@color/shade_secondary" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Bottom Border -->
+    <View
+        android:id="@+id/bottom_border"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/top_bar_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/gray_light" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,93 +13,16 @@
         android:layout_height="wrap_content"
         android:paddingBottom="24dp">
 
-        <!-- Top Bar -->
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Top Bar (Include the new component) -->
+        <include
             android:id="@+id/layout_top_bar"
+            layout="@layout/layout_top_bar"
             android:layout_width="0dp"
             android:layout_height="64dp"
-            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_top_bar_gradient"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <!-- Character Image -->
-            <ImageView
-                android:id="@+id/iv_character"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginStart="12dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/character_rika"
-                tools:src="@drawable/character_rika"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!-- Welcome Text Container -->
-            <LinearLayout
-                android:id="@+id/layout_welcome"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/layout_settings_button"
-                app:layout_constraintStart_toEndOf="@+id/iv_character"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:id="@+id/tv_welcome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Welcome Qurio explorer"
-                    android:textAppearance="@style/TextAppearance.Body.Small"
-                    android:textColor="@color/shade_secondary" />
-
-                <TextView
-                    android:id="@+id/tv_character_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Rika"
-                    android:textAppearance="@style/TextAppearance.Label.Medium"
-                    android:textColor="@color/shade_primary" />
-
-            </LinearLayout>
-
-            <!-- Settings Button Container -->
-            <FrameLayout
-                android:id="@+id/layout_settings_button"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_marginEnd="12dp"
-                android:elevation="4dp"
-                android:outlineProvider="background"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_settings_button" />
-
-                <ImageButton
-                    android:id="@+id/btn_settings"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:scaleType="fitEnd"
-                    android:src="@drawable/ic_settings" />
-
-            </FrameLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!-- Stats Section -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -120,6 +43,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <!-- Lives -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -131,20 +55,22 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_heart"
-                        app:tint="@color/red" />
+                        app:tint="@color/red_accent" />
 
                     <TextView
                         android:id="@+id/tv_lives"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="4"
-                        android:textColor="@color/white"
+                        android:fontFamily="@font/fredoka_one"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/shade_primary"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        tools:text="4" />
 
                 </LinearLayout>
 
+                <!-- Coins -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -156,20 +82,22 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_coin"
-                        app:tint="@color/orange" />
+                        app:tint="@color/yellow_accent" />
 
                     <TextView
                         android:id="@+id/tv_coins"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="0"
-                        android:textColor="@color/white"
+                        android:fontFamily="@font/fredoka_one"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/shade_primary"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        tools:text="5,400" />
 
                 </LinearLayout>
 
+                <!-- Awards -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -181,23 +109,25 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_trophy"
-                        app:tint="@color/yellow" />
+                        app:tint="@color/yellow_accent" />
 
                     <TextView
+                        android:id="@+id/tv_awards"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="2"
-                        android:textColor="@color/white"
+                        android:fontFamily="@font/fredoka_one"
+                        android:includeFontPadding="false"
+                        android:textColor="@color/shade_primary"
                         android:textSize="16sp"
-                        android:textStyle="bold" />
+                        tools:text="2" />
 
                     <ImageView
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginStart="4dp"
                         android:src="@drawable/ic_crown"
-                        app:tint="@color/blue_primary" />
+                        app:tint="@color/primary" />
 
                 </LinearLayout>
 
@@ -220,8 +150,8 @@
             android:id="@+id/layout_games_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="24dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -233,7 +163,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Games"
+                android:text="@string/games"
                 android:textAppearance="@style/TextAppearance.Headline.Small"
                 android:textColor="@color/shade_primary" />
 
@@ -242,14 +172,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_pill"
+                android:drawablePadding="6dp"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
                 android:text="@string/all"
                 android:textAppearance="@style/TextAppearance.Label.Medium"
                 android:textColor="@color/shade_primary"
-                android:drawablePadding="6dp"
                 app:drawableStartCompat="@drawable/ic_grid"
-                app:drawableTint="@color/white" />
+                app:drawableTint="@color/primary" />
 
         </LinearLayout>
 
@@ -257,24 +187,25 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categories"
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingStart="20dp"
             android:paddingEnd="4dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_games_header"
+            tools:itemCount="5"
             tools:listitem="@layout/item_category" />
 
+        <!-- Last Games Section Header -->
         <LinearLayout
             android:id="@+id/layout_last_games_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="32dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -286,7 +217,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Last Games"
+                android:text="@string/last_games"
                 android:textAppearance="@style/TextAppearance.Headline.Small"
                 android:textColor="@color/shade_primary" />
 
@@ -295,12 +226,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_pill"
+                android:drawablePadding="6dp"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
                 android:text="@string/all"
                 android:textAppearance="@style/TextAppearance.Label.Medium"
                 android:textColor="@color/shade_primary"
-                android:drawablePadding="6dp"
                 app:drawableStartCompat="@drawable/ic_arrow_right"
                 app:drawableTint="@color/primary" />
 
@@ -310,14 +241,15 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_last_games"
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="16dp"
             android:nestedScrollingEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_last_games_header"
-            tools:listitem="@layout/item_last_game"
-            tools:itemCount="3" />
+            tools:itemCount="3"
+            tools:listitem="@layout/item_last_game" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
