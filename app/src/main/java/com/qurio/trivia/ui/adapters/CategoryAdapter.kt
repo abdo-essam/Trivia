@@ -38,7 +38,7 @@ class CategoryAdapter(
                 }
             }
 
-            binding.cardCategory.setOnClickListener {
+            binding.ivCategoryImage.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
                     onCategoryClick(getItem(position))
