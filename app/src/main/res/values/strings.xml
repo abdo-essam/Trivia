@@ -45,6 +45,8 @@
     <string name="start_game">Start Game</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <string name="play_now">PLAY NOW</string>
+
     <!-- Last Games -->
     <string name="card_background">Card background</string>
     <string name="date_badge">Date badge</string>
@@ -53,4 +55,10 @@
     <string name="time">Time</string>
     <string name="last_games">Last Games</string>
     <string name="all">All</string>
+
+    <string name="welcome_qurio_explorer">Welcome Qurio explorer</string>
+    <string name="streak_start">0 day streak, start make a series</string>
+    <string name="every_day_count">Every day count!</string>
+    <string name="streak_count">%d day streak, make a big series</string>
+    <string name="keep_it_up">KEEP IT UP!</string>
 </resources>

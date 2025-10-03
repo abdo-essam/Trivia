@@ -13,12 +13,13 @@ class CategoryAdapter(
 ) : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        val binding = ItemCategoryBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+        return CategoryViewHolder(
+            ItemCategoryBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
         )
-        return CategoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
@@ -29,27 +30,35 @@ class CategoryAdapter(
         private val binding: ItemCategoryBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(category: Category) {
-            binding.tvCategoryName.text = category.displayName
-            binding.ivCategoryImage.setImageResource(category.imageRes)
-
+        init {
             binding.btnPlayNow.setOnClickListener {
-                onCategoryClick(category)
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onCategoryClick(getItem(position))
+                }
             }
 
-            binding.root.setOnClickListener {
-                onCategoryClick(category)
+            binding.cardCategory.setOnClickListener {
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onCategoryClick(getItem(position))
+                }
+            }
+        }
+
+        fun bind(category: Category) {
+            binding.apply {
+                tvCategoryName.text = category.displayName
+                ivCategoryImage.setImageResource(category.imageRes)
             }
         }
     }
 
     private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
-        override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: Category, newItem: Category) =
+            oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Category, newItem: Category) =
+            oldItem == newItem
     }
 }
