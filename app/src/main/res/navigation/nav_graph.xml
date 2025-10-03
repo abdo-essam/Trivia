@@ -2,7 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/loadingFragment">
+
+    <fragment
+        android:id="@+id/loadingFragment"
+        android:name="com.qurio.trivia.ui.loading.LoadingFragment"
+        android:label="LoadingFragment" />
 
     <fragment
         android:id="@+id/onboardingFragment"
