@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="165dp"
+    android:height="44dp"
+    android:viewportWidth="165"
+    android:viewportHeight="44">
+
+    <!-- Hexagon path -->
+    <path
+        android:fillColor="@color/primary"
+        android:pathData="M 20,0 L 145,0 L 165,22 L 145,44 L 20,44 L 0,22 Z" />
+</vector>

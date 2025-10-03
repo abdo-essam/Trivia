@@ -244,7 +244,7 @@
                 android:background="@drawable/bg_pill"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
-                android:text="All"
+                android:text="@string/all"
                 android:textAppearance="@style/TextAppearance.Label.Medium"
                 android:textColor="@color/shade_primary"
                 android:drawablePadding="6dp"
@@ -253,23 +253,22 @@
 
         </LinearLayout>
 
-        <!-- Categories RecyclerView (Horizontal Scroll) -->
+        <!-- Categories RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categories"
             android:layout_width="0dp"
             android:layout_height="400dp"
-            android:layout_marginTop="16dp"
             android:clipToPadding="false"
+            android:orientation="horizontal"
             android:paddingStart="20dp"
             android:paddingEnd="4dp"
-            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_games_header"
-            tools:listitem="@layout/item_category"
-            tools:itemCount="1" />
+            tools:listitem="@layout/item_category" />
 
-        <!-- Last Games Section Header -->
         <LinearLayout
             android:id="@+id/layout_last_games_header"
             android:layout_width="0dp"
@@ -298,7 +297,7 @@
                 android:background="@drawable/bg_pill"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="8dp"
-                android:text="All"
+                android:text="@string/all"
                 android:textAppearance="@style/TextAppearance.Label.Medium"
                 android:textColor="@color/shade_primary"
                 android:drawablePadding="6dp"

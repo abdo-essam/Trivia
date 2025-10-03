@@ -1,8 +1,6 @@
 package com.qurio.trivia.ui.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,8 +27,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         FragmentHomeBinding.inflate(layoutInflater)
     }
 
-    private lateinit var categoryAdapter: CategoryAdapter
-    private lateinit var lastGamesAdapter: LastGamesAdapter
+    private val categoryAdapter by lazy {
+        CategoryAdapter(::navigateToCharacterSelection)
+    }
+
+    private val lastGamesAdapter by lazy {
+        LastGamesAdapter { /* Handle game result click */ }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,22 +47,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     override fun setupViews() {
         setupCategoriesRecyclerView()
         setupLastGamesRecyclerView()
-
-        binding.btnSettings.setOnClickListener {
-            showSettings()
-        }
-
-        binding.tvAllLastGames.setOnClickListener {
-            navigateToAllLastGames()
-        }
-
-        // Initialize fake data first (for testing)
-        presenter.initializeData()
-
-        // Load data
-        presenter.loadUserProgress()
-        presenter.loadCategories()
-        presenter.loadLastGames(3) // Show only 3 games in home screen
+        setupClickListeners()
+        loadInitialData()
     }
 
     override fun setupObservers() {
@@ -67,40 +56,91 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun setupCategoriesRecyclerView() {
-        categoryAdapter = CategoryAdapter { category ->
-            navigateToCharacterSelection(category)
-        }
-
         binding.rvCategories.apply {
-            layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL,
-                false
-            )
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
             adapter = categoryAdapter
             setHasFixedSize(true)
-
         }
-        // Load categories immediately after setup
-        presenter.loadCategories()
     }
 
     private fun setupLastGamesRecyclerView() {
-        lastGamesAdapter = LastGamesAdapter { gameResult ->
-            // Handle click on game result if needed
-            // Could show game details or replay
-        }
-
         binding.rvLastGames.apply {
-            layoutManager = LinearLayoutManager(requireContext())
+            layoutManager = LinearLayoutManager(context)
             adapter = lastGamesAdapter
             isNestedScrollingEnabled = false
         }
     }
 
-    private fun showSettings() {
-        val settingsDialog = SettingsDialogFragment()
-        settingsDialog.show(childFragmentManager, "settings")
+    private fun setupClickListeners() {
+        binding.btnSettings.setOnClickListener {
+            SettingsDialogFragment().show(childFragmentManager, "settings")
+        }
+
+        binding.tvAllLastGames.setOnClickListener {
+            // TODO: Navigate to all last games
+        }
+    }
+
+    private fun loadInitialData() {
+        presenter.apply {
+            initializeData()
+            loadUserProgress()
+            loadCategories()
+            loadLastGames(3)
+        }
+    }
+
+    override fun displayUserProgress(userProgress: UserProgress) {
+        binding.apply {
+            tvLives.text = userProgress.lives.toString()
+            tvCoins.text = userProgress.totalCoins.toString()
+            tvWelcome.text = getString(R.string.welcome_qurio_explorer)
+            tvCharacterName.text = userProgress.selectedCharacter.capitalize()
+            ivCharacter.setImageResource(getCharacterImageRes(userProgress.selectedCharacter))
+        }
+        updateStreakDisplay(userProgress)
+    }
+
+    private fun updateStreakDisplay(userProgress: UserProgress) {
+        val streak = userProgress.currentStreak
+
+        binding.layoutStreak.apply {
+            if (streak == 0) {
+                tvStreakTitle.text = getString(R.string.streak_start)
+                tvStreakSubtitle.text = getString(R.string.every_day_count)
+            } else {
+                tvStreakTitle.text = getString(R.string.streak_count, streak)
+                tvStreakSubtitle.text = getString(R.string.keep_it_up)
+            }
+        }
+
+        updateStreakFireIcons(userProgress.streakDays)
+    }
+
+    private fun updateStreakFireIcons(streakDays: String) {
+        val days = streakDays.split(",").mapNotNull { it.toIntOrNull() }.toSet()
+        val fireViews = with(binding.layoutStreak) {
+            listOf(
+                ivFireSunday, ivFireMonday, ivFireTuesday, ivFireWednesday,
+                ivFireThursday, ivFireFriday, ivFireSaturday
+            )
+        }
+
+        fireViews.forEachIndexed { index, imageView ->
+            imageView.visibility = if (index in days) View.VISIBLE else View.GONE
+        }
+    }
+
+    override fun displayCategories(categories: List<Category>) {
+        categoryAdapter.submitList(categories)
+    }
+
+    override fun displayLastGames(games: List<GameResult>) {
+        lastGamesAdapter.submitList(games)
+
+        val visibility = if (games.isEmpty()) View.GONE else View.VISIBLE
+        binding.layoutLastGamesHeader.visibility = visibility
+        binding.rvLastGames.visibility = visibility
     }
 
     private fun navigateToCharacterSelection(category: Category) {
@@ -111,90 +151,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         findNavController().navigate(action)
     }
 
-    private fun navigateToAllLastGames() {
-        // TODO: Navigate to all last games screen
-        // val action = HomeFragmentDirections.actionHomeToLastGames()
-        // findNavController().navigate(action)
+    private fun getCharacterImageRes(characterName: String): Int = when (characterName) {
+        "rika" -> R.drawable.character_rika
+        "kaiyo" -> R.drawable.character_kaiyo
+        "mimi" -> R.drawable.character_mimi
+        "yoru" -> R.drawable.character_yoru
+        "kuro" -> R.drawable.character_kuro
+        "miko" -> R.drawable.character_miko
+        "aori" -> R.drawable.character_aori
+        "nara" -> R.drawable.character_nara
+        "renji" -> R.drawable.character_renji
+        else -> R.drawable.character_rika
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun displayUserProgress(userProgress: UserProgress) {
-        binding.tvLives.text = userProgress.lives.toString()
-        binding.tvCoins.text = userProgress.totalCoins.toString()
-
-        binding.tvWelcome.text = "Welcome Qurio explorer"
-        binding.tvCharacterName.text = getCharacterDisplayName(userProgress.selectedCharacter)
-
-        val characterImageRes = getCharacterImageRes(userProgress.selectedCharacter)
-        binding.ivCharacter.setImageResource(characterImageRes)
-
-        updateStreakDisplay(userProgress)
-    }
-
-    private fun updateStreakDisplay(userProgress: UserProgress) {
-        val streak = userProgress.currentStreak
-
-        if (streak == 0) {
-            binding.layoutStreak.tvStreakTitle.text = "0 day streak, start make a series"
-            binding.layoutStreak.tvStreakSubtitle.text = "Every day count!"
-        } else {
-            binding.layoutStreak.tvStreakTitle.text = "$streak day streak, make a big series"
-            binding.layoutStreak.tvStreakSubtitle.text = "KEEP IT UP!"
-        }
-
-        val streakDays = userProgress.streakDays.split(",").mapNotNull { it.toIntOrNull() }
-        val fireViews = listOf(
-            binding.layoutStreak.ivFireSunday,
-            binding.layoutStreak.ivFireMonday,
-            binding.layoutStreak.ivFireTuesday,
-            binding.layoutStreak.ivFireWednesday,
-            binding.layoutStreak.ivFireThursday,
-            binding.layoutStreak.ivFireFriday,
-            binding.layoutStreak.ivFireSaturday
-        )
-
-        fireViews.forEachIndexed { index, imageView ->
-            imageView.visibility = if (streakDays.contains(index)) View.VISIBLE else View.GONE
-        }
-    }
-
-    override fun displayCategories(categories: List<Category>) {
-        Log.d("HomeFragment", "Categories loaded: ${categories.size}")
-        categoryAdapter.submitList(categories)
-    }
-
-    override fun displayLastGames(games: List<GameResult>) {
-        Log.d("HomeFragment", "Last games loaded: ${games.size}")
-        lastGamesAdapter.submitList(games)
-
-        // Show/hide last games section based on availability
-        if (games.isEmpty()) {
-            binding.layoutLastGamesHeader.visibility = View.GONE
-            binding.rvLastGames.visibility = View.GONE
-        } else {
-            binding.layoutLastGamesHeader.visibility = View.VISIBLE
-            binding.rvLastGames.visibility = View.VISIBLE
-        }
-    }
-
-    private fun getCharacterDisplayName(characterName: String): String {
-        return characterName.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase() else it.toString()
-        }
-    }
-
-    private fun getCharacterImageRes(characterName: String): Int {
-        return when (characterName) {
-            "rika" -> R.drawable.character_rika
-            "kaiyo" -> R.drawable.character_kaiyo
-            "mimi" -> R.drawable.character_mimi
-            "yoru" -> R.drawable.character_yoru
-            "kuro" -> R.drawable.character_kuro
-            "miko" -> R.drawable.character_miko
-            "aori" -> R.drawable.character_aori
-            "nara" -> R.drawable.character_nara
-            "renji" -> R.drawable.character_renji
-            else -> R.drawable.character_rika
-        }
+    private fun String.capitalize() = replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase() else it.toString()
     }
 }
