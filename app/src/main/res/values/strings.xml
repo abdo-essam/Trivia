@@ -61,4 +61,7 @@
     <string name="every_day_count">Every day count!</string>
     <string name="streak_count">%d day streak, make a big series</string>
     <string name="keep_it_up">KEEP IT UP!</string>
+
+    <string name="character_image">Character avatar</string>
+    <string name="games">Games</string>
 </resources>
