@@ -1,13 +1,13 @@
 package com.qurio.trivia.base
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
-import com.qurio.trivia.ui.dialogs.LoadingDialogFragment
+import com.airbnb.lottie.LottieAnimationView
+import com.qurio.trivia.R
 import com.qurio.trivia.ui.dialogs.NoConnectionDialogFragment
 
 abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment(), BaseView {
@@ -15,10 +15,16 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
     protected abstract val binding: VB
     protected abstract val presenter: P
 
-    private var loadingDialog: LoadingDialogFragment? = null
+    private var loadingOverlay: View? = null
+    private var lottieAnimation: LottieAnimationView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Find loading overlay in the layout
+        loadingOverlay = view.findViewById(R.id.loading_overlay)
+        lottieAnimation = loadingOverlay?.findViewById(R.id.lottie_loading)
+
         setupViews()
         setupObservers()
         (presenter as? BasePresenter<BaseView>)?.attachView(this)
@@ -27,18 +33,19 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
     override fun onDestroyView() {
         super.onDestroyView()
         (presenter as? BasePresenter<BaseView>)?.detachView()
-        loadingDialog?.dismiss()
-        loadingDialog = null
+        hideLoading()
+        loadingOverlay = null
+        lottieAnimation = null
     }
 
     override fun showLoading() {
-        loadingDialog = LoadingDialogFragment()
-        loadingDialog?.show(childFragmentManager, "loading")
+        loadingOverlay?.isVisible = true
+        lottieAnimation?.playAnimation()
     }
 
     override fun hideLoading() {
-        loadingDialog?.dismiss()
-        loadingDialog = null
+        loadingOverlay?.isVisible = false
+        lottieAnimation?.cancelAnimation()
     }
 
     override fun showError(message: String) {
