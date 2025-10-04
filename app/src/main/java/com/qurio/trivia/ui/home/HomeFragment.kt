@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +15,7 @@ import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
+import com.qurio.trivia.databinding.LayoutSectionHeaderBinding
 import com.qurio.trivia.databinding.LayoutTopBarBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
@@ -36,6 +38,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         LayoutTopBarBinding.bind(binding.root.findViewById(R.id.layout_top_bar))
     }
 
+    private val sectionHeaderGamesBinding: LayoutSectionHeaderBinding by lazy {
+        LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_games))
+    }
+    private val sectionHeaderLastGamesBinding: LayoutSectionHeaderBinding by lazy {
+        LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_last_games))
+    }
+
+
     private val categoryAdapter by lazy {
         CategoryAdapter(::onCategoryClick)
     }
@@ -55,10 +65,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun setupViews() {
         setupTopBar()
+        setupSectionHeaders()
         setupRecyclerViews()
-        setupClickListeners()
         loadData()
     }
+
 
     override fun setupObservers() {
         // MVP pattern - no observers needed
@@ -88,10 +99,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         }
     }
 
-    private fun setupClickListeners() {
-        with(binding) {
-            tvAllLastGames.setOnClickListener { navigateToAllGames() }
-            tvAllCategories.setOnClickListener { navigateToAllCategories() }
+    private fun setupSectionHeaders() {
+        with(sectionHeaderGamesBinding) {
+            tvSectionTitle.text = getString(R.string.games)
+            btnAll.setOnClickListener { navigateToAllCategories() }
+        }
+        with(sectionHeaderLastGamesBinding) {
+            tvSectionTitle.text = getString(R.string.last_games)
+            btnAll.setOnClickListener { navigateToAllGames() }
         }
     }
 
@@ -125,6 +140,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         val (titleRes, subtitleRes) = when {
             userProgress.currentStreak == 0 ->
                 R.string.streak_start to R.string.every_day_count
+
             else ->
                 R.string.streak_count to R.string.keep_it_up
         }
@@ -167,7 +183,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
         val shouldShowSection = games.isNotEmpty()
         with(binding) {
-            layoutLastGamesHeader.isVisible = shouldShowSection
             rvLastGames.isVisible = shouldShowSection
         }
     }

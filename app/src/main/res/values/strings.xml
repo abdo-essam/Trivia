@@ -65,4 +65,8 @@
     <string name="character_image">Character avatar</string>
     <string name="games">Games</string>
     <string name="loading_game">Loading Game</string>
+    <string name="show_all">Show all</string>
+    <string name="awards">Awards</string>
+    <string name="crown">Crown</string>
+    <string name="lives">Lives</string>
 </resources>
