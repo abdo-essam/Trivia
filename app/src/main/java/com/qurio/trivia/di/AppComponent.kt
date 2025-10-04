@@ -1,6 +1,7 @@
 package com.qurio.trivia.di
 
 import android.content.Context
+import com.qurio.trivia.MainActivity
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.ui.achievements.AchievementsFragment
 import com.qurio.trivia.ui.buylife.BuyLifeFragment
@@ -9,9 +10,9 @@ import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import com.qurio.trivia.ui.difficulty.DifficultyFragment
 import com.qurio.trivia.ui.game.GameFragment
 import com.qurio.trivia.ui.home.HomeFragment
+import com.qurio.trivia.ui.loading.LoadingFragment
 import com.qurio.trivia.ui.onboarding.OnboardingFragment
 import com.qurio.trivia.ui.result.GameResultFragment
-import com.qurio.trivia.ui.splash.SplashFragment
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -33,7 +34,7 @@ interface AppComponent {
     }
 
     fun inject(app: QuriοApp)
-    fun inject(fragment: SplashFragment)
+    fun inject(fragment: LoadingFragment)
     fun inject(fragment: OnboardingFragment)
     fun inject(fragment: HomeFragment)
     fun inject(fragment: CharacterSelectionFragment)
