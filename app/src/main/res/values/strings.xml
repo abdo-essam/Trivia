@@ -50,23 +50,29 @@
     <!-- Last Games -->
     <string name="card_background">Card background</string>
     <string name="date_badge">Date badge</string>
-    <string name="coins">Coins</string>
     <string name="stars">Stars</string>
     <string name="time">Time</string>
-    <string name="last_games">Last Games</string>
     <string name="all">All</string>
 
-    <string name="welcome_qurio_explorer">Welcome Qurio explorer</string>
+    <!-- Streak -->
+    <string name="fire_image">Fire icon</string>
+    <string name="day_fire">Day fire icon</string>
     <string name="streak_start">0 day streak, start make a series</string>
-    <string name="every_day_count">Every day count!</string>
     <string name="streak_count">%d day streak, make a big series</string>
+    <string name="every_day_count">Every day count!</string>
     <string name="keep_it_up">KEEP IT UP!</string>
 
     <string name="character_image">Character avatar</string>
-    <string name="games">Games</string>
     <string name="loading_game">Loading Game</string>
     <string name="show_all">Show all</string>
+    <!-- Stats -->
+    <string name="lives">Lives</string>
+    <string name="coins">Coins</string>
     <string name="awards">Awards</string>
     <string name="crown">Crown</string>
-    <string name="lives">Lives</string>
+
+    <!-- Home -->
+    <string name="welcome_qurio_explorer">Welcome Qurio explorer</string>
+    <string name="games">Games</string>
+    <string name="last_games">Last Games</string>
 </resources>
