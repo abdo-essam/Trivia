@@ -40,6 +40,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -54,6 +55,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/lives"
                         android:src="@drawable/ic_heart"
                         app:tint="@color/red_accent" />
 
@@ -81,6 +83,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/coins"
                         android:src="@drawable/ic_coin"
                         app:tint="@color/yellow_accent" />
 
@@ -108,6 +111,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:contentDescription="@string/awards"
                         android:src="@drawable/ic_trophy"
                         app:tint="@color/yellow_accent" />
 
@@ -126,6 +130,7 @@
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_marginStart="4dp"
+                        android:contentDescription="@string/crown"
                         android:src="@drawable/ic_crown"
                         app:tint="@color/primary" />
 
@@ -146,48 +151,22 @@
             app:layout_constraintTop_toBottomOf="@id/layout_stats" />
 
         <!-- Games Section Header -->
-        <LinearLayout
-            android:id="@+id/layout_games_header"
+        <include
+            android:id="@+id/section_header_games"
+            layout="@layout/layout_section_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="24dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_streak">
-
-            <TextView
-                android:id="@+id/tv_games_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/games"
-                android:textAppearance="@style/TextAppearance.Headline.Small"
-                android:textColor="@color/shade_primary" />
-
-            <TextView
-                android:id="@+id/tv_all_categories"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_pill"
-                android:drawablePadding="6dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
-                android:text="@string/all"
-                android:textAppearance="@style/TextAppearance.Label.Medium"
-                android:textColor="@color/shade_primary"
-                app:drawableStartCompat="@drawable/ic_grid"
-                app:drawableTint="@color/primary" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/layout_streak" />
 
         <!-- Categories RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_categories"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:paddingStart="20dp"
@@ -195,47 +174,20 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_games_header"
+            app:layout_constraintTop_toBottomOf="@id/section_header_games"
             tools:itemCount="5"
             tools:listitem="@layout/item_category" />
 
         <!-- Last Games Section Header -->
-        <LinearLayout
-            android:id="@+id/layout_last_games_header"
+        <include
+            android:id="@+id/section_header_last_games"
+            layout="@layout/layout_section_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
             android:layout_marginTop="32dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_categories">
-
-            <TextView
-                android:id="@+id/tv_last_games_title"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/last_games"
-                android:textAppearance="@style/TextAppearance.Headline.Small"
-                android:textColor="@color/shade_primary" />
-
-            <TextView
-                android:id="@+id/tv_all_last_games"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_pill"
-                android:drawablePadding="6dp"
-                android:paddingHorizontal="20dp"
-                android:paddingVertical="8dp"
-                android:text="@string/all"
-                android:textAppearance="@style/TextAppearance.Label.Medium"
-                android:textColor="@color/shade_primary"
-                app:drawableStartCompat="@drawable/ic_arrow_right"
-                app:drawableTint="@color/primary" />
-
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@id/rv_categories" />
 
         <!-- Last Games RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
@@ -247,7 +199,7 @@
             android:nestedScrollingEnabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_last_games_header"
+            app:layout_constraintTop_toBottomOf="@id/section_header_last_games"
             tools:itemCount="3"
             tools:listitem="@layout/item_last_game" />
 
