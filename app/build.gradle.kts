@@ -79,4 +79,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // lottie for animations
+    implementation(libs.lottie)
+
 }

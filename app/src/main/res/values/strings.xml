@@ -64,4 +64,5 @@
 
     <string name="character_image">Character avatar</string>
     <string name="games">Games</string>
+    <string name="loading_game">Loading Game</string>
 </resources>

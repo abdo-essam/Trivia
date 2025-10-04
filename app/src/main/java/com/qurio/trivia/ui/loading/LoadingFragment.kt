@@ -12,7 +12,9 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.data.database.UserProgressDao
 import com.qurio.trivia.data.model.UserProgress
+import com.qurio.trivia.databinding.FragmentLoadingBinding
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -25,20 +27,25 @@ class LoadingFragment : Fragment() {
     @Inject
     lateinit var userProgressDao: UserProgressDao
 
+    private var _binding: FragmentLoadingBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return View(requireContext()).apply {
-            setBackgroundColor(resources.getColor(R.color.surface, null))
-        }
+        _binding = FragmentLoadingBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         (requireActivity().application as QuriοApp).appComponent.inject(this)
+
+        // Start loading animation
+        binding.lottieLoading.playAnimation()
 
         checkFirstLaunchAndNavigate()
     }
@@ -53,6 +60,9 @@ class LoadingFragment : Fragment() {
                     userProgressDao.insertOrUpdateUserProgress(initialProgress)
                 }
 
+                // Minimum loading time to show animation (optional)
+                delay(2000)
+
                 withContext(Dispatchers.Main) {
                     if (isFirstLaunch) {
                         findNavController().navigate(R.id.onboardingFragment)
@@ -62,5 +72,10 @@ class LoadingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
