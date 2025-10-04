@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,7 @@ import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
+import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.databinding.LayoutSectionHeaderBinding
 import com.qurio.trivia.databinding.LayoutTopBarBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
@@ -33,18 +35,21 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         FragmentHomeBinding.inflate(layoutInflater)
     }
 
-    // Lazy initialization - will be created when first accessed
     private val topBarBinding: LayoutTopBarBinding by lazy {
         LayoutTopBarBinding.bind(binding.root.findViewById(R.id.layout_top_bar))
+    }
+
+    private val streakBinding: ItemStreakBinding by lazy {
+        ItemStreakBinding.bind(binding.root.findViewById(R.id.layout_streak))
     }
 
     private val sectionHeaderGamesBinding: LayoutSectionHeaderBinding by lazy {
         LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_games))
     }
+
     private val sectionHeaderLastGamesBinding: LayoutSectionHeaderBinding by lazy {
         LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_last_games))
     }
-
 
     private val categoryAdapter by lazy {
         CategoryAdapter(::onCategoryClick)
@@ -69,7 +74,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         setupRecyclerViews()
         loadData()
     }
-
 
     override fun setupObservers() {
         // MVP pattern - no observers needed
@@ -131,47 +135,59 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         with(binding) {
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = userProgress.totalCoins.toString()
+            tvAwards.text = userProgress.awards.toString()
         }
 
         updateStreakDisplay(userProgress)
     }
 
     private fun updateStreakDisplay(userProgress: UserProgress) {
-        val (titleRes, subtitleRes) = when {
-            userProgress.currentStreak == 0 ->
-                R.string.streak_start to R.string.every_day_count
-
-            else ->
-                R.string.streak_count to R.string.keep_it_up
-        }
-
-        with(binding.layoutStreak) {
-            tvStreakTitle.text = if (userProgress.currentStreak == 0) {
-                getString(titleRes)
+        with(streakBinding) {
+            // Update title and subtitle based on streak
+            if (userProgress.currentStreak == 0) {
+                streakTitle.text = getString(R.string.streak_start)
+                streakSubtitle.text = getString(R.string.every_day_count)
             } else {
-                getString(titleRes, userProgress.currentStreak)
+                streakTitle.text = getString(R.string.streak_count, userProgress.currentStreak)
+                streakSubtitle.text = getString(R.string.keep_it_up)
             }
-            tvStreakSubtitle.text = getString(subtitleRes)
         }
 
-        updateStreakFireIcons(userProgress.streakDays)
+        updateStreakDays(userProgress.streakDays)
     }
 
-    private fun updateStreakFireIcons(streakDays: String) {
+    private fun updateStreakDays(streakDays: String) {
         val activeDays = streakDays.split(",")
             .mapNotNull { it.toIntOrNull() }
             .toSet()
 
-        val fireViews = with(binding.layoutStreak) {
+        val dayViews = getDayViews()
+        val dayLabels = listOf("S", "M", "T", "W", "Th", "F", "S")
+
+        dayViews.forEachIndexed { index, (fireView, labelView) ->
+            labelView.text = dayLabels[index]
+            fireView.isVisible = index in activeDays
+        }
+    }
+
+    private fun getDayViews(): List<Pair<ImageView, TextView>> {
+        return with(streakBinding) {
             listOf(
-                ivFireSunday, ivFireMonday, ivFireTuesday,
-                ivFireWednesday, ivFireThursday, ivFireFriday, ivFireSaturday
+                getDayViewPair(daySunday.root),
+                getDayViewPair(dayMonday.root),
+                getDayViewPair(dayTuesday.root),
+                getDayViewPair(dayWednesday.root),
+                getDayViewPair(dayThursday.root),
+                getDayViewPair(dayFriday.root),
+                getDayViewPair(daySaturday.root)
             )
         }
+    }
 
-        fireViews.forEachIndexed { index, imageView ->
-            imageView.isVisible = index in activeDays
-        }
+    private fun getDayViewPair(dayView: View): Pair<ImageView, TextView> {
+        val fireView = dayView.findViewById<ImageView>(R.id.ivDayFire)
+        val labelView = dayView.findViewById<TextView>(R.id.tvDayLabel)
+        return Pair(fireView, labelView)
     }
 
     override fun displayCategories(categories: List<Category>) {
@@ -182,9 +198,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         lastGamesAdapter.submitList(games)
 
         val shouldShowSection = games.isNotEmpty()
-        with(binding) {
-            rvLastGames.isVisible = shouldShowSection
-        }
+        binding.rvLastGames.isVisible = shouldShowSection
     }
 
     private fun onCategoryClick(category: Category) {
@@ -205,12 +219,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     private fun navigateToAllGames() {
         // TODO: Navigate to all games screen
-        // findNavController().navigate(R.id.action_home_to_all_games)
     }
 
     private fun navigateToAllCategories() {
         // TODO: Navigate to all categories screen
-        // findNavController().navigate(R.id.action_home_to_all_categories)
     }
 
     companion object {

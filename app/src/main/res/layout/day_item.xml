@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <!-- Fire Icon with Circle Background -->
+    <ImageView
+        android:id="@+id/ivDayFire"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:contentDescription="@string/day_fire"
+        android:padding="4dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_fire"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!-- Day Label -->
+    <TextView
+        android:id="@+id/tvDayLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/fredoka"
+        android:textColor="@color/shade_tertiary"
+        android:textSize="10sp"
+        tools:ignore="SmallSp"
+        tools:text="S" />
+
+</LinearLayout>
