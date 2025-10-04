@@ -54,9 +54,6 @@
     <string name="time">Time</string>
     <string name="all">All</string>
 
-    <string name="character_image">Character avatar</string>
-    <string name="show_all">Show all</string>
-
     <!-- Streak -->
     <string name="fire_image">Fire icon</string>
     <string name="day_fire">Day fire icon</string>
@@ -65,6 +62,9 @@
     <string name="every_day_count">Every day count!</string>
     <string name="keep_it_up">KEEP IT UP!</string>
 
+    <string name="character_image">Character avatar</string>
+    <string name="loading_game">Loading Game</string>
+    <string name="show_all">Show all</string>
     <!-- Stats -->
     <string name="lives">Lives</string>
     <string name="coins">Coins</string>
