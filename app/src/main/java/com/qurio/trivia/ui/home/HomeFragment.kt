@@ -92,7 +92,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
                     false
                 )
                 adapter = categoryAdapter
-                setHasFixedSize(true)
             }
 
             rvLastGames.apply {
