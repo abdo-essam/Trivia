@@ -42,10 +42,22 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
     }
 
     override fun setupViews() {
-        setupTopBar()
         setupRecyclerView()
-        presenter.loadAllCategories()
+        setupTopBar()
+        loadData()
     }
+
+    private fun loadData() {
+        checkConnectionAndExecute {
+            presenter.loadAllCategories()
+        }
+    }
+
+    override fun onRetryConnection() {
+        super.onRetryConnection()
+        loadData()
+    }
+
 
     private fun setupTopBar() {
         with(topBarBinding) {

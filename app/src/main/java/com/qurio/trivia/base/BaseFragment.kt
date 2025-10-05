@@ -7,8 +7,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieAnimationView
+import com.google.android.material.button.MaterialButton
 import com.qurio.trivia.R
-import com.qurio.trivia.ui.dialogs.NoConnectionDialogFragment
+import com.qurio.trivia.utils.NetworkUtils
 
 abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment(), BaseView {
 
@@ -17,27 +18,50 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
 
     private var loadingOverlay: View? = null
     private var lottieAnimation: LottieAnimationView? = null
+    private var noConnectionOverlay: View? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Find loading overlay in the layout
-        loadingOverlay = view.findViewById(R.id.loading_overlay)
-        lottieAnimation = loadingOverlay?.findViewById(R.id.lottie_loading)
+        // Initialize overlays
+        initializeOverlays(view)
 
         setupViews()
         (presenter as? BasePresenter<BaseView>)?.attachView(this)
     }
 
+    private fun initializeOverlays(view: View) {
+        // Loading overlay
+        loadingOverlay = view.findViewById(R.id.loading_overlay)
+        lottieAnimation = loadingOverlay?.findViewById(R.id.lottie_loading)
+
+        // No connection overlay
+        noConnectionOverlay = view.findViewById(R.id.no_connection_overlay)
+        noConnectionOverlay?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+            if (NetworkUtils.isNetworkAvailable(requireContext())) {
+                hideNoConnection()
+                onRetryConnection()
+            } else {
+                showError(getString(R.string.still_no_connection))
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         (presenter as? BasePresenter<BaseView>)?.detachView()
+        cleanupOverlays()
+    }
+
+    private fun cleanupOverlays() {
         hideLoading()
         loadingOverlay = null
         lottieAnimation = null
+        noConnectionOverlay = null
     }
 
     override fun showLoading() {
+        hideNoConnection()
         loadingOverlay?.isVisible = true
         lottieAnimation?.playAnimation()
     }
@@ -52,8 +76,24 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
     }
 
     override fun showNoConnection() {
-        val noConnectionDialog = NoConnectionDialogFragment()
-        noConnectionDialog.show(childFragmentManager, "no_connection")
+        hideLoading()
+        noConnectionOverlay?.isVisible = true
+    }
+
+    private fun hideNoConnection() {
+        noConnectionOverlay?.isVisible = false
+    }
+
+    protected fun checkConnectionAndExecute(action: () -> Unit) {
+        if (NetworkUtils.isNetworkAvailable(requireContext())) {
+            action()
+        } else {
+            showNoConnection()
+        }
+    }
+
+    protected open fun onRetryConnection() {
+        // Override this in child fragments to implement retry logic
     }
 
     protected abstract fun setupViews()

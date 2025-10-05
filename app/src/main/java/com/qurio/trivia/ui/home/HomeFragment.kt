@@ -110,23 +110,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun loadData() {
-        presenter.apply {
-            initializeData()
-            loadUserProgress()
-            loadCategories()
-            loadLastGames(LAST_GAMES_LIMIT)
+        checkConnectionAndExecute {
+            presenter.apply {
+                initializeData()
+                loadUserProgress()
+                loadCategories()
+                loadLastGames(LAST_GAMES_LIMIT)
+            }
         }
     }
 
+    override fun onRetryConnection() {
+        super.onRetryConnection()
+        loadData()
+    }
+
     override fun displayUserProgress(userProgress: UserProgress) {
-        // Update top bar
         with(topBarBinding) {
             tvWelcome.text = getString(R.string.welcome_qurio_explorer)
             tvCharacterName.text = userProgress.selectedCharacter.capitalizeFirst()
             ivCharacter.loadCharacterImage(userProgress.selectedCharacter)
         }
 
-        // Update stats
         with(binding) {
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = userProgress.totalCoins.toString()
@@ -138,7 +143,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     private fun updateStreakDisplay(userProgress: UserProgress) {
         with(streakBinding) {
-            // Update title and subtitle based on streak
             if (userProgress.currentStreak == 0) {
                 streakTitle.text = getString(R.string.streak_start)
                 streakSubtitle.text = getString(R.string.every_day_count)
@@ -191,9 +195,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun displayLastGames(games: List<GameResult>) {
         lastGamesAdapter.submitList(games)
-
-        val shouldShowSection = games.isNotEmpty()
-        binding.rvLastGames.isVisible = shouldShowSection
+        binding.rvLastGames.isVisible = games.isNotEmpty()
     }
 
     private fun onCategoryClick(category: Category) {
@@ -219,7 +221,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     private fun navigateToAllGames() {
         findNavController().navigate(R.id.action_home_to_last_games)
     }
-
 
     companion object {
         private const val LAST_GAMES_LIMIT = 3

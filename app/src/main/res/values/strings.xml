@@ -79,4 +79,6 @@
 
     <string name="no_games_yet">No Games Yet</string>
     <string name="start_playing_to_see_history">Start playing to see your game history</string>
+    <string name="still_no_connection">Still no internet connection. Please check your network settings.</string>
+    <string name="offline_error">Oops! It looks like you’re offline. Please check your internet connection to continue playing</string>
 </resources>
