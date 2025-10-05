@@ -12,7 +12,7 @@ import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.databinding.FragmentLastGamesBinding
-import com.qurio.trivia.databinding.LayoutTopBarSimpleBinding
+import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
 import javax.inject.Inject
 
@@ -25,8 +25,8 @@ class LastGamesFragment : BaseFragment<FragmentLastGamesBinding, LastGamesPresen
         FragmentLastGamesBinding.inflate(layoutInflater)
     }
 
-    private val topBarBinding: LayoutTopBarSimpleBinding by lazy {
-        LayoutTopBarSimpleBinding.bind(binding.root.findViewById(R.id.layout_top_bar))
+    private val topBarBinding: TopBarBinding by lazy {
+        TopBarBinding.bind(binding.root.findViewById(R.id.top_bar))
     }
 
     private val lastGamesAdapter by lazy {
