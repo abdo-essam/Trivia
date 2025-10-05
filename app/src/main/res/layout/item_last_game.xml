@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -56,11 +55,11 @@
 
         <!-- Heptagon Shape -->
         <ImageView
-            android:scaleType="centerCrop"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
             android:src="@drawable/heptagon_shape" />
 
         <!-- Date Text -->
@@ -69,10 +68,10 @@
             style="@style/TextAppearance.Label.Medium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/on_primary"
             android:layout_gravity="center"
             android:layout_marginBottom="2dp"
             android:gravity="center"
+            android:textColor="@color/on_primary"
             tools:text="03-08-2025" />
     </FrameLayout>
 
@@ -114,30 +113,14 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <!-- Coin Icon -->
+            <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="4dp">
-
-                <!-- Coin Glow Effect -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="19dp"
-                    android:layout_height="19dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/transparent"
-                    android:outlineSpotShadowColor="@color/orange_accent"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="6dp" />
-
-                <!-- Coin Icon -->
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/coins"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_coin_stack" />
-            </FrameLayout>
+                android:layout_gravity="center"
+                android:contentDescription="@string/coins"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_coin_stack" />
 
             <TextView
                 android:id="@+id/tv_coins"
@@ -165,30 +148,14 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <!-- Star Icon -->
+            <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="4dp">
-
-                <!-- Star Glow Effect -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/transparent"
-                    android:outlineSpotShadowColor="@color/primary_variant"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="6dp" />
-
-                <!-- Star Icon -->
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/stars"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_star_blue" />
-            </FrameLayout>
+                android:layout_gravity="center"
+                android:contentDescription="@string/stars"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_star_blue" />
 
             <TextView
                 android:id="@+id/tv_stars"
@@ -216,30 +183,14 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <FrameLayout
+            <!-- Clock Icon -->
+            <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginEnd="4dp">
-
-                <!-- Clock Glow Effect -->
-                <androidx.cardview.widget.CardView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/transparent"
-                    android:outlineSpotShadowColor="@color/primary_variant"
-                    app:cardCornerRadius="50dp"
-                    app:cardElevation="6dp" />
-
-                <!-- Clock Icon -->
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:contentDescription="@string/time"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_clock" />
-            </FrameLayout>
+                android:layout_gravity="center"
+                android:contentDescription="@string/time"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_clock" />
 
             <TextView
                 android:id="@+id/tv_time"
