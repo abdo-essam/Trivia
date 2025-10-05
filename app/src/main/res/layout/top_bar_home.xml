@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Character Image (Visible by default) -->
+        <!-- Character Image -->
         <ImageView
             android:id="@+id/iv_character"
             android:layout_width="48dp"
@@ -31,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/character_rika" />
 
-        <!-- Welcome Section (Visible by default - for home) -->
+        <!-- Welcome Section -->
         <LinearLayout
             android:id="@+id/layout_welcome"
             android:layout_width="0dp"
@@ -48,12 +48,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/fredoka"
                 android:includeFontPadding="false"
+                style="@style/TextAppearance.Body.Small"
                 android:maxLines="1"
                 android:text="@string/welcome_qurio_explorer"
                 android:textColor="@color/shade_secondary"
-                android:textSize="12sp" />
+                />
 
             <TextView
                 android:id="@+id/tv_character_name"
@@ -61,41 +61,26 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:ellipsize="end"
-                android:fontFamily="@font/fredoka_one"
+                style="@style/TextAppearance.Label.Medium"
                 android:includeFontPadding="false"
                 android:maxLines="1"
                 android:textColor="@color/shade_primary"
-                android:textSize="16sp"
                 tools:text="Rika" />
 
         </LinearLayout>
 
-        <!-- Settings Button Container -->
-        <FrameLayout
-            android:id="@+id/layout_settings_button"
+        <!-- Settings Button -->
+        <ImageView
+            android:id="@+id/btn_settings"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="12dp"
-            android:elevation="4dp"
-            android:outlineProvider="background"
+            android:layout_gravity="center"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitEnd"
+            android:src="@drawable/ic_settings"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_settings_button" />
-
-            <ImageButton
-                android:id="@+id/btn_settings"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:scaleType="fitEnd"
-                android:src="@drawable/ic_settings" />
-        </FrameLayout>
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
