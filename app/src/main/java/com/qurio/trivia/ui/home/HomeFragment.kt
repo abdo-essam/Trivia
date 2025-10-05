@@ -216,13 +216,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         SettingsDialogFragment().show(childFragmentManager, SETTINGS_DIALOG_TAG)
     }
 
+    private fun navigateToAllCategories() {
+        findNavController().navigate(R.id.action_home_to_games)
+    }
+
     private fun navigateToAllGames() {
         // TODO: Navigate to all games screen
     }
 
-    private fun navigateToAllCategories() {
-        // TODO: Navigate to all categories screen
-    }
 
     companion object {
         private const val LAST_GAMES_LIMIT = 3

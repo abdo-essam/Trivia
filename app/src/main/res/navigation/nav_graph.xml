@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loadingFragment">
 
@@ -21,6 +22,17 @@
     </fragment>
 
     <fragment
+        android:id="@+id/gamesFragment"
+        android:name="com.qurio.trivia.ui.games.GamesFragment"
+        android:label="@string/games"
+        tools:layout="@layout/fragment_games">
+
+        <action
+            android:id="@+id/action_games_to_character_selection"
+            app:destination="@id/characterSelectionFragment" />
+    </fragment>
+
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.qurio.trivia.ui.home.HomeFragment"
         android:label="HomeFragment">
@@ -30,6 +42,10 @@
         <action
             android:id="@+id/action_home_to_achievements"
             app:destination="@id/achievementsFragment" />
+
+        <action
+            android:id="@+id/action_home_to_games"
+            app:destination="@id/gamesFragment" />
     </fragment>
 
     <fragment
