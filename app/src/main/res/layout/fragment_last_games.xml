@@ -10,7 +10,7 @@
     <!-- Top Bar -->
     <include
         android:id="@+id/layout_top_bar"
-        layout="@layout/layout_top_bar_simple"
+        layout="@layout/top_bar"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginTop="20dp"
