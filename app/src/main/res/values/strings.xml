@@ -75,4 +75,8 @@
     <string name="welcome_qurio_explorer">Welcome Qurio explorer</string>
     <string name="games">Games</string>
     <string name="last_games">Last Games</string>
+
+
+    <string name="no_games_yet">No Games Yet</string>
+    <string name="start_playing_to_see_history">Start playing to see your game history</string>
 </resources>

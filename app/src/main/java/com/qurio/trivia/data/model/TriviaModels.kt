@@ -35,7 +35,8 @@ data class GameResult(
     val skippedAnswers: Int,
     val stars: Int,
     val coins: Int,
-    val timeTaken: Long
+    val timeTaken: Long,
+    val timestamp: Long = System.currentTimeMillis()
 )
 
 @Entity(tableName = "user_progress")

@@ -11,6 +11,7 @@ import com.qurio.trivia.ui.difficulty.DifficultyFragment
 import com.qurio.trivia.ui.game.GameFragment
 import com.qurio.trivia.ui.games.GamesFragment
 import com.qurio.trivia.ui.home.HomeFragment
+import com.qurio.trivia.ui.lastgames.LastGamesFragment
 import com.qurio.trivia.ui.loading.LoadingFragment
 import com.qurio.trivia.ui.onboarding.OnboardingFragment
 import com.qurio.trivia.ui.result.GameResultFragment
@@ -46,4 +47,5 @@ interface AppComponent {
     fun inject(fragment: AchievementsFragment)
     fun inject(dialog: SettingsDialogFragment)
     fun inject(fragment: GamesFragment)
+    fun inject(fragment: LastGamesFragment)
 }

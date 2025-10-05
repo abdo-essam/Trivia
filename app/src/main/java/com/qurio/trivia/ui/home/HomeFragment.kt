@@ -221,7 +221,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun navigateToAllGames() {
-        // TODO: Navigate to all games screen
+        findNavController().navigate(R.id.action_home_to_last_games)
     }
 
 
