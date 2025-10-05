@@ -7,19 +7,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingHorizontal="20dp"
-    android:paddingVertical="12dp"
-    android:background="@color/surface">
+    android:paddingVertical="12dp">
 
     <!-- Section Title -->
     <TextView
         android:id="@+id/tv_section_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="12dp"
-        android:fontFamily="@font/fredoka_one"
-        android:includeFontPadding="false"
-        android:textColor="@color/shade_primary"
-        android:textSize="24sp"
+        android:textColor="@color/on_primary"
+        style="@style/TextAppearance.Title.Small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/btn_all"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,19 +41,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:fontFamily="@font/fredoka_one"
-            android:includeFontPadding="false"
             android:text="@string/all"
-            android:textColor="@color/shade_primary"
-            android:textSize="18sp" />
-
+            style="@style/TextAppearance.Label.Small"
+            android:textColor="@color/on_primary"
+          />
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:contentDescription="@string/show_all"
                 android:src="@drawable/ic_back_arrow" />
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

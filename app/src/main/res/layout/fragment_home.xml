@@ -156,7 +156,7 @@
         <!-- Games Section Header -->
         <include
             android:id="@+id/section_header_games"
-            layout="@layout/layout_section_header"
+            layout="@layout/section_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
@@ -183,7 +183,7 @@
         <!-- Last Games Section Header -->
         <include
             android:id="@+id/section_header_last_games"
-            layout="@layout/layout_section_header"
+            layout="@layout/section_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"

@@ -17,7 +17,7 @@ import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
 import com.qurio.trivia.databinding.ItemStreakBinding
-import com.qurio.trivia.databinding.LayoutSectionHeaderBinding
+import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.LayoutTopBarBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
@@ -43,12 +43,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         ItemStreakBinding.bind(binding.root.findViewById(R.id.layout_streak))
     }
 
-    private val sectionHeaderGamesBinding: LayoutSectionHeaderBinding by lazy {
-        LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_games))
+    private val sectionHeaderGamesBinding: SectionHeaderBinding by lazy {
+        SectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_games))
     }
 
-    private val sectionHeaderLastGamesBinding: LayoutSectionHeaderBinding by lazy {
-        LayoutSectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_last_games))
+    private val sectionHeaderLastGamesBinding: SectionHeaderBinding by lazy {
+        SectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_last_games))
     }
 
     private val categoryAdapter by lazy {
