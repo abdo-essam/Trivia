@@ -44,10 +44,6 @@ class BuyLifeFragment : BaseFragment<FragmentBuyLifeBinding, BuyLifePresenter>()
         presenter.loadUserProgress()
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
-
     override fun displayUserProgress(userProgress: UserProgress) {
         binding.tvCurrentLives.text = userProgress.lives.toString()
         binding.tvCurrentCoins.text = userProgress.totalCoins.toString()

@@ -39,9 +39,6 @@ class AchievementsFragment : BaseFragment<FragmentAchievementsBinding, Achieveme
         presenter.loadAchievements()
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
 
     private fun setupRecyclerView() {
         achievementAdapter = AchievementAdapter()
