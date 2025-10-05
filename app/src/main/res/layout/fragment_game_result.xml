@@ -105,7 +105,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:src="@drawable/ic_coin"
+                android:src="@drawable/ic_coin_stack"
                 app:tint="@color/orange" />
 
             <TextView
