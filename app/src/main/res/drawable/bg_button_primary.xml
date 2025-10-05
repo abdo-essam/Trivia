@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Disabled State -->
+    <item android:state_enabled="false">
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/disable"/>
+                    <corners android:radius="@dimen/button_corner_radius_default"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Pressed State -->
+    <item android:state_pressed="true">
+        <layer-list>
+            <!-- Drop Shadow -->
+            <item android:top="4dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#2E49BAF2"/>
+                    <corners android:radius="@dimen/button_corner_radius_pressed"/>
+                </shape>
+            </item>
+
+            <!-- Button Background -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/primary"/>
+                    <corners android:radius="@dimen/button_corner_radius_pressed"/>
+                </shape>
+            </item>
+
+            <!-- Inner Shadow (top highlight) -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#40FFFFFF"
+                        android:centerColor="#00FFFFFF"
+                        android:endColor="#00FFFFFF"
+                        android:centerY="0.1"/>
+                    <corners android:radius="@dimen/button_corner_radius_pressed"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- Default State -->
+    <item>
+        <layer-list>
+            <!-- Drop Shadow -->
+            <item android:top="4dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="#2E49BAF2"/>
+                    <corners android:radius="@dimen/button_corner_radius_default"/>
+                </shape>
+            </item>
+
+            <!-- Button Background -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <solid android:color="@color/primary"/>
+                    <corners android:radius="@dimen/button_corner_radius_default"/>
+                </shape>
+            </item>
+
+            <!-- Inner Shadow (top highlight) -->
+            <item android:bottom="4dp">
+                <shape android:shape="rectangle">
+                    <gradient
+                        android:angle="270"
+                        android:startColor="#40FFFFFF"
+                        android:centerColor="#00FFFFFF"
+                        android:endColor="#00FFFFFF"
+                        android:centerY="0.1"/>
+                    <corners android:radius="@dimen/button_corner_radius_default"/>
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+
+</selector>
