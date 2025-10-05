@@ -44,10 +44,6 @@ class DifficultyFragment : BaseFragment<FragmentDifficultyBinding, DifficultyPre
         selectDifficulty(Difficulty.MEDIUM)
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
-
     private fun setupDifficultySelection() {
         binding.btnEasy.setOnClickListener { selectDifficulty(Difficulty.EASY) }
         binding.btnMedium.setOnClickListener { selectDifficulty(Difficulty.MEDIUM) }

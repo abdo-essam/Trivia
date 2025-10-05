@@ -61,10 +61,6 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingPre
         startArrowAnimations()
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
-
     private fun setupViewPager() {
         val onboardingItems = listOf(
             OnboardingItem(

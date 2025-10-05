@@ -47,10 +47,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
         presenter.loadAllCategories()
     }
 
-    override fun setupObservers() {
-        // MVP pattern - no observers needed
-    }
-
     private fun setupTopBar() {
         with(topBarBinding) {
             tvTitle.text = getString(R.string.games)

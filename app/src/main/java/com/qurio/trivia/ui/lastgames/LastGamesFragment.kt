@@ -48,10 +48,6 @@ class LastGamesFragment : BaseFragment<FragmentLastGamesBinding, LastGamesPresen
         presenter.loadAllLastGames()
     }
 
-    override fun setupObservers() {
-        // MVP pattern - no observers needed
-    }
-
     private fun setupTopBar() {
         with(topBarBinding) {
             tvTitle.text = getString(R.string.last_games)

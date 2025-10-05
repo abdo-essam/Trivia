@@ -51,10 +51,6 @@ class CharacterSelectionFragment : BaseFragment<FragmentCharacterSelectionBindin
         presenter.loadCharacters()
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
-
     private fun setupRecyclerView() {
         characterAdapter = CharacterAdapter { character, isSelected ->
             if (isSelected) {

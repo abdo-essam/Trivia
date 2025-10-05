@@ -52,10 +52,6 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(), GameVie
         presenter.loadQuestions(args.categoryId, args.difficulty)
     }
 
-    override fun setupObservers() {
-        // No observers needed for MVP
-    }
-
     private fun setupAnswerButtons() {
         val answerButtons = listOf(
             binding.btnAnswer1,

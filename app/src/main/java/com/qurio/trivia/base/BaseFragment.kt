@@ -26,7 +26,6 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
         lottieAnimation = loadingOverlay?.findViewById(R.id.lottie_loading)
 
         setupViews()
-        setupObservers()
         (presenter as? BasePresenter<BaseView>)?.attachView(this)
     }
 
@@ -58,5 +57,4 @@ abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment()
     }
 
     protected abstract fun setupViews()
-    protected abstract fun setupObservers()
 }

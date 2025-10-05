@@ -75,10 +75,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         loadData()
     }
 
-    override fun setupObservers() {
-        // MVP pattern - no observers needed
-    }
-
     private fun setupTopBar() {
         topBarBinding.btnSettings.setOnClickListener { showSettingsDialog() }
     }

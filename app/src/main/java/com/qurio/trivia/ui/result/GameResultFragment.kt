@@ -46,10 +46,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultPre
         }
     }
 
-    override fun setupObservers() {
-        // No observers needed
-    }
-
     private fun calculateAndDisplayResults() {
         val totalQuestions = Constants.QUESTIONS_PER_GAME
         val correctAnswers = args.correctAnswers
