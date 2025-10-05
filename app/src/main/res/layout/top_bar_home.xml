@@ -17,22 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!-- Back Arrow (Hidden by default) -->
-        <ImageButton
-            android:id="@+id/btn_back"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/back"
-            android:src="@drawable/ic_back_arrow"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/shade_secondary"/>
-
         <!-- Character Image (Visible by default) -->
         <ImageView
             android:id="@+id/iv_character"
@@ -47,22 +31,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/character_rika" />
 
-        <!-- Title (Hidden by default - for inner screens) -->
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
-            android:textAppearance="@style/TextAppearance.Title.Medium"
-            android:textColor="@color/shade_primary"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_settings"
-            app:layout_constraintStart_toEndOf="@id/btn_back"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Games" />
-
         <!-- Welcome Section (Visible by default - for home) -->
         <LinearLayout
             android:id="@+id/layout_welcome"
@@ -72,7 +40,6 @@
             android:layout_marginEnd="12dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_settings"
             app:layout_constraintStart_toEndOf="@id/iv_character"
             app:layout_constraintTop_toTopOf="parent">
 
