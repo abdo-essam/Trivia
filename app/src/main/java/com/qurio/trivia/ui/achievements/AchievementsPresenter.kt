@@ -82,7 +82,7 @@ class AchievementsPresenter @Inject constructor(
             id = "coins_1000",
             title = "Coin Collector",
             description = "Collect 1000 coins",
-            iconRes = R.drawable.ic_coin,
+            iconRes = R.drawable.ic_coin_stack,
             isUnlocked = totalCoins >= 1000,
             progress = minOf(totalCoins, 1000),
             maxProgress = 1000

@@ -21,7 +21,7 @@
         android:id="@+id/iv_unlocked"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_coin"
+        android:src="@drawable/ic_coin_stack"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/iv_icon"
         app:layout_constraintTop_toTopOf="@id/iv_icon"
