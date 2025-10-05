@@ -17,7 +17,7 @@ class AchievementsPresenter @Inject constructor(
 
     fun loadAchievements() {
         CoroutineScope(Dispatchers.IO).launch {
-            val gameResults = gameResultDao.getAllGameResults()
+            val gameResults = gameResultDao.getAllGames()
             val userProgress = userProgressDao.getUserProgress()
 
             val achievements = generateAchievements(gameResults, userProgress)

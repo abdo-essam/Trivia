@@ -26,7 +26,7 @@ class DatabaseSeeder @Inject constructor(
             }
 
             // Check if game results exist
-            val existingGames = gameResultDao.getAllGameResults()
+            val existingGames = gameResultDao.getAllGames()
             if (existingGames.isEmpty()) {
                 // Seed game results
                 seedGameResults()
@@ -59,7 +59,7 @@ class DatabaseSeeder @Inject constructor(
 
     fun clearAllData() {
         CoroutineScope(Dispatchers.IO).launch {
-            gameResultDao.clearGameResults()
+            gameResultDao.deleteAllGames()
         }
     }
 }
