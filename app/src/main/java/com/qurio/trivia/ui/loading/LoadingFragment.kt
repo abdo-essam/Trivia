@@ -50,6 +50,11 @@ class LoadingFragment : Fragment() {
         checkFirstLaunchAndNavigate()
     }
 
+
+    // todo: this approach is not ture
+    // because it just responsible for the loading not for the first launch
+    // ideally we should have a splash screen for loading and then navigate to home fragment or onboarding fragment
+    // based on the first launch condition
     private fun checkFirstLaunchAndNavigate() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
