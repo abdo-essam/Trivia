@@ -6,8 +6,7 @@
     android:id="@+id/section_header_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingHorizontal="20dp"
-    android:paddingVertical="12dp">
+    android:paddingHorizontal="20dp">
 
     <!-- Section Title -->
     <TextView
