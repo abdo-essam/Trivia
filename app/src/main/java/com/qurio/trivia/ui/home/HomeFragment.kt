@@ -18,7 +18,7 @@ import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
 import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.databinding.SectionHeaderBinding
-import com.qurio.trivia.databinding.LayoutTopBarBinding
+import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
@@ -35,8 +35,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         FragmentHomeBinding.inflate(layoutInflater)
     }
 
-    private val topBarBinding: LayoutTopBarBinding by lazy {
-        LayoutTopBarBinding.bind(binding.root.findViewById(R.id.layout_top_bar))
+    private val topBarBinding: TopBarHomeBinding by lazy {
+        TopBarHomeBinding.bind(binding.root.findViewById(R.id.top_bar_home))
     }
 
     private val streakBinding: ItemStreakBinding by lazy {
