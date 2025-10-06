@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
-import com.qurio.trivia.ui.adapters.AllGamesAdapter
+import com.qurio.trivia.ui.adapters.CategoryGameAdapter
 import javax.inject.Inject
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), GamesView {
@@ -28,8 +27,8 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
         TopBarBinding.bind(binding.root.findViewById(R.id.top_bar))
     }
 
-    private val allGamesAdapter by lazy {
-        AllGamesAdapter(::onCategoryClick)
+    private val categoryGameAdapter by lazy {
+        CategoryGameAdapter(::onCategoryClick)
     }
 
     override fun onCreateView(
@@ -57,14 +56,13 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
     }
 
     private fun setupRecyclerView() {
-        with(binding.rvAllGames) {
-            layoutManager = GridLayoutManager(requireContext(), 2)
-            adapter = allGamesAdapter
+        binding.rvAllGames.apply {
+            adapter = categoryGameAdapter
         }
     }
 
     override fun displayCategories(categories: List<Category>) {
-        allGamesAdapter.submitList(categories)
+        categoryGameAdapter.submitList(categories)
     }
 
     private fun onCategoryClick(category: Category) {

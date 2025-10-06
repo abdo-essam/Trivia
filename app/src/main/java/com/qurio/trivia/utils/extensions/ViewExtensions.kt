@@ -4,6 +4,9 @@ import android.view.View
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.qurio.trivia.R
+import android.graphics.drawable.GradientDrawable
+import androidx.core.graphics.ColorUtils
+import androidx.core.graphics.drawable.DrawableCompat
 
 fun View.setVisibleIf(condition: Boolean) {
     visibility = if (condition) View.VISIBLE else View.GONE
@@ -37,4 +40,24 @@ fun String.toCharacterDrawable(): Int = when (lowercase()) {
     "nara" -> R.drawable.character_nara
     "renji" -> R.drawable.character_renji
     else -> R.drawable.character_rika
+}
+
+fun ImageView.setTintColor(color: Int) {
+    val drawable = this.drawable?.mutate()
+    drawable?.let {
+        DrawableCompat.setTint(it, color)
+        this.setImageDrawable(it)
+    }
+}
+
+fun View.setGradientBackground(baseColor: Int) {
+    val startColor = ColorUtils.setAlphaComponent(baseColor, 0)
+    val centerColor = ColorUtils.setAlphaComponent(baseColor, (0.3f * 255).toInt())
+    val endColor = ColorUtils.setAlphaComponent(baseColor, (0.8f * 255).toInt())
+
+    val gradient = GradientDrawable(
+        GradientDrawable.Orientation.TOP_BOTTOM,
+        intArrayOf(startColor, centerColor, endColor)
+    )
+    this.background = gradient
 }

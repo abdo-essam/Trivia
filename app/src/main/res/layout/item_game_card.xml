@@ -1,83 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="344dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginHorizontal="8dp">
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp">
 
-    <!-- Category Image (with border already included) -->
-    <ImageView
-        android:id="@+id/iv_category_image"
-        android:layout_width="match_parent"
-        android:layout_height="322dp"
-        android:layout_gravity="top"
-        android:scaleType="fitXY"
-        tools:src="@drawable/category_geography" />
-
-    <!-- Category Name (overlaid on image) -->
-    <TextView
-        android:id="@+id/tv_category_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="52dp"
-        android:gravity="center"
-        android:textAppearance="@style/TextAppearance.Title.Large"
-        android:textColor="@color/shade_primary"
-        android:shadowColor="#80000000"
-        android:shadowDx="0"
-        android:shadowDy="2"
-        android:shadowRadius="8"
-        tools:text="Geography" />
-
-    <!-- Play Now Button (overlapping bottom) -->
+    <!-- Card Container -->
     <FrameLayout
-        android:layout_width="165dp"
-        android:layout_height="44dp"
-        android:layout_gravity="bottom|center_horizontal">
+        android:id="@+id/card_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="156:225"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Clipped Content Container -->
+        <com.qurio.trivia.ui.views.ClippedFrameLayout
+            android:id="@+id/clipped_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- Category Image -->
+            <ImageView
+                android:id="@+id/iv_category_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/games"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/category_music" />
+
+            <!-- Gradient Overlay -->
+            <View
+                android:id="@+id/view_gradient"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </com.qurio.trivia.ui.views.ClippedFrameLayout>
+
+        <!-- Category Name -->
+        <TextView
+            android:id="@+id/tv_category_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="60dp"
+            style="@style/TextAppearance.Title.Small"
+            android:textColor="@color/on_primary"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center"
+            tools:text="Music" />
+
+        <!-- Border Image (On Top) -->
+        <ImageView
+            android:id="@+id/iv_card_border"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/card_border"
+            android:src="@drawable/ic_card_border" />
+
+    </FrameLayout>
+
+    <!-- Play Now Button -->
+    <FrameLayout
+        android:id="@+id/btn_play_container"
+        android:layout_width="120dp"
+        android:layout_height="36dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/card_container"
+        app:layout_constraintStart_toStartOf="@id/card_container">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/bg_hexagon_button"
-            android:scaleType="fitXY" />
+            android:contentDescription="@string/play_now"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_hexagon_button" />
 
         <LinearLayout
-            android:id="@+id/btn_play_now"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:orientation="horizontal">
 
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@drawable/ic_star_small"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:layout_marginEnd="6dp"
-                app:tint="@color/shade_primary" />
+                android:contentDescription="@string/star"
+                android:src="@drawable/ic_star_small"
+                app:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/play_now"
-                android:textAppearance="@style/TextAppearance.Label.Medium"
-                android:textColor="@color/shade_primary" />
+                android:includeFontPadding="false"
+                style="@style/TextAppearance.Label.Small"
+                android:textColor="@color/on_primary"
+                android:text="@string/play_now" />
 
             <ImageView
-                android:layout_width="10dp"
-                android:layout_height="10dp"
-                android:src="@drawable/ic_star_small"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:layout_marginStart="6dp"
-                app:tint="@color/shade_primary" />
+                android:contentDescription="@string/star"
+                android:src="@drawable/ic_star_small"
+                app:tint="@color/white" />
 
         </LinearLayout>
 
     </FrameLayout>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

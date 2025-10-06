@@ -44,4 +44,12 @@
 
     <color name="card_background">#1A1F2E</color>
     <color name="card_stroke">#2D3548</color>
+
+
+    <color name="music_border">#993397</color>
+    <color name="food_drink_border">#FFA726</color>
+    <color name="geography_border">#66BB6A</color>
+    <color name="general_knowledge_border">#EF5350</color>
+    <color name="tv_movies_border">#AB47BC</color>
+    <color name="politics_border">#66BB6A</color>
 </resources>
