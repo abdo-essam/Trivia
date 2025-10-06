@@ -16,6 +16,7 @@ import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
+import com.qurio.trivia.databinding.ItemStatsBinding
 import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.TopBarHomeBinding
@@ -37,6 +38,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     private val topBarBinding: TopBarHomeBinding by lazy {
         TopBarHomeBinding.bind(binding.root.findViewById(R.id.top_bar_home))
+    }
+
+    private val statsBinding: ItemStatsBinding by lazy {
+        ItemStatsBinding.bind(binding.root.findViewById(R.id.layout_stats))
     }
 
     private val streakBinding: ItemStreakBinding by lazy {
@@ -70,6 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun setupViews() {
         setupTopBar()
+        setupStatsSection()
         setupSectionHeaders()
         setupRecyclerViews()
         loadData()
@@ -77,6 +83,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     private fun setupTopBar() {
         topBarBinding.btnSettings.setOnClickListener { showSettingsDialog() }
+    }
+
+    private fun setupStatsSection() {
+        with(statsBinding) {
+            // Lives click listener - Open Buy Life Dialog
+            statsLivesContainer.setOnClickListener {
+                showBuyLifeDialog()
+            }
+
+            // Awards click listener - Open Achievements Dialog
+            statsAwardsContainer.setOnClickListener {
+                showAchievementsDialog()
+            }
+        }
     }
 
     private fun setupRecyclerViews() {
@@ -127,13 +147,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         }
 
         // Update stats
-        with(binding) {
+        with(statsBinding) {
             tvLives.text = userProgress.lives.toString()
-            tvCoins.text = userProgress.totalCoins.toString()
+            tvCoins.text = formatNumber(userProgress.totalCoins)
             tvAwards.text = userProgress.awards.toString()
         }
 
         updateStreakDisplay(userProgress)
+    }
+
+    private fun formatNumber(number: Int): String {
+        return when {
+            number >= 1000 -> String.format("%,d", number)
+            else -> number.toString()
+        }
     }
 
     private fun updateStreakDisplay(userProgress: UserProgress) {
@@ -191,7 +218,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun displayLastGames(games: List<GameResult>) {
         lastGamesAdapter.submitList(games)
-
         val shouldShowSection = games.isNotEmpty()
         binding.rvLastGames.isVisible = shouldShowSection
     }
@@ -205,7 +231,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun onGameResultClick(gameResult: GameResult) {
-        // TODO: Navigate to game result detail
+        // TODO: Navigate to game result detail or replay game
+    }
+
+    private fun showBuyLifeDialog() {
+/*        val dialog = BuyLifeDialog()
+        dialog.setOnBuyClickListener { coinsRequired ->
+            presenter.buyLife(coinsRequired)
+        }
+        dialog.show(childFragmentManager, BuyLifeDialog.TAG)*/
+    }
+
+    private fun showAchievementsDialog() {
+/*        val dialog = AchievementsDialog()
+        dialog.show(childFragmentManager, AchievementsDialog.TAG)*/
     }
 
     private fun showSettingsDialog() {
@@ -219,7 +258,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     private fun navigateToAllGames() {
         findNavController().navigate(R.id.action_home_to_last_games)
     }
-
 
     companion object {
         private const val LAST_GAMES_LIMIT = 3

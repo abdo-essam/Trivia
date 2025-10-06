@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stats_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="16dp"
+    android:background="@drawable/bg_stats"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!-- Lives Section -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stats_lives_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingVertical="8dp">
+
+            <!-- Plus Icon -->
+            <ImageView
+                android:id="@+id/iv_add_life"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/add_life"
+                android:src="@drawable/ic_add_circle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/primary" />
+
+            <!-- Lives Label -->
+            <TextView
+                android:id="@+id/tv_lives_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/fredoka"
+                android:text="@string/lives"
+                android:textColor="@color/shade_secondary"
+                android:textSize="12sp"
+                android:includeFontPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_add_life" />
+
+            <!-- Lives Value Container -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_lives_label">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/lives"
+                    android:src="@drawable/ic_heart"
+                    app:tint="@color/red_accent" />
+
+                <TextView
+                    android:id="@+id/tv_lives"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/fredoka_one"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/shade_primary"
+                    android:textSize="24sp"
+                    tools:text="4" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Points Section -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stats_points_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingVertical="8dp">
+
+            <!-- Points Label -->
+            <TextView
+                android:id="@+id/tv_points_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fredoka"
+                android:text="@string/points"
+                android:textColor="@color/shade_secondary"
+                android:textSize="12sp"
+                android:includeFontPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Points Value Container -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_points_label">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/coins"
+                    android:src="@drawable/ic_coin_stack" />
+
+                <TextView
+                    android:id="@+id/tv_coins"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/fredoka_one"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/shade_primary"
+                    android:textSize="24sp"
+                    tools:text="5,400" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Awards Section -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/stats_awards_container"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingVertical="8dp">
+
+            <!-- Awards Label -->
+            <TextView
+                android:id="@+id/tv_awards_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/fredoka"
+                android:text="@string/awards"
+                android:textColor="@color/shade_secondary"
+                android:textSize="12sp"
+                android:includeFontPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!-- Awards Value Container -->
+            <LinearLayout
+                android:id="@+id/awards_value_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_awards_label">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:contentDescription="@string/awards"
+                    android:src="@drawable/ic_trophy" />
+
+                <TextView
+                    android:id="@+id/tv_awards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:fontFamily="@font/fredoka_one"
+                    android:includeFontPadding="false"
+                    android:textColor="@color/shade_primary"
+                    android:textSize="24sp"
+                    tools:text="2" />
+
+            </LinearLayout>
+
+            <!-- Arrow Icon -->
+            <ImageView
+                android:id="@+id/iv_view_awards"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/view_awards"
+                android:rotation="180"
+                android:src="@drawable/ic_back_arrow"
+                app:layout_constraintBottom_toBottomOf="@id/awards_value_container"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/awards_value_container" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
