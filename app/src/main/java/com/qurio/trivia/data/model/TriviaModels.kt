@@ -79,8 +79,10 @@ data class Achievement(
     val id: String,
     val title: String,
     val description: String,
+    val howToGet: String,
     val iconRes: Int,
-    val isUnlocked: Boolean,
-    val progress: Int,
-    val maxProgress: Int
+    val iconLockedRes: Int,
+    var isUnlocked: Boolean = false,
+    var progress: Int = 0,
+    var maxProgress: Int = 1
 )

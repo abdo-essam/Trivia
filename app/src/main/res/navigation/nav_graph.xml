@@ -45,9 +45,6 @@
         <action
             android:id="@+id/action_home_to_character_selection"
             app:destination="@id/characterSelectionFragment" />
-        <action
-            android:id="@+id/action_home_to_achievements"
-            app:destination="@id/achievementsFragment" />
 
         <action
             android:id="@+id/action_home_to_games"
@@ -139,10 +136,5 @@
         android:id="@+id/buyLifeFragment"
         android:name="com.qurio.trivia.ui.buylife.BuyLifeFragment"
         android:label="BuyLifeFragment" />
-
-    <fragment
-        android:id="@+id/achievementsFragment"
-        android:name="com.qurio.trivia.ui.achievements.AchievementsFragment"
-        android:label="AchievementsFragment" />
 
 </navigation>

@@ -22,6 +22,8 @@ import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
+import com.qurio.trivia.ui.dialogs.AchievementsDialog
+import com.qurio.trivia.ui.dialogs.BuyLifeDialog
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import com.qurio.trivia.utils.extensions.capitalizeFirst
 import com.qurio.trivia.utils.extensions.loadCharacterImage
@@ -235,20 +237,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun showBuyLifeDialog() {
-/*        val dialog = BuyLifeDialog()
-        dialog.setOnBuyClickListener { coinsRequired ->
-            presenter.buyLife(coinsRequired)
-        }
-        dialog.show(childFragmentManager, BuyLifeDialog.TAG)*/
+        BuyLifeDialog().show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
     private fun showAchievementsDialog() {
-/*        val dialog = AchievementsDialog()
-        dialog.show(childFragmentManager, AchievementsDialog.TAG)*/
+        AchievementsDialog().show(childFragmentManager, AchievementsDialog.TAG)
     }
 
     private fun showSettingsDialog() {
-        SettingsDialogFragment().show(childFragmentManager, SETTINGS_DIALOG_TAG)
+        SettingsDialogFragment().show(childFragmentManager, SettingsDialogFragment.TAG)
     }
 
     private fun navigateToAllCategories() {
@@ -261,6 +258,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     companion object {
         private const val LAST_GAMES_LIMIT = 3
-        private const val SETTINGS_DIALOG_TAG = "settings_dialog"
     }
 }

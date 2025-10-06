@@ -1,75 +1,75 @@
 package com.qurio.trivia.ui.dialogs
 
-import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.lifecycleScope
-import com.qurio.trivia.R
-import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.data.database.UserProgressDao
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.qurio.trivia.databinding.DialogSettingsBinding
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class SettingsDialogFragment : DialogFragment() {
+class SettingsDialogFragment : BaseDialogFragment() {
 
-    @Inject
-    lateinit var userProgressDao: UserProgressDao
+    private var _binding: DialogSettingsBinding? = null
+    private val binding get() = _binding!!
 
-    private lateinit var binding: DialogSettingsBinding
-    private var soundEnabled = true
-    private var musicEnabled = true
+    private var initialSoundValue = 80f
+    private var initialMusicValue = 60f
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DialogSettingsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        binding = DialogSettingsBinding.inflate(layoutInflater)
-
-        val dialog = Dialog(requireContext(), R.style.SettingsDialogTheme)
-        dialog.setContentView(binding.root)
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         setupViews()
-        loadCurrentSettings()
-
-        return dialog
+        loadSettings()
     }
 
     private fun setupViews() {
-        binding.switchSound.setOnCheckedChangeListener { _, isChecked ->
-            soundEnabled = isChecked
-        }
+        binding.apply {
+            btnClose.setOnClickListener { dismiss() }
 
-        binding.switchMusic.setOnCheckedChangeListener { _, isChecked ->
-            musicEnabled = isChecked
-        }
+            btnSave.setOnClickListener {
+                saveSettings()
+                dismiss()
+            }
 
-        binding.btnSaveChanges.setOnClickListener {
-            saveSettings()
-        }
-
-        binding.btnDiscard.setOnClickListener {
-            dismiss()
-        }
-    }
-
-    private fun loadCurrentSettings() {
-        lifecycleScope.launch {
-            val userProgress = userProgressDao.getUserProgress()
-            userProgress?.let {
-                soundEnabled = it.soundEnabled
-                musicEnabled = it.musicEnabled
-
-                binding.switchSound.isChecked = soundEnabled
-                binding.switchMusic.isChecked = musicEnabled
+            btnDiscard.setOnClickListener {
+                restoreSettings()
+                dismiss()
             }
         }
     }
 
+    private fun loadSettings() {
+        // TODO: Load from SharedPreferences or ViewModel
+        binding.sliderSound.value = initialSoundValue
+        binding.sliderMusic.value = initialMusicValue
+    }
+
     private fun saveSettings() {
-        lifecycleScope.launch {
-            userProgressDao.updateSoundEnabled(soundEnabled)
-            userProgressDao.updateMusicEnabled(musicEnabled)
-            dismiss()
-        }
+        val soundValue = binding.sliderSound.value
+        val musicValue = binding.sliderMusic.value
+
+        // TODO: Save to SharedPreferences or ViewModel
+        // Also update sound and music managers
+    }
+
+    private fun restoreSettings() {
+        binding.sliderSound.value = initialSoundValue
+        binding.sliderMusic.value = initialMusicValue
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    companion object {
+        const val TAG = "SettingsDialogFragment"
     }
 }

@@ -13,7 +13,7 @@ class NoConnectionDialogFragment : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogNoConnectionBinding.inflate(layoutInflater)
 
-        val dialog = Dialog(requireContext(), R.style.FullScreenDialogTheme)
+        val dialog = Dialog(requireContext())
         dialog.setContentView(binding.root)
         dialog.setCancelable(false)
         dialog.setCanceledOnTouchOutside(false)
