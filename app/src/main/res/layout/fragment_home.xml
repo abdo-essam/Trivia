@@ -26,7 +26,6 @@
 
         <!-- Stats Section -->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:visibility="invisible"
             android:id="@+id/layout_stats"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

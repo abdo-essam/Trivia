@@ -79,4 +79,12 @@
 
     <string name="no_games_yet">No Games Yet</string>
     <string name="start_playing_to_see_history">Start playing to see your game history</string>
+
+    <!-- Dialogs -->
+    <string name="character">Character</string>
+    <string name="buy">Buy</string>
+    <string name="confirm">Confirm</string>
+    <string name="achievements">Achievements</string>
+    <string name="how_to_get">How to get:</string>
+    <string name="click_achievement_details">*Click on achievement to view details</string>
 </resources>

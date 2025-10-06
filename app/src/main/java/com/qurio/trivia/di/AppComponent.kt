@@ -1,11 +1,14 @@
 package com.qurio.trivia.di
 
 import android.content.Context
-import com.qurio.trivia.MainActivity
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.ui.achievements.AchievementsFragment
 import com.qurio.trivia.ui.buylife.BuyLifeFragment
 import com.qurio.trivia.ui.character.CharacterSelectionFragment
+import com.qurio.trivia.ui.dialogs.AchievementInfoDialog
+import com.qurio.trivia.ui.dialogs.AchievementsDialog
+import com.qurio.trivia.ui.dialogs.BuyLifeDialog
+import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
+import com.qurio.trivia.ui.dialogs.DifficultyDialogFragment
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import com.qurio.trivia.ui.difficulty.DifficultyFragment
 import com.qurio.trivia.ui.game.GameFragment
@@ -44,8 +47,12 @@ interface AppComponent {
     fun inject(fragment: GameFragment)
     fun inject(fragment: GameResultFragment)
     fun inject(fragment: BuyLifeFragment)
-    fun inject(fragment: AchievementsFragment)
-    fun inject(dialog: SettingsDialogFragment)
     fun inject(fragment: GamesFragment)
     fun inject(fragment: LastGamesFragment)
+    fun inject(dialog: AchievementsDialog)
+    fun inject(dialog: AchievementInfoDialog)
+    fun inject(dialog: SettingsDialogFragment)
+    fun inject(dialog: CharacterSelectionDialog)
+    fun inject(dialog: DifficultyDialogFragment)
+    fun inject(dialog: BuyLifeDialog)
 }

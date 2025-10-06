@@ -209,7 +209,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun showSettingsDialog() {
-        SettingsDialogFragment().show(childFragmentManager, SETTINGS_DIALOG_TAG)
+        SettingsDialogFragment().show(childFragmentManager, SettingsDialogFragment.TAG)
     }
 
     private fun navigateToAllCategories() {
