@@ -13,6 +13,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
@@ -256,11 +257,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         dialog.show(childFragmentManager, DifficultyDialogFragment.TAG)
     }
 
-    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: String) {
+    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
         val action = HomeFragmentDirections.actionHomeToGame(
             categoryId = categoryId,
             categoryName = categoryName,
-            difficulty = difficulty
+            difficulty = difficulty.value
         )
         findNavController().navigate(action)
     }

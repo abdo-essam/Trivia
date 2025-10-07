@@ -3,6 +3,7 @@ package com.qurio.trivia.ui.games
 import com.qurio.trivia.base.BasePresenter
 import com.qurio.trivia.data.database.UserProgressDao
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.provider.DataProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +22,7 @@ class GamesPresenter @Inject constructor(
         }
     }
 
-    fun checkLivesAndStartGame(category: Category?, difficulty: String) {
+    fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
         if (category == null) return
 
         CoroutineScope(Dispatchers.IO).launch {

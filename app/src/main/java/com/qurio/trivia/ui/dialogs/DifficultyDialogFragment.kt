@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.qurio.trivia.R
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.databinding.DialogDifficultyBinding
 
 class DifficultyDialogFragment : BaseDialogFragment() {
@@ -13,8 +14,8 @@ class DifficultyDialogFragment : BaseDialogFragment() {
     private var _binding: DialogDifficultyBinding? = null
     private val binding get() = _binding!!
 
-    private var selectedDifficulty: String = "hard"
-    private var onDifficultySelected: ((String) -> Unit)? = null
+    private var selectedDifficulty: Difficulty = Difficulty.HARD
+    private var onDifficultySelected: ((Difficulty) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,19 +33,25 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
     private fun setupViews() {
         binding.apply {
-            // Set default selection (Hard is selected by default in XML)
+            // Set button texts from enum
+            btnEasy.text = Difficulty.EASY.displayName
+            btnMedium.text = Difficulty.MEDIUM.displayName
+            btnHard.text = Difficulty.HARD.displayName
+
+            // Default selection is HARD
+            updateButtonStyles()
 
             // Handle difficulty selection
             btnEasy.setOnClickListener {
-                selectDifficulty("easy")
+                selectDifficulty(Difficulty.EASY)
             }
 
             btnMedium.setOnClickListener {
-                selectDifficulty("medium")
+                selectDifficulty(Difficulty.MEDIUM)
             }
 
             btnHard.setOnClickListener {
-                selectDifficulty("hard")
+                selectDifficulty(Difficulty.HARD)
             }
 
             btnClose.setOnClickListener { dismiss() }
@@ -57,7 +64,7 @@ class DifficultyDialogFragment : BaseDialogFragment() {
         }
     }
 
-    private fun selectDifficulty(difficulty: String) {
+    private fun selectDifficulty(difficulty: Difficulty) {
         selectedDifficulty = difficulty
         updateButtonStyles()
     }
@@ -78,15 +85,15 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
             // Highlight selected button
             when (selectedDifficulty) {
-                "easy" -> {
+                Difficulty.EASY -> {
                     btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
                     btnEasy.setTextColor(context.getColor(R.color.white))
                 }
-                "medium" -> {
+                Difficulty.MEDIUM -> {
                     btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
                     btnMedium.setTextColor(context.getColor(R.color.white))
                 }
-                "hard" -> {
+                Difficulty.HARD -> {
                     btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
                     btnHard.setTextColor(context.getColor(R.color.white))
                 }
@@ -94,7 +101,7 @@ class DifficultyDialogFragment : BaseDialogFragment() {
         }
     }
 
-    fun setOnDifficultySelectedListener(listener: (String) -> Unit) {
+    fun setOnDifficultySelectedListener(listener: (Difficulty) -> Unit) {
         onDifficultySelected = listener
     }
 

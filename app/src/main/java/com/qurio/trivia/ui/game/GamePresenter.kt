@@ -2,6 +2,7 @@ package com.qurio.trivia.ui.game
 
 import com.qurio.trivia.base.BasePresenter
 import com.qurio.trivia.data.database.UserProgressDao
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.data.repository.TriviaRepository
 import com.qurio.trivia.utils.Constants
@@ -22,7 +23,7 @@ class GamePresenter @Inject constructor(
     private var skippedAnswers = 0
     private var gameStartTime = 0L
 
-    fun loadQuestions(categoryId: Int, difficulty: String) {
+    fun loadQuestions(categoryId: Int, difficulty: Difficulty) {
         view?.showLoading()
         gameStartTime = System.currentTimeMillis()
 
@@ -30,7 +31,7 @@ class GamePresenter @Inject constructor(
             val result = triviaRepository.getQuestions(
                 Constants.QUESTIONS_PER_GAME,
                 categoryId,
-                difficulty
+                difficulty.value // Use difficulty.value for API call
             )
 
             CoroutineScope(Dispatchers.Main).launch {

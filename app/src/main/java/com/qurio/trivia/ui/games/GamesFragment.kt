@@ -10,6 +10,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.ui.adapters.AllGamesAdapter
@@ -96,11 +97,11 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
         dialog.show(childFragmentManager, DifficultyDialogFragment.TAG)
     }
 
-    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: String) {
+    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
         val action = GamesFragmentDirections.actionGamesToGame(
             categoryId = categoryId,
             categoryName = categoryName,
-            difficulty = difficulty
+            difficulty = difficulty.value
         )
         findNavController().navigate(action)
     }

@@ -90,4 +90,5 @@
     <string name="add_life">Add Life</string>
     <string name="view_awards">View Awards</string>
     <string name="points">Points</string>
+    <string name="cancel">Cancel</string>
 </resources>
