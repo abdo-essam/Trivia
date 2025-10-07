@@ -45,6 +45,7 @@
     <dimen name="button_corner_radius_default">16dp</dimen>
     <dimen name="button_corner_radius_pressed">12dp</dimen>
     <dimen name="button_min_width">70dp</dimen>
+    <dimen name="floating_tag_size">18dp</dimen>
 
 
 </resources>

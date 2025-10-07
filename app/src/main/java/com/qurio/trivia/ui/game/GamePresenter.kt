@@ -22,16 +22,18 @@ class GamePresenter @Inject constructor(
     private var incorrectAnswers = 0
     private var skippedAnswers = 0
     private var gameStartTime = 0L
+    private var hasShownImageInSession = false // Track if image was shown
 
     fun loadQuestions(categoryId: Int, difficulty: Difficulty) {
         view?.showLoading()
         gameStartTime = System.currentTimeMillis()
+        hasShownImageInSession = false // Reset for new game
 
         CoroutineScope(Dispatchers.IO).launch {
             val result = triviaRepository.getQuestions(
                 Constants.QUESTIONS_PER_GAME,
                 categoryId,
-                difficulty.value // Use difficulty.value for API call
+                difficulty.value
             )
 
             CoroutineScope(Dispatchers.Main).launch {
@@ -65,13 +67,15 @@ class GamePresenter @Inject constructor(
         val selectedAnswer = allAnswers[selectedAnswerIndex]
         val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
 
-        if (selectedAnswer == currentQuestion.correctAnswer) {
+        val isCorrect = selectedAnswer == currentQuestion.correctAnswer
+
+        if (isCorrect) {
             correctAnswers++
         } else {
             incorrectAnswers++
         }
 
-        view?.showCorrectAnswer(correctAnswerIndex)
+        view?.showCorrectAnswer(correctAnswerIndex, isCorrect)
     }
 
     fun skipQuestion() {
@@ -82,7 +86,7 @@ class GamePresenter @Inject constructor(
         val allAnswers = currentQuestion.getAllAnswers()
         val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
 
-        view?.showCorrectAnswer(correctAnswerIndex)
+        view?.showCorrectAnswer(correctAnswerIndex, false)
     }
 
     fun timeUp() {
@@ -103,19 +107,26 @@ class GamePresenter @Inject constructor(
         if (currentQuestionIndex < questions.size) {
             val question = questions[currentQuestionIndex]
 
-            // Check if this question might have an image (for certain categories)
-            val hasImage = question.category.contains("Art", ignoreCase = true) ||
-                    question.category.contains("Film", ignoreCase = true)
+            // Show image only once per game session and only for specific categories
+            val canShowImage = !hasShownImageInSession &&
+                    (question.category.contains("Art", ignoreCase = true) ||
+                            question.category.contains("Film", ignoreCase = true) ||
+                            question.category.contains("Science", ignoreCase = true))
 
-            if (hasImage && Math.random() > 0.7) { // 30% chance to show image
+            if (canShowImage && Math.random() > 0.7) { // 30% chance
+                hasShownImageInSession = true
                 view?.displayQuestionWithImage(
                     question,
-                    "https://picsum.photos/300/200", // Placeholder image
+                    "https://picsum.photos/600/400",
                     currentQuestionIndex + 1,
                     questions.size
                 )
             } else {
-                view?.displayQuestion(question, currentQuestionIndex + 1, questions.size)
+                view?.displayQuestion(
+                    question,
+                    currentQuestionIndex + 1,
+                    questions.size
+                )
             }
         }
     }
@@ -123,8 +134,6 @@ class GamePresenter @Inject constructor(
     private fun endGame() {
         val totalTime = System.currentTimeMillis() - gameStartTime
         view?.navigateToResults(correctAnswers, incorrectAnswers, skippedAnswers, totalTime)
-
-        // Save game result
         saveGameResult(totalTime)
     }
 
@@ -141,7 +150,6 @@ class GamePresenter @Inject constructor(
 
     private fun saveGameResult(totalTime: Long) {
         CoroutineScope(Dispatchers.IO).launch {
-            // Calculate stars and coins based on performance
             val totalQuestions = Constants.QUESTIONS_PER_GAME
             val correctPercentage = (correctAnswers.toFloat() / totalQuestions) * 100
 
@@ -159,7 +167,6 @@ class GamePresenter @Inject constructor(
                 else -> Constants.Rewards.LOSE_COINS
             }
 
-            // Update user's total coins
             val userProgress = userProgressDao.getUserProgress()
             userProgress?.let {
                 val newTotalCoins = it.totalCoins + coinsEarned

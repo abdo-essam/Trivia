@@ -2,8 +2,8 @@ package com.qurio.trivia.utils
 
 object Constants {
     const val MAX_LIVES = 4
+    const val QUESTION_TIME_LIMIT = 60000L // 60 seconds
     const val QUESTIONS_PER_GAME = 12
-    const val QUESTION_TIME_LIMIT = 30_000L // 30 seconds
 
     // Categories from Open Trivia DB
     object Categories {
@@ -28,9 +28,9 @@ object Constants {
 
     // Rewards
     object Rewards {
-        const val THREE_STAR_COINS = 500
-        const val TWO_STAR_COINS = 300
-        const val ONE_STAR_COINS = 100
-        const val LOSE_COINS = 1
+        const val THREE_STAR_COINS = 100
+        const val TWO_STAR_COINS = 50
+        const val ONE_STAR_COINS = 25
+        const val LOSE_COINS = 0
     }
 }

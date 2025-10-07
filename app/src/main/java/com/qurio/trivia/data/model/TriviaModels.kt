@@ -42,7 +42,7 @@ data class GameResult(
 @Entity(tableName = "user_progress")
 data class UserProgress(
     @PrimaryKey val id: Int = 1,
-    val lives: Int = 4,
+    val lives: Int = 400,
     val totalCoins: Int = 0,
     val awards: Int = 0,
     val selectedCharacter: String = "rika",

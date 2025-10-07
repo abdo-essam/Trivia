@@ -1,6 +1,7 @@
 package com.qurio.trivia.utils.extensions
 
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.qurio.trivia.R
@@ -9,16 +10,24 @@ fun View.setVisibleIf(condition: Boolean) {
     visibility = if (condition) View.VISIBLE else View.GONE
 }
 
-fun View.setVisible() {
+fun ViewGroup.removeAllViewsSafely() {
+    try {
+        removeAllViews()
+    } catch (e: Exception) {
+        // Handle exception if views are being removed during animation
+    }
+}
+
+fun View.visible() {
     visibility = View.VISIBLE
 }
 
-fun View.setGone() {
-    visibility = View.GONE
+fun View.invisible() {
+    visibility = View.INVISIBLE
 }
 
-fun View.setInvisible() {
-    visibility = View.INVISIBLE
+fun View.gone() {
+    visibility = View.GONE
 }
 
 fun ImageView.loadCharacterImage(characterName: String) {
