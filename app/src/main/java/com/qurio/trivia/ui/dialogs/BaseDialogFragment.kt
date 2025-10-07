@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import com.qurio.trivia.R
+import androidx.core.graphics.drawable.toDrawable
 
 abstract class BaseDialogFragment : DialogFragment() {
 
@@ -18,7 +19,7 @@ abstract class BaseDialogFragment : DialogFragment() {
 
     private fun setupDialog() {
         dialog?.window?.apply {
-            setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
             setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT

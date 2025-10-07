@@ -10,16 +10,15 @@ import com.qurio.trivia.databinding.ItemGameCardBinding
 
 class AllGamesAdapter(
     private val onCategoryClick: (Category) -> Unit
-) : ListAdapter<Category, AllGamesAdapter.GameViewHolder>(GameDiffCallback()) {
+) : ListAdapter<Category, AllGamesAdapter.GameViewHolder>(CategoryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GameViewHolder {
-        return GameViewHolder(
-            ItemGameCardBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
+        val binding = ItemGameCardBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
         )
+        return GameViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: GameViewHolder, position: Int) {
@@ -30,35 +29,26 @@ class AllGamesAdapter(
         private val binding: ItemGameCardBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        init {
-            binding.btnPlayNow.setOnClickListener {
-                val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onCategoryClick(getItem(position))
-                }
-            }
-
-            binding.ivCategoryImage.setOnClickListener {
-                val position = bindingAdapterPosition
-                if (position != RecyclerView.NO_POSITION) {
-                    onCategoryClick(getItem(position))
-                }
-            }
-        }
-
         fun bind(category: Category) {
             binding.apply {
                 tvCategoryName.text = category.displayName
                 ivCategoryImage.setImageResource(category.imageRes)
+
+                // Click on "Play Now" button
+                btnPlayNow.setOnClickListener {
+                    onCategoryClick(category)
+                }
             }
         }
     }
 
-    private class GameDiffCallback : DiffUtil.ItemCallback<Category>() {
-        override fun areItemsTheSame(oldItem: Category, newItem: Category) =
-            oldItem.id == newItem.id
+    private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
+        override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
+            return oldItem.id == newItem.id
+        }
 
-        override fun areContentsTheSame(oldItem: Category, newItem: Category) =
-            oldItem == newItem
+        override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
+            return oldItem == newItem
+        }
     }
 }

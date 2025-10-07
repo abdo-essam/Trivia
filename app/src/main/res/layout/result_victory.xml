@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!-- Shine Effect -->
+    <ImageView
+        android:id="@+id/iv_shine_effect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_result_shape"
+        app:layout_constraintBottom_toTopOf="@id/iv_ribbon_banner"
+        app:layout_constraintEnd_toEndOf="@id/iv_ribbon_banner"
+        app:layout_constraintStart_toStartOf="@id/iv_ribbon_banner"
+        app:layout_constraintTop_toTopOf="@id/iv_ribbon_banner" />
+
+    <!-- Ribbon Banner -->
+    <ImageView
+        android:id="@+id/iv_ribbon_banner"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/banner_ribbon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title Shadow Effect -->
+    <TextView
+        android:id="@+id/tv_victory_title_shadow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="@string/great_job"
+        android:textColor="#1980B2"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tv_victory_title"
+        app:layout_constraintEnd_toEndOf="@id/tv_victory_title"
+        app:layout_constraintStart_toStartOf="@id/tv_victory_title"
+        app:layout_constraintTop_toTopOf="@id/tv_victory_title" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/tv_victory_title"
+        style="@style/TextAppearance.Headline.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/great_job"
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toBottomOf="@id/iv_ribbon_banner"
+        app:layout_constraintEnd_toEndOf="@id/iv_ribbon_banner"
+        app:layout_constraintStart_toStartOf="@id/iv_ribbon_banner"
+        app:layout_constraintTop_toTopOf="@id/iv_ribbon_banner" />
+
+    <!-- Stars Container -->
+    <LinearLayout
+        android:id="@+id/layout_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/iv_ribbon_banner"
+        app:layout_constraintEnd_toEndOf="@id/iv_ribbon_banner"
+        app:layout_constraintStart_toStartOf="@id/iv_ribbon_banner"
+        app:layout_constraintTop_toTopOf="@id/iv_ribbon_banner">
+
+        <ImageView
+            android:id="@+id/iv_star1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_star2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginBottom="12dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_star3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

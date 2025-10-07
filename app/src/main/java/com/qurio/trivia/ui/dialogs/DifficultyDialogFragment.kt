@@ -1,10 +1,12 @@
 package com.qurio.trivia.ui.dialogs
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.qurio.trivia.R
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.databinding.DialogDifficultyBinding
 
 class DifficultyDialogFragment : BaseDialogFragment() {
@@ -12,8 +14,8 @@ class DifficultyDialogFragment : BaseDialogFragment() {
     private var _binding: DialogDifficultyBinding? = null
     private val binding get() = _binding!!
 
-    private var selectedDifficulty: String = "hard"
-    private var onDifficultySelected: ((String) -> Unit)? = null
+    private var selectedDifficulty: Difficulty = Difficulty.HARD
+    private var onDifficultySelected: ((Difficulty) -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,19 +33,25 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
     private fun setupViews() {
         binding.apply {
-            // Set default selection
-            toggleDifficulty.check(R.id.btn_hard)
+            // Set button texts from enum
+            btnEasy.text = Difficulty.EASY.displayName
+            btnMedium.text = Difficulty.MEDIUM.displayName
+            btnHard.text = Difficulty.HARD.displayName
+
+            // Default selection is HARD
+            updateButtonStyles()
 
             // Handle difficulty selection
-            toggleDifficulty.addOnButtonCheckedListener { _, checkedId, isChecked ->
-                if (isChecked) {
-                    selectedDifficulty = when (checkedId) {
-                        R.id.btn_easy -> "easy"
-                        R.id.btn_medium -> "medium"
-                        R.id.btn_hard -> "hard"
-                        else -> "hard"
-                    }
-                }
+            btnEasy.setOnClickListener {
+                selectDifficulty(Difficulty.EASY)
+            }
+
+            btnMedium.setOnClickListener {
+                selectDifficulty(Difficulty.MEDIUM)
+            }
+
+            btnHard.setOnClickListener {
+                selectDifficulty(Difficulty.HARD)
             }
 
             btnClose.setOnClickListener { dismiss() }
@@ -56,7 +64,44 @@ class DifficultyDialogFragment : BaseDialogFragment() {
         }
     }
 
-    fun setOnDifficultySelectedListener(listener: (String) -> Unit) {
+    private fun selectDifficulty(difficulty: Difficulty) {
+        selectedDifficulty = difficulty
+        updateButtonStyles()
+    }
+
+    private fun updateButtonStyles() {
+        binding.apply {
+            val context = requireContext()
+
+            // Reset all buttons to unselected state
+            btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnEasy.setTextColor(context.getColor(R.color.shade_secondary))
+
+            btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnMedium.setTextColor(context.getColor(R.color.shade_secondary))
+
+            btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnHard.setTextColor(context.getColor(R.color.shade_secondary))
+
+            // Highlight selected button
+            when (selectedDifficulty) {
+                Difficulty.EASY -> {
+                    btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnEasy.setTextColor(context.getColor(R.color.white))
+                }
+                Difficulty.MEDIUM -> {
+                    btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnMedium.setTextColor(context.getColor(R.color.white))
+                }
+                Difficulty.HARD -> {
+                    btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnHard.setTextColor(context.getColor(R.color.white))
+                }
+            }
+        }
+    }
+
+    fun setOnDifficultySelectedListener(listener: (Difficulty) -> Unit) {
         onDifficultySelected = listener
     }
 

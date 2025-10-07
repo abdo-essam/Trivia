@@ -10,9 +10,12 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.ui.adapters.AllGamesAdapter
+import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
+import com.qurio.trivia.ui.dialogs.DifficultyDialogFragment
 import javax.inject.Inject
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), GamesView {
@@ -31,6 +34,9 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
     private val allGamesAdapter by lazy {
         AllGamesAdapter(::onCategoryClick)
     }
+
+    // Store selected category for dialog flow
+    private var selectedCategory: Category? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,10 +74,39 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesPresenter>(), Game
     }
 
     private fun onCategoryClick(category: Category) {
-        val action = GamesFragmentDirections.actionGamesToCharacterSelection(
-            categoryId = category.id,
-            categoryName = category.displayName
+        selectedCategory = category
+        showCharacterSelectionDialog()
+    }
+
+    // Dialog flow: Category -> Character -> Difficulty -> Game
+    private fun showCharacterSelectionDialog() {
+        val dialog = CharacterSelectionDialog()
+        dialog.setOnCharacterSelectedListener { selectedCharacter ->
+            // Character selected, now show difficulty
+            showDifficultyDialog()
+        }
+        dialog.show(childFragmentManager, CharacterSelectionDialog.TAG)
+    }
+
+    private fun showDifficultyDialog() {
+        val dialog = DifficultyDialogFragment()
+        dialog.setOnDifficultySelectedListener { difficulty ->
+            // Difficulty selected, check lives and start game
+            presenter.checkLivesAndStartGame(selectedCategory, difficulty)
+        }
+        dialog.show(childFragmentManager, DifficultyDialogFragment.TAG)
+    }
+
+    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
+        val action = GamesFragmentDirections.actionGamesToGame(
+            categoryId = categoryId,
+            categoryName = categoryName,
+            difficulty = difficulty.value
         )
         findNavController().navigate(action)
+    }
+
+    override fun showNotEnoughLives() {
+        showError("Not enough lives! Please buy more lives from the home screen.")
     }
 }

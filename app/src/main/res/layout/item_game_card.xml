@@ -4,11 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="344dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginHorizontal="8dp">
+    android:layout_height="wrap_content">
 
-    <!-- Category Image (with border already included) -->
+    <!-- Category Image -->
     <ImageView
         android:id="@+id/iv_category_image"
         android:layout_width="match_parent"
@@ -17,7 +15,7 @@
         android:scaleType="fitXY"
         tools:src="@drawable/category_geography" />
 
-    <!-- Category Name (overlaid on image) -->
+    <!-- Category Name -->
     <TextView
         android:id="@+id/tv_category_name"
         android:layout_width="match_parent"
@@ -33,7 +31,7 @@
         android:shadowRadius="8"
         tools:text="Geography" />
 
-    <!-- Play Now Button (overlapping bottom) -->
+    <!-- Play Now Button-->
     <FrameLayout
         android:layout_width="165dp"
         android:layout_height="44dp"

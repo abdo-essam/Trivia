@@ -11,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.databinding.FragmentGameBinding
 import com.qurio.trivia.ui.dialogs.NoConnectionDialogFragment
@@ -49,7 +50,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(), GameVie
         }
 
         setupAnswerButtons()
-        presenter.loadQuestions(args.categoryId, args.difficulty)
+        presenter.loadQuestions(args.categoryId, Difficulty.valueOf(args.difficulty.uppercase()))
     }
 
     private fun setupAnswerButtons() {
@@ -271,7 +272,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(), GameVie
     }
 
     override fun onRetryClicked() {
-        presenter.loadQuestions(args.categoryId, args.difficulty)
+        presenter.loadQuestions(args.categoryId, Difficulty.valueOf(args.difficulty.uppercase()))
     }
 
     override fun onDestroyView() {

@@ -22,7 +22,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/choose_difficulty"
+        android:text="Difficulty level"
         android:textAppearance="@style/TextAppearance.Title.Medium"
         android:textColor="@color/white"
         android:background="@drawable/bg_dialog_title"
@@ -33,14 +33,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Difficulty Options -->
-    <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggle_difficulty"
+    <!-- Difficulty Options - Using LinearLayout instead of MaterialButtonToggleGroup -->
+    <LinearLayout
+        android:id="@+id/layout_difficulty"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        app:singleSelection="true"
-        app:selectionRequired="true"
+        android:orientation="horizontal"
+        android:weightSum="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title">
@@ -51,8 +51,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/easy"
-            android:textColor="@color/shade_secondary" />
+            android:layout_marginEnd="4dp"
+            android:textColor="@color/shade_secondary"
+            android:backgroundTint="@color/disable" />
 
         <Button
             android:id="@+id/btn_medium"
@@ -60,8 +61,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/medium"
-            android:textColor="@color/shade_secondary" />
+            android:layout_marginHorizontal="4dp"
+            android:textColor="@color/shade_secondary"
+            android:backgroundTint="@color/disable" />
 
         <Button
             android:id="@+id/btn_hard"
@@ -69,9 +71,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/hard" />
+            android:layout_marginStart="4dp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/primary" />
 
-    </com.google.android.material.button.MaterialButtonToggleGroup>
+    </LinearLayout>
 
     <!-- Action Buttons -->
     <Button
@@ -79,19 +83,19 @@
         style="@style/Widget.App.Button.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/continue_text"
+        android:text="@string/confirm"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@id/btn_cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toggle_difficulty" />
+        app:layout_constraintTop_toBottomOf="@id/layout_difficulty" />
 
     <Button
         android:id="@+id/btn_cancel"
         style="@style/Widget.App.Button.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@android:string/cancel"
+        android:text="@string/cancel"
         android:backgroundTint="@color/transparent"
         android:textColor="@color/primary"
         android:layout_marginStart="8dp"

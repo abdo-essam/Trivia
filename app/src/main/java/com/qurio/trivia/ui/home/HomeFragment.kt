@@ -13,6 +13,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.base.BaseFragment
 import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
@@ -24,6 +25,8 @@ import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
 import com.qurio.trivia.ui.dialogs.AchievementsDialog
 import com.qurio.trivia.ui.dialogs.BuyLifeDialog
+import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
+import com.qurio.trivia.ui.dialogs.DifficultyDialogFragment
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
 import com.qurio.trivia.utils.extensions.capitalizeFirst
 import com.qurio.trivia.utils.extensions.loadCharacterImage
@@ -65,6 +68,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     private val lastGamesAdapter by lazy {
         LastGamesAdapter(::onGameResultClick)
     }
+
+    // Store selected category for dialog flow
+    private var selectedCategory: Category? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -167,7 +173,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     private fun updateStreakDisplay(userProgress: UserProgress) {
         with(streakBinding) {
-            // Update title and subtitle based on streak
             if (userProgress.currentStreak == 0) {
                 streakTitle.text = getString(R.string.streak_start)
                 streakSubtitle.text = getString(R.string.every_day_count)
@@ -225,19 +230,52 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun onCategoryClick(category: Category) {
-        val action = HomeFragmentDirections.actionHomeToCharacterSelection(
-            categoryId = category.id,
-            categoryName = category.displayName
+        selectedCategory = category
+        showCharacterSelectionDialog()
+    }
+
+    private fun onGameResultClick(gameResult: GameResult) {
+        // TODO: Show game result detail dialog or replay
+    }
+
+    // Dialog flow: Category -> Character -> Difficulty -> Game
+    private fun showCharacterSelectionDialog() {
+        val dialog = CharacterSelectionDialog()
+        dialog.setOnCharacterSelectedListener { selectedCharacter ->
+            // Character selected, now show difficulty
+            showDifficultyDialog()
+        }
+        dialog.show(childFragmentManager, CharacterSelectionDialog.TAG)
+    }
+
+    private fun showDifficultyDialog() {
+        val dialog = DifficultyDialogFragment()
+        dialog.setOnDifficultySelectedListener { difficulty ->
+            // Difficulty selected, check lives and start game
+            presenter.checkLivesAndStartGame(selectedCategory, difficulty)
+        }
+        dialog.show(childFragmentManager, DifficultyDialogFragment.TAG)
+    }
+
+    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
+        val action = HomeFragmentDirections.actionHomeToGame(
+            categoryId = categoryId,
+            categoryName = categoryName,
+            difficulty = difficulty.value
         )
         findNavController().navigate(action)
     }
 
-    private fun onGameResultClick(gameResult: GameResult) {
-        // TODO: Navigate to game result detail or replay game
+    override fun showNotEnoughLives() {
+        showBuyLifeDialog()
     }
 
     private fun showBuyLifeDialog() {
-        BuyLifeDialog().show(childFragmentManager, BuyLifeDialog.TAG)
+        val dialog = BuyLifeDialog()
+        dialog.setOnPurchaseConfirmedListener {
+            presenter.purchaseLife()
+        }
+        dialog.show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
     private fun showAchievementsDialog() {
