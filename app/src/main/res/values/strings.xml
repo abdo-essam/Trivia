@@ -98,4 +98,8 @@
     <string name="share_disappointment">Share disappointment with friends</string>
     <string name="share_win_message">I just played %1$s trivia and got %2$d/%3$d correct! 🎉 Can you beat my score?</string>
     <string name="share_lose_message">I just played %1$s trivia. Not my best game, but I\'ll try again! 💪</string>
+
+    <string name="question_counter">Q %1$d/%2$d</string>
+    <string name="timer_seconds">%d Sec</string>
+    <string name="floating_tag">Floating tag indicator</string>
 </resources>
