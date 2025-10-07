@@ -1,4 +1,3 @@
-// StrokeTextView.kt
 package com.qurio.trivia.ui.custom
 
 import android.content.Context

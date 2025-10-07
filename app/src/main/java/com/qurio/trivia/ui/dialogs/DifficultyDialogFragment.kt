@@ -1,5 +1,6 @@
 package com.qurio.trivia.ui.dialogs
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -31,19 +32,19 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
     private fun setupViews() {
         binding.apply {
-            // Set default selection
-            toggleDifficulty.check(R.id.btn_hard)
+            // Set default selection (Hard is selected by default in XML)
 
             // Handle difficulty selection
-            toggleDifficulty.addOnButtonCheckedListener { _, checkedId, isChecked ->
-                if (isChecked) {
-                    selectedDifficulty = when (checkedId) {
-                        R.id.btn_easy -> "easy"
-                        R.id.btn_medium -> "medium"
-                        R.id.btn_hard -> "hard"
-                        else -> "hard"
-                    }
-                }
+            btnEasy.setOnClickListener {
+                selectDifficulty("easy")
+            }
+
+            btnMedium.setOnClickListener {
+                selectDifficulty("medium")
+            }
+
+            btnHard.setOnClickListener {
+                selectDifficulty("hard")
             }
 
             btnClose.setOnClickListener { dismiss() }
@@ -52,6 +53,43 @@ class DifficultyDialogFragment : BaseDialogFragment() {
             btnConfirm.setOnClickListener {
                 onDifficultySelected?.invoke(selectedDifficulty)
                 dismiss()
+            }
+        }
+    }
+
+    private fun selectDifficulty(difficulty: String) {
+        selectedDifficulty = difficulty
+        updateButtonStyles()
+    }
+
+    private fun updateButtonStyles() {
+        binding.apply {
+            val context = requireContext()
+
+            // Reset all buttons to unselected state
+            btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnEasy.setTextColor(context.getColor(R.color.shade_secondary))
+
+            btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnMedium.setTextColor(context.getColor(R.color.shade_secondary))
+
+            btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
+            btnHard.setTextColor(context.getColor(R.color.shade_secondary))
+
+            // Highlight selected button
+            when (selectedDifficulty) {
+                "easy" -> {
+                    btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnEasy.setTextColor(context.getColor(R.color.white))
+                }
+                "medium" -> {
+                    btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnMedium.setTextColor(context.getColor(R.color.white))
+                }
+                "hard" -> {
+                    btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
+                    btnHard.setTextColor(context.getColor(R.color.white))
+                }
             }
         }
     }

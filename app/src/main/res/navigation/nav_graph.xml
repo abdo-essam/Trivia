@@ -22,71 +22,36 @@
     </fragment>
 
     <fragment
-        android:id="@+id/lastGamesFragment"
-        android:name="com.qurio.trivia.ui.lastgames.LastGamesFragment"
-        android:label="@string/last_games"
-        tools:layout="@layout/fragment_last_games" />
-
-    <fragment
-        android:id="@+id/gamesFragment"
-        android:name="com.qurio.trivia.ui.games.GamesFragment"
-        android:label="@string/games"
-        tools:layout="@layout/fragment_games">
-
-        <action
-            android:id="@+id/action_games_to_character_selection"
-            app:destination="@id/characterSelectionFragment" />
-    </fragment>
-
-    <fragment
         android:id="@+id/homeFragment"
         android:name="com.qurio.trivia.ui.home.HomeFragment"
         android:label="HomeFragment">
         <action
-            android:id="@+id/action_home_to_character_selection"
-            app:destination="@id/characterSelectionFragment" />
-
+            android:id="@+id/action_home_to_game"
+            app:destination="@id/gameFragment" />
         <action
             android:id="@+id/action_home_to_games"
             app:destination="@id/gamesFragment" />
-
         <action
             android:id="@+id/action_home_to_last_games"
             app:destination="@id/lastGamesFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/characterSelectionFragment"
-        android:name="com.qurio.trivia.ui.character.CharacterSelectionFragment"
-        android:label="CharacterSelectionFragment">
-        <argument
-            android:name="categoryId"
-            app:argType="integer" />
-        <argument
-            android:name="categoryName"
-            app:argType="string" />
+        android:id="@+id/gamesFragment"
+        android:name="com.qurio.trivia.ui.games.GamesFragment"
+        android:label="@string/games"
+        tools:layout="@layout/fragment_games">
+        <!-- Add action to game -->
         <action
-            android:id="@+id/action_character_selection_to_difficulty"
-            app:destination="@id/difficultyFragment" />
+            android:id="@+id/action_games_to_game"
+            app:destination="@id/gameFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/difficultyFragment"
-        android:name="com.qurio.trivia.ui.difficulty.DifficultyFragment"
-        android:label="DifficultyFragment">
-        <argument
-            android:name="categoryId"
-            app:argType="integer" />
-        <argument
-            android:name="categoryName"
-            app:argType="string" />
-        <action
-            android:id="@+id/action_difficulty_to_game"
-            app:destination="@id/gameFragment" />
-        <action
-            android:id="@+id/action_difficulty_to_buy_life"
-            app:destination="@id/buyLifeFragment" />
-    </fragment>
+        android:id="@+id/lastGamesFragment"
+        android:name="com.qurio.trivia.ui.lastgames.LastGamesFragment"
+        android:label="@string/last_games"
+        tools:layout="@layout/fragment_last_games" />
 
     <fragment
         android:id="@+id/gameFragment"
@@ -131,10 +96,5 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="false" />
     </fragment>
-
-    <fragment
-        android:id="@+id/buyLifeFragment"
-        android:name="com.qurio.trivia.ui.buylife.BuyLifeFragment"
-        android:label="BuyLifeFragment" />
 
 </navigation>

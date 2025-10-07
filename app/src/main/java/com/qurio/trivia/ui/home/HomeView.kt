@@ -9,4 +9,6 @@ interface HomeView : BaseView {
     fun displayUserProgress(userProgress: UserProgress)
     fun displayCategories(categories: List<Category>)
     fun displayLastGames(games: List<GameResult>)
+    fun navigateToGame(categoryId: Int, categoryName: String, difficulty: String)
+    fun showNotEnoughLives()
 }
