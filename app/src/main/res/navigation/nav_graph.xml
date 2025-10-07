@@ -41,7 +41,6 @@
         android:name="com.qurio.trivia.ui.games.GamesFragment"
         android:label="@string/games"
         tools:layout="@layout/fragment_games">
-        <!-- Add action to game -->
         <action
             android:id="@+id/action_games_to_game"
             app:destination="@id/gameFragment" />
@@ -68,7 +67,9 @@
             app:argType="string" />
         <action
             android:id="@+id/action_game_to_result"
-            app:destination="@id/gameResultFragment" />
+            app:destination="@id/gameResultFragment"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="false" />
     </fragment>
 
     <fragment
