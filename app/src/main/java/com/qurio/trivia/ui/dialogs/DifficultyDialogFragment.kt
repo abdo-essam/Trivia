@@ -71,32 +71,16 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
     private fun updateButtonStyles() {
         binding.apply {
-            val context = requireContext()
+            // Reset all buttons
+            btnEasy.isSelected = false
+            btnMedium.isSelected = false
+            btnHard.isSelected = false
 
-            // Reset all buttons to unselected state
-            btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
-            btnEasy.setTextColor(context.getColor(R.color.shade_secondary))
-
-            btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
-            btnMedium.setTextColor(context.getColor(R.color.shade_secondary))
-
-            btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.disable))
-            btnHard.setTextColor(context.getColor(R.color.shade_secondary))
-
-            // Highlight selected button
+            // Set selected button
             when (selectedDifficulty) {
-                Difficulty.EASY -> {
-                    btnEasy.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
-                    btnEasy.setTextColor(context.getColor(R.color.white))
-                }
-                Difficulty.MEDIUM -> {
-                    btnMedium.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
-                    btnMedium.setTextColor(context.getColor(R.color.white))
-                }
-                Difficulty.HARD -> {
-                    btnHard.backgroundTintList = ColorStateList.valueOf(context.getColor(R.color.primary))
-                    btnHard.setTextColor(context.getColor(R.color.white))
-                }
+                Difficulty.EASY -> btnEasy.isSelected = true
+                Difficulty.MEDIUM -> btnMedium.isSelected = true
+                Difficulty.HARD -> btnHard.isSelected = true
             }
         }
     }

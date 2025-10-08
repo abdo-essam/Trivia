@@ -106,4 +106,5 @@
     <string name="buy_character">Buy Character</string>
     <string name="lock_icon">Lock Icon</string>
     <string name="ok">Ok</string>
+    <string name="difficulty_level">Difficulty Level</string>
 </resources>
