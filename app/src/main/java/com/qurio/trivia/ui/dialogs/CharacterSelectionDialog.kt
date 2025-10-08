@@ -10,7 +10,6 @@ import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.data.provider.DataProvider
 import com.qurio.trivia.databinding.DialogCharacterSelectionBinding
 import com.qurio.trivia.ui.adapters.CharacterGridAdapter
-import javax.inject.Inject
 
 class CharacterSelectionDialog : BaseDialogFragment() {
 
