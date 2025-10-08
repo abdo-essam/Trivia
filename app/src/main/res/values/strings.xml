@@ -102,4 +102,12 @@
     <string name="question_counter">Q %1$d/%2$d</string>
     <string name="timer_seconds">%d Sec</string>
     <string name="floating_tag">Floating tag indicator</string>
+    <string name="selected">Selected</string>
+    <string name="buy_character">Buy Character</string>
+    <string name="lock_icon">Lock Icon</string>
+    <string name="ok">Ok</string>
+    <string name="difficulty_level">Difficulty Level</string>
+    <string name="buy_life">Buy Life</string>
+    <string name="x">X</string>
+    <string name="equal">=</string>
 </resources>

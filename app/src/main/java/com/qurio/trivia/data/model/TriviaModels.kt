@@ -59,7 +59,9 @@ data class Character(
     val age: String,
     val description: String,
     val imageRes: Int,
-    val lockedImageRes: Int
+    val lockedImageRes: Int,
+    val unlockCost: Int = 0,
+    var isLocked: Boolean = false
 )
 
 data class Category(

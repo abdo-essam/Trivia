@@ -2,19 +2,21 @@ package com.qurio.trivia.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.databinding.ItemCharacterGridBinding
-import com.qurio.trivia.utils.extensions.loadCharacterImage
 
 class CharacterGridAdapter(
-    private val onCharacterClick: (Character) -> Unit
+    private val onCharacterSelected: (Character) -> Unit,
+    private val onLockedCharacterClick: (Character) -> Unit
 ) : ListAdapter<Character, CharacterGridAdapter.CharacterViewHolder>(CharacterDiffCallback()) {
 
-    private var selectedPosition = -1
+    private var selectedPosition = 0 // First character selected by default
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val binding = ItemCharacterGridBinding.inflate(
@@ -29,30 +31,48 @@ class CharacterGridAdapter(
         holder.bind(getItem(position), position == selectedPosition)
     }
 
+    fun selectCharacter(position: Int) {
+        val previousPosition = selectedPosition
+        selectedPosition = position
+        notifyItemChanged(previousPosition)
+        notifyItemChanged(selectedPosition)
+    }
+
     inner class CharacterViewHolder(
         private val binding: ItemCharacterGridBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(character: Character, isSelected: Boolean) {
             binding.apply {
+                ivCharacter.setImageResource(
+                    if (character.isLocked) character.lockedImageRes
+                    else character.imageRes
+                )
+
+                // Show selection checkmark only for selected unlocked character
+                ivSelectedCheck.isVisible = isSelected && !character.isLocked
+
+                // Set character name and color
                 tvName.text = character.displayName
-                ivCharacter.loadCharacterImage(character.name)
+                tvName.setTextColor(
+                    ContextCompat.getColor(
+                        root.context,
+                        when {
+                            isSelected && !character.isLocked -> R.color.primary
+                            character.isLocked -> R.color.shade_tertiary
+                            else -> R.color.shade_secondary
+                        }
+                    )
+                )
 
-                // Show selection indicator
-                ivSelectedCheck.isVisible = isSelected
-
-                // Set alpha for locked characters (optional)
-                val alpha = if (character.name == "locked") 0.5f else 1.0f
-                ivCharacter.alpha = alpha
-
+                // Handle clicks
                 root.setOnClickListener {
-                    val previousPosition = selectedPosition
-                    selectedPosition = bindingAdapterPosition
-
-                    notifyItemChanged(previousPosition)
-                    notifyItemChanged(selectedPosition)
-
-                    onCharacterClick(character)
+                    if (character.isLocked) {
+                        onLockedCharacterClick(character)
+                    } else {
+                        selectCharacter(bindingAdapterPosition)
+                        onCharacterSelected(character)
+                    }
                 }
             }
         }

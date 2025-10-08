@@ -10,7 +10,6 @@ import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.data.provider.DataProvider
 import com.qurio.trivia.databinding.DialogCharacterSelectionBinding
 import com.qurio.trivia.ui.adapters.CharacterGridAdapter
-import javax.inject.Inject
 
 class CharacterSelectionDialog : BaseDialogFragment() {
 
@@ -21,10 +20,15 @@ class CharacterSelectionDialog : BaseDialogFragment() {
     private var selectedCharacter: Character? = null
 
     private val characterAdapter by lazy {
-        CharacterGridAdapter { character ->
-            selectedCharacter = character
-            binding.btnConfirm.isEnabled = true
-        }
+        CharacterGridAdapter(
+            onCharacterSelected = { character ->
+                selectedCharacter = character
+                binding.btnConfirm.isEnabled = true
+            },
+            onLockedCharacterClick = { character ->
+                showBuyCharacterDialog(character)
+            }
+        )
     }
 
     override fun onCreateView(
@@ -44,26 +48,39 @@ class CharacterSelectionDialog : BaseDialogFragment() {
     }
 
     private fun setupViews() {
+        // Setup RecyclerView
+        binding.rvCharacters.apply {
+            layoutManager = GridLayoutManager(requireContext(), 5)
+            adapter = characterAdapter
+            setHasFixedSize(true)
+        }
+
+        // Setup buttons
         binding.btnClose.setOnClickListener { dismiss() }
         binding.btnCancel.setOnClickListener { dismiss() }
 
-        binding.btnConfirm.isEnabled = false
         binding.btnConfirm.setOnClickListener {
             selectedCharacter?.let { character ->
                 onCharacterSelected?.invoke(character)
                 dismiss()
             }
         }
-
-        binding.rvCharacters.apply {
-            layoutManager = GridLayoutManager(requireContext(), 4)
-            adapter = characterAdapter
-        }
     }
 
     private fun loadCharacters() {
         val characters = DataProvider.getCharacters()
         characterAdapter.submitList(characters)
+
+        // Select first character by default
+        selectedCharacter = characters.firstOrNull()
+        binding.btnConfirm.isEnabled = true
+    }
+
+    private fun showBuyCharacterDialog(character: Character) {
+        BuyCharacterDialog.newInstance(character).show(
+            childFragmentManager,
+            BuyCharacterDialog.TAG
+        )
     }
 
     fun setOnCharacterSelectedListener(listener: (Character) -> Unit) {
