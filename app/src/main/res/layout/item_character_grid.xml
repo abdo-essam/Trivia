@@ -5,43 +5,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:padding="4dp"
     android:clickable="true"
     android:focusable="true"
     android:background="?attr/selectableItemBackgroundBorderless">
 
-    <!-- Character Image -->
-    <ImageView
-        android:id="@+id/iv_character"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:contentDescription="@string/character_image"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/character_rika"
+    <!-- Character Image Container -->
+    <FrameLayout
+        android:id="@+id/frame_character"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <!-- Selection Checkmark -->
-    <ImageView
-        android:id="@+id/iv_selected_check"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:src="@drawable/ic_check_circle"
-        android:contentDescription="@string/character_image"
-        android:visibility="gone"
-        app:tint="@color/primary"
-        app:layout_constraintEnd_toEndOf="@id/iv_character"
-        app:layout_constraintTop_toTopOf="@id/iv_character"
-        tools:visibility="visible" />
+        <!-- Character Image -->
+        <ImageView
+            android:id="@+id/iv_character"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/character_image"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/character_rika" />
+
+        <!-- Lock Overlay (for locked characters) -->
+        <FrameLayout
+            android:id="@+id/frame_lock"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#AA000000"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_lock"
+                android:contentDescription="@null" />
+
+            <!-- Cost Badge -->
+            <LinearLayout
+                android:id="@+id/layout_cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginBottom="4dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_coin_stack"
+                    android:contentDescription="@null"/>
+
+                <TextView
+                    android:id="@+id/tv_cost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.Label.Small"
+                    android:textColor="@color/white"
+                    android:layout_marginStart="2dp"
+                    tools:text="300"/>
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Selection Checkmark -->
+        <ImageView
+            android:id="@+id/iv_selected_check"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="top|start"
+            android:src="@drawable/ic_check"
+            android:contentDescription="@null"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </FrameLayout>
 
     <!-- Character Name -->
     <TextView
         android:id="@+id/tv_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Label.Small"
-        android:textColor="@color/white"
+        android:textAppearance="@style/TextAppearance.Label.Medium"
+        android:textColor="@color/shade_tertiary"
         android:gravity="center"
         android:maxLines="1"
         android:ellipsize="end"
@@ -49,6 +97,6 @@
         tools:text="Rika"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_character" />
+        app:layout_constraintTop_toBottomOf="@id/frame_character" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

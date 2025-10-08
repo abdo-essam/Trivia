@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="4dp">
+
+    <ImageView
+        android:id="@+id/iv_character"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:contentDescription="@string/character_image"
+        android:alpha="0.5"
+        tools:src="@drawable/character_mimi_locked"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_lock"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:contentDescription="@string/lock_icon"
+        android:src="@drawable/ic_lock"
+        app:layout_constraintEnd_toEndOf="@id/iv_character"
+        app:layout_constraintStart_toStartOf="@id/iv_character"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_coin"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="6dp"
+        android:contentDescription="@string/coins"
+        android:src="@drawable/ic_coin_stack"
+        app:layout_constraintBottom_toBottomOf="@id/iv_character"
+        app:layout_constraintEnd_toStartOf="@id/tv_cost"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@id/iv_character"
+        app:layout_constraintTop_toBottomOf="@id/iv_lock" />
+
+    <TextView
+        android:id="@+id/tv_cost"
+        style="@style/TextAppearance.Label.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:textColor="@color/shade_primary"
+        tools:text="30k"
+        app:layout_constraintBottom_toBottomOf="@id/iv_coin"
+        app:layout_constraintEnd_toEndOf="@id/iv_character"
+        app:layout_constraintStart_toEndOf="@id/iv_coin"
+        app:layout_constraintTop_toTopOf="@id/iv_coin" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/shade_tertiary"
+        tools:text="Mimi"
+        app:layout_constraintEnd_toEndOf="@id/iv_character"
+        app:layout_constraintStart_toStartOf="@id/iv_character"
+        app:layout_constraintTop_toBottomOf="@id/iv_character" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

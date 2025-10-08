@@ -25,6 +25,7 @@ import com.qurio.trivia.ui.adapters.CategoryAdapter
 import com.qurio.trivia.ui.adapters.LastGamesAdapter
 import com.qurio.trivia.ui.dialogs.AchievementsDialog
 import com.qurio.trivia.ui.dialogs.BuyLifeDialog
+import com.qurio.trivia.ui.dialogs.CharacterInfoDialog
 import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
 import com.qurio.trivia.ui.dialogs.DifficultyDialogFragment
 import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
@@ -238,11 +239,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         // TODO: Show game result detail dialog or replay
     }
 
-    // Dialog flow: Category -> Character -> Difficulty -> Game
     private fun showCharacterSelectionDialog() {
         val dialog = CharacterSelectionDialog()
         dialog.setOnCharacterSelectedListener { selectedCharacter ->
-            // Character selected, now show difficulty
+            // Save selected character to user progress
+            presenter.updateSelectedCharacter(selectedCharacter.name)
+
+            // Show character info (optional)
+            CharacterInfoDialog.newInstance(
+                name = selectedCharacter.displayName,
+                age = selectedCharacter.age,
+                description = selectedCharacter.description
+            ).show(childFragmentManager, CharacterInfoDialog.TAG)
+
+            // Then show difficulty
             showDifficultyDialog()
         }
         dialog.show(childFragmentManager, CharacterSelectionDialog.TAG)

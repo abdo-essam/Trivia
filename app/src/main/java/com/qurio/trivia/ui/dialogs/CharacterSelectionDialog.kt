@@ -10,7 +10,6 @@ import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.data.provider.DataProvider
 import com.qurio.trivia.databinding.DialogCharacterSelectionBinding
 import com.qurio.trivia.ui.adapters.CharacterGridAdapter
-import javax.inject.Inject
 
 class CharacterSelectionDialog : BaseDialogFragment() {
 
@@ -21,10 +20,15 @@ class CharacterSelectionDialog : BaseDialogFragment() {
     private var selectedCharacter: Character? = null
 
     private val characterAdapter by lazy {
-        CharacterGridAdapter { character ->
-            selectedCharacter = character
-            binding.btnConfirm.isEnabled = true
-        }
+        CharacterGridAdapter(
+            onCharacterClick = { character ->
+                selectedCharacter = character
+                binding.btnConfirm.isEnabled = true
+            },
+            onLockedCharacterClick = { character ->
+                showBuyCharacterDialog(character)
+            }
+        )
     }
 
     override fun onCreateView(
@@ -44,6 +48,14 @@ class CharacterSelectionDialog : BaseDialogFragment() {
     }
 
     private fun setupViews() {
+        // Set up RecyclerView with GridLayoutManager
+        binding.rvCharacters.apply {
+            layoutManager = GridLayoutManager(requireContext(), 5) // 5 columns
+            adapter = characterAdapter
+            setHasFixedSize(true)
+        }
+
+        // Button listeners
         binding.btnClose.setOnClickListener { dismiss() }
         binding.btnCancel.setOnClickListener { dismiss() }
 
@@ -54,16 +66,16 @@ class CharacterSelectionDialog : BaseDialogFragment() {
                 dismiss()
             }
         }
-
-        binding.rvCharacters.apply {
-            layoutManager = GridLayoutManager(requireContext(), 4)
-            adapter = characterAdapter
-        }
     }
 
     private fun loadCharacters() {
         val characters = DataProvider.getCharacters()
         characterAdapter.submitList(characters)
+    }
+
+    private fun showBuyCharacterDialog(character: Character) {
+        val dialog = BuyCharacterDialog.newInstance(character)
+        dialog.show(childFragmentManager, BuyCharacterDialog.TAG)
     }
 
     fun setOnCharacterSelectedListener(listener: (Character) -> Unit) {

@@ -5,11 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import androidx.fragment.app.DialogFragment
 import com.qurio.trivia.databinding.DialogCharacterInfoBinding
 import com.qurio.trivia.utils.extensions.loadCharacterImage
 
-class CharacterInfoDialog : DialogFragment() {
+class CharacterInfoDialog : BaseDialogFragment() {
 
     private var _binding: DialogCharacterInfoBinding? = null
     private val binding get() = _binding!!
@@ -25,19 +24,8 @@ class CharacterInfoDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupDialog()
         setupViews()
         loadCharacterData()
-    }
-
-    private fun setupDialog() {
-        dialog?.window?.apply {
-            setBackgroundDrawableResource(android.R.color.transparent)
-            setLayout(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            )
-        }
     }
 
     private fun setupViews() {
@@ -51,6 +39,7 @@ class CharacterInfoDialog : DialogFragment() {
         val description = arguments?.getString(ARG_DESCRIPTION) ?: return
 
         binding.apply {
+            tvDialogTitle.text = name
             tvCharacterName.text = name
             tvCharacterAge.text = age
             tvCharacterDescription.text = description

@@ -2,13 +2,7 @@ package com.qurio.trivia.di
 
 import android.content.Context
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.ui.dialogs.AchievementInfoDialog
-import com.qurio.trivia.ui.dialogs.AchievementsDialog
-import com.qurio.trivia.ui.dialogs.BuyLifeDialog
-import com.qurio.trivia.ui.dialogs.CharacterInfoDialog
-import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
-import com.qurio.trivia.ui.dialogs.DifficultyDialogFragment
-import com.qurio.trivia.ui.dialogs.SettingsDialogFragment
+import com.qurio.trivia.ui.dialogs.*
 import com.qurio.trivia.ui.game.GameFragment
 import com.qurio.trivia.ui.games.GamesFragment
 import com.qurio.trivia.ui.home.HomeFragment
@@ -36,7 +30,6 @@ interface AppComponent {
         fun create(@BindsInstance context: Context): AppComponent
     }
 
-    // App
     fun inject(app: QuriοApp)
 
     // Fragments
@@ -54,6 +47,7 @@ interface AppComponent {
     fun inject(dialog: SettingsDialogFragment)
     fun inject(dialog: CharacterSelectionDialog)
     fun inject(dialog: CharacterInfoDialog)
+    fun inject(dialog: BuyCharacterDialog)
     fun inject(dialog: DifficultyDialogFragment)
     fun inject(dialog: BuyLifeDialog)
 }

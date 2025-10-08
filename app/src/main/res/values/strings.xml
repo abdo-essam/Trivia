@@ -102,4 +102,6 @@
     <string name="question_counter">Q %1$d/%2$d</string>
     <string name="timer_seconds">%d Sec</string>
     <string name="floating_tag">Floating tag indicator</string>
+    <string name="ok">Ok</string>
+    <string name="lock_icon">Lock Icon</string>
 </resources>

@@ -6,12 +6,14 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.databinding.ItemCharacterGridBinding
 import com.qurio.trivia.utils.extensions.loadCharacterImage
 
 class CharacterGridAdapter(
-    private val onCharacterClick: (Character) -> Unit
+    private val onCharacterClick: (Character) -> Unit,
+    private val onLockedCharacterClick: ((Character) -> Unit)? = null
 ) : ListAdapter<Character, CharacterGridAdapter.CharacterViewHolder>(CharacterDiffCallback()) {
 
     private var selectedPosition = -1
@@ -35,25 +37,52 @@ class CharacterGridAdapter(
 
         fun bind(character: Character, isSelected: Boolean) {
             binding.apply {
-                tvName.text = character.displayName
-                ivCharacter.loadCharacterImage(character.name)
-
-                // Show selection indicator
-                ivSelectedCheck.isVisible = isSelected
-
-                // Set alpha for locked characters (optional)
-                val alpha = if (character.name == "locked") 0.5f else 1.0f
-                ivCharacter.alpha = alpha
-
-                root.setOnClickListener {
-                    val previousPosition = selectedPosition
-                    selectedPosition = bindingAdapterPosition
-
-                    notifyItemChanged(previousPosition)
-                    notifyItemChanged(selectedPosition)
-
-                    onCharacterClick(character)
+                // Load character image
+                if (character.isLocked) {
+                    ivCharacter.setImageResource(character.lockedImageRes)
+                } else {
+                    ivCharacter.loadCharacterImage(character.name)
                 }
+
+                // Show lock overlay for locked characters
+                frameLock.isVisible = character.isLocked
+                if (character.isLocked) {
+                    tvCost.text = formatCost(character.unlockCost)
+                }
+
+                // Show selection indicator only for unlocked characters
+                ivSelectedCheck.isVisible = isSelected && !character.isLocked
+
+                // Character name color - primary for selected, tertiary for others
+                tvName.text = character.displayName
+                tvName.setTextColor(
+                    root.context.getColor(
+                        if (isSelected && !character.isLocked) R.color.primary
+                        else R.color.shade_tertiary
+                    )
+                )
+
+                // Click handling
+                root.setOnClickListener {
+                    if (character.isLocked) {
+                        onLockedCharacterClick?.invoke(character)
+                    } else {
+                        val previousPosition = selectedPosition
+                        selectedPosition = bindingAdapterPosition
+
+                        notifyItemChanged(previousPosition)
+                        notifyItemChanged(selectedPosition)
+
+                        onCharacterClick(character)
+                    }
+                }
+            }
+        }
+
+        private fun formatCost(cost: Int): String {
+            return when {
+                cost >= 1000 -> "${cost / 1000}k"
+                else -> cost.toString()
             }
         }
     }

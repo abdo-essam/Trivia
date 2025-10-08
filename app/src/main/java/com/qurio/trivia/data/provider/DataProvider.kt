@@ -19,7 +19,9 @@ object DataProvider {
                 age = "Age: 12 Sunblooms",
                 description = "Nature's little explorer! Rika talks to mushrooms and swears squirrels give her battle advice. Always ready for an adventure.",
                 imageRes = R.drawable.character_rika,
-                lockedImageRes = R.drawable.character_rika_locked
+                lockedImageRes = R.drawable.character_rika_locked,
+                unlockCost = 0, // Free
+                isLocked = false
             ),
             Character(
                 name = "kaiyo",
@@ -27,7 +29,9 @@ object DataProvider {
                 age = "Age: 14 Storms",
                 description = "A calm storm in human form. Kaiyo trains with ancient scrolls by day and drinks spicy tea by night. Sword sharp, heart sharper.",
                 imageRes = R.drawable.character_kaiyo,
-                lockedImageRes = R.drawable.character_kaiyo_locked
+                lockedImageRes = R.drawable.character_kaiyo_locked,
+                unlockCost = 300,
+                isLocked = true
             ),
             Character(
                 name = "mimi",
@@ -35,7 +39,9 @@ object DataProvider {
                 age = "Age: 10 Volcano Puffs",
                 description = "Tiny but terrifying! Mimi is always grumpy, but don't let that scare you—unless you like pranks involving firecrackers.",
                 imageRes = R.drawable.character_mimi,
-                lockedImageRes = R.drawable.character_mimi_locked
+                lockedImageRes = R.drawable.character_mimi_locked,
+                unlockCost = 700,
+                isLocked = true
             ),
             Character(
                 name = "yoru",
@@ -43,7 +49,9 @@ object DataProvider {
                 age = "Age: 13 Shadows",
                 description = "Quiet, mysterious, and probably watching you right now. Yoru shows up when you least expect it.",
                 imageRes = R.drawable.character_yoru,
-                lockedImageRes = R.drawable.character_yoru_locked
+                lockedImageRes = R.drawable.character_yoru_locked,
+                unlockCost = 1000,
+                isLocked = true
             ),
             Character(
                 name = "kuro",
@@ -51,7 +59,9 @@ object DataProvider {
                 age = "Age: 15 Thunder Beats",
                 description = "Cool jacket, cooler moves. Kuro never backs down from a challenge.",
                 imageRes = R.drawable.character_kuro,
-                lockedImageRes = R.drawable.character_kuro_locked
+                lockedImageRes = R.drawable.character_kuro_locked,
+                unlockCost = 3000,
+                isLocked = true
             ),
             Character(
                 name = "miko",
@@ -59,7 +69,9 @@ object DataProvider {
                 age = "Age: 11 Leaf Turns",
                 description = "Energetic, cheerful, and faster than a leaf in the wind. Miko can turn any trivia into a giggle-fest.",
                 imageRes = R.drawable.character_miko,
-                lockedImageRes = R.drawable.character_miko_locked
+                lockedImageRes = R.drawable.character_miko_locked,
+                unlockCost = 7000,
+                isLocked = true
             ),
             Character(
                 name = "aori",
@@ -67,7 +79,9 @@ object DataProvider {
                 age = "Age: 13 Blade Echoes",
                 description = "The sword chooses the wielder—and it chose Aori. Calm, focused.",
                 imageRes = R.drawable.character_aori,
-                lockedImageRes = R.drawable.character_aori_locked
+                lockedImageRes = R.drawable.character_aori_locked,
+                unlockCost = 12000,
+                isLocked = true
             ),
             Character(
                 name = "nara",
@@ -75,7 +89,9 @@ object DataProvider {
                 age = "Age: 12 Crystal Songs",
                 description = "Part magic, part sass. Nara sparkles even when she's mad.",
                 imageRes = R.drawable.character_nara,
-                lockedImageRes = R.drawable.character_nara_locked
+                lockedImageRes = R.drawable.character_nara_locked,
+                unlockCost = 30000,
+                isLocked = true
             ),
             Character(
                 name = "renji",
@@ -83,7 +99,9 @@ object DataProvider {
                 age = "Age: 11 Hero Coins",
                 description = "Small but mighty! Renji dreams of glory, carries a shield too big for him.",
                 imageRes = R.drawable.character_renji,
-                lockedImageRes = R.drawable.character_renji_locked
+                lockedImageRes = R.drawable.character_renji_locked,
+                unlockCost = 50000,
+                isLocked = true
             )
         )
     }

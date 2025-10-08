@@ -99,4 +99,14 @@ class HomePresenter @Inject constructor(
             }
         }
     }
+
+    fun updateSelectedCharacter(characterName: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            userProgressDao.updateSelectedCharacter(characterName)
+
+            withContext(Dispatchers.Main) {
+                loadUserProgress() // Refresh UI
+            }
+        }
+    }
 }

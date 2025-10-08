@@ -1,103 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.App.DialogCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog"
-    android:padding="24dp">
+    android:layout_margin="16dp">
 
-    <ImageButton
-        android:id="@+id/btn_close"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/bg_close_button"
-        android:src="@drawable/ic_close"
-        android:contentDescription="@string/back"
-        app:tint="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Character"
-        android:textAppearance="@style/TextAppearance.Title.Medium"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_dialog_title"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="8dp"
-        android:layout_marginTop="-40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:paddingBottom="36dp">
 
-    <!-- Character Image -->
-    <ImageView
-        android:id="@+id/iv_character"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginTop="56dp"
-        android:contentDescription="@string/character_image"
-        tools:src="@drawable/character_rika"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        <!-- Common header elements (gradients, heptagon, close) -->
+        <View
+            android:id="@+id/gradient_left"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintDimensionRatio="56:1"
+            android:background="@drawable/bg_gradient_blue_fade"
+            android:rotation="180"
+            android:translationX="5dp"
+            app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
-    <!-- Character Name -->
-    <TextView
-        android:id="@+id/tv_character_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Headline.Small"
-        android:textColor="@color/white"
-        android:layout_marginEnd="16dp"
-        tools:text="Rika"
-        app:layout_constraintEnd_toStartOf="@id/iv_character"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/iv_character" />
+        <View
+            android:id="@+id/gradient_right"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintDimensionRatio="56:1"
+            android:background="@drawable/bg_gradient_blue_fade"
+            android:translationX="-5dp"
+            app:layout_constraintStart_toEndOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
-    <!-- Character Age -->
-    <TextView
-        android:id="@+id/tv_character_age"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Body.Small"
-        android:textColor="@color/shade_secondary"
-        android:layout_marginTop="4dp"
-        tools:text="Age: 12 Sunblooms"
-        app:layout_constraintEnd_toEndOf="@id/tv_character_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_character_name" />
+        <ImageView
+            android:id="@+id/heptagon_shape"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@null"
+            android:src="@drawable/heptagon_shape"
+            app:layout_constraintDimensionRatio="145:40"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Character Description -->
-    <TextView
-        android:id="@+id/tv_character_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.Body.Small"
-        android:textColor="@color/shade_secondary"
-        android:lineSpacingExtra="4dp"
-        android:layout_marginTop="24dp"
-        tools:text="Nature's little explorer! Rika talks to mushrooms and swears squirrels give her battle advice. Always ready for an adventure."
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_character" />
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            style="@style/TextAppearance.Title.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/character"
+            android:textColor="@color/on_primary"
+            app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
+            app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
+            app:layout_constraintStart_toStartOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="@id/heptagon_shape"/>
 
-    <!-- OK Button -->
-    <Button
-        android:id="@+id/btn_ok"
-        style="@style/Widget.App.Button.Primary"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OK"
-        android:minWidth="120dp"
-        android:layout_marginTop="32dp"
-        android:backgroundTint="@color/transparent"
-        android:textColor="@color/primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_character_description" />
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_cancel"
+            app:layout_constraintDimensionRatio="22:26"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Character Info Card -->
+        <View
+            android:id="@+id/view_character_card"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/bg_character_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
+
+        <TextView
+            android:id="@+id/tv_character_name"
+            style="@style/TextAppearance.Title.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="7dp"
+            android:maxLines="1"
+            android:textColor="@color/shade_primary"
+            tools:text="Rika"
+            app:layout_constraintStart_toStartOf="@id/view_character_card"
+            app:layout_constraintTop_toTopOf="@id/view_character_card" />
+
+        <TextView
+            android:id="@+id/tv_character_age"
+            style="@style/TextAppearance.Label.XSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="7dp"
+            android:maxLines="1"
+            android:textColor="@color/shade_secondary"
+            tools:text="Age: 12 Sunblooms"
+            app:layout_constraintBottom_toBottomOf="@id/view_character_card"
+            app:layout_constraintStart_toStartOf="@id/tv_character_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_character_name" />
+
+        <ImageView
+            android:id="@+id/iv_character"
+            android:layout_width="47dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:contentDescription="@string/character_image"
+            tools:src="@drawable/character_rika"
+            app:layout_constraintBottom_toBottomOf="@id/view_character_card"
+            app:layout_constraintEnd_toEndOf="@id/view_character_card" />
+
+        <!-- Character Description -->
+        <TextView
+            android:id="@+id/tv_character_description"
+            style="@style/TextAppearance.Body.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="24dp"
+            android:textColor="@color/shade_secondary"
+            tools:text="Nature's little explorer! Rika talks to mushrooms and swears squirrels give her battle advice. Always ready for an adventure."
+            app:layout_constraintBottom_toTopOf="@id/btn_ok"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_character_card" />
+
+        <!-- OK Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_ok"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginBottom="36dp"
+            android:background="@drawable/bg_button_secondary"
+            android:text="@string/ok"
+            android:textAllCaps="false"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

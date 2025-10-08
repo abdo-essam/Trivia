@@ -2,7 +2,6 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.App.DialogCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,34 +12,37 @@
         android:layout_height="wrap_content"
         android:paddingBottom="36dp">
 
-        <!-- Gradients and Heptagon (Common) -->
+        <!-- Left Gradient Line -->
         <View
             android:id="@+id/gradient_left"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="13dp"
+            app:layout_constraintDimensionRatio="56:1"
             android:background="@drawable/bg_gradient_blue_fade"
             android:rotation="180"
             android:translationX="5dp"
-            app:layout_constraintDimensionRatio="56:1"
             app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
+        <!-- Right Gradient Line -->
         <View
             android:id="@+id/gradient_right"
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_marginTop="13dp"
+            app:layout_constraintDimensionRatio="56:1"
             android:background="@drawable/bg_gradient_blue_fade"
             android:translationX="-5dp"
-            app:layout_constraintDimensionRatio="56:1"
             app:layout_constraintStart_toEndOf="@id/heptagon_shape"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
+        <!-- Title Badge (Heptagon) -->
         <ImageView
             android:id="@+id/heptagon_shape"
             android:layout_width="0dp"
             android:layout_height="40dp"
+            android:layout_gravity="center"
             android:contentDescription="@null"
             android:src="@drawable/heptagon_shape"
             app:layout_constraintDimensionRatio="145:40"
@@ -48,77 +50,55 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Title Text -->
         <TextView
             android:id="@+id/tv_dialog_title"
             style="@style/TextAppearance.Title.Small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/character"
             android:textColor="@color/on_primary"
             app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
             app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
             app:layout_constraintStart_toStartOf="@id/heptagon_shape"
-            app:layout_constraintTop_toTopOf="@id/heptagon_shape" />
+            app:layout_constraintTop_toTopOf="@id/heptagon_shape"/>
 
+        <!-- Close Button -->
         <ImageView
             android:id="@+id/btn_close"
             android:layout_width="0dp"
             android:layout_height="26dp"
-            android:layout_marginTop="13dp"
             android:clickable="true"
-            android:contentDescription="@string/back"
             android:focusable="true"
+            android:contentDescription="@string/back"
             android:src="@drawable/ic_cancel"
             app:layout_constraintDimensionRatio="22:26"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
 
-        <!-- Character Grid Content -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_characters"
+        <!-- Content Container (to be filled by merge) -->
+        <FrameLayout
+            android:id="@+id/dialog_content_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="12dp"
             android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            app:layout_constraintBottom_toTopOf="@id/btn_confirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
+            app:layout_constraintTop_toBottomOf="@id/heptagon_shape"/>
 
-        <!-- Action Buttons -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_confirm"
-            style="@style/TextAppearance.Label.Medium"
+        <!-- Action Buttons Container -->
+        <LinearLayout
+            android:id="@+id/dialog_action_container"
             android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="2dp"
-            android:layout_marginBottom="36dp"
-            android:background="@drawable/bg_button_primary"
-            android:text="@string/confirm"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btn_cancel"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
-            style="@style/TextAppearance.Label.Medium"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/bg_button_secondary"
-            android:text="@string/cancel"
-            android:textAllCaps="false"
-            android:textColor="@color/primary"
-            app:layout_constraintBottom_toBottomOf="@id/btn_confirm"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btn_confirm"
-            app:layout_constraintTop_toTopOf="@id/btn_confirm" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_content_container"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
