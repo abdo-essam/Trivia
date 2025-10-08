@@ -44,8 +44,6 @@ class CharacterGridAdapter(
 
         fun bind(character: Character, isSelected: Boolean) {
             binding.apply {
-                // Set character image (locked or unlocked)
-                // lockedImageRes already contains lock icon and cost
                 ivCharacter.setImageResource(
                     if (character.isLocked) character.lockedImageRes
                     else character.imageRes
