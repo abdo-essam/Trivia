@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Widget.App.DialogCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="36dp">
+
+        <!-- Common header -->
+        <View
+            android:id="@+id/gradient_left"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintDimensionRatio="56:1"
+            android:background="@drawable/bg_gradient_blue_fade"
+            android:rotation="180"
+            android:translationX="5dp"
+            app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
+
+        <View
+            android:id="@+id/gradient_right"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            app:layout_constraintDimensionRatio="56:1"
+            android:background="@drawable/bg_gradient_blue_fade"
+            android:translationX="-5dp"
+            app:layout_constraintStart_toEndOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
+
+        <ImageView
+            android:id="@+id/heptagon_shape"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:contentDescription="@null"
+            android:src="@drawable/heptagon_shape"
+            app:layout_constraintDimensionRatio="145:40"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_dialog_title"
+            style="@style/TextAppearance.Title.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_character"
+            android:textColor="@color/on_primary"
+            app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
+            app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
+            app:layout_constraintStart_toStartOf="@id/heptagon_shape"
+            app:layout_constraintTop_toTopOf="@id/heptagon_shape"/>
+
+        <ImageView
+            android:id="@+id/btn_close"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_cancel"
+            app:layout_constraintDimensionRatio="22:26"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="13dp"/>
+
+        <!-- Purchase Info -->
+        <ImageView
+            android:id="@+id/iv_character"
+            android:layout_width="47dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="53dp"
+            android:contentDescription="@string/character_image"
+            tools:src="@drawable/kaiyo_info"
+            app:layout_constraintEnd_toStartOf="@id/tv_equal"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
+
+        <ImageView
+            android:id="@+id/iv_lock"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginBottom="12dp"
+            android:contentDescription="@string/lock_icon"
+            android:src="@drawable/ic_lock"
+            app:layout_constraintBottom_toBottomOf="@id/iv_character"
+            app:layout_constraintEnd_toEndOf="@id/iv_character"
+            app:layout_constraintStart_toStartOf="@id/iv_character" />
+
+        <TextView
+            android:id="@+id/tv_equal"
+            style="@style/TextAppearance.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="19dp"
+            android:text="="
+            android:textColor="@color/on_primary"
+            app:layout_constraintBottom_toBottomOf="@id/iv_character"
+            app:layout_constraintEnd_toStartOf="@id/tv_cost"
+            app:layout_constraintStart_toEndOf="@id/iv_character"
+            app:layout_constraintTop_toTopOf="@id/iv_character" />
+
+        <TextView
+            android:id="@+id/tv_cost"
+            style="@style/TextAppearance.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:textColor="@color/on_primary"
+            tools:text="300"
+            app:layout_constraintBottom_toBottomOf="@id/iv_character"
+            app:layout_constraintEnd_toStartOf="@id/tv_multiply"
+            app:layout_constraintStart_toEndOf="@id/tv_equal"
+            app:layout_constraintTop_toTopOf="@id/iv_character" />
+
+        <TextView
+            android:id="@+id/tv_multiply"
+            style="@style/TextAppearance.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="×"
+            android:textColor="@color/on_primary"
+            app:layout_constraintBottom_toBottomOf="@id/iv_character"
+            app:layout_constraintEnd_toStartOf="@id/iv_coin"
+            app:layout_constraintStart_toEndOf="@id/tv_cost"
+            app:layout_constraintTop_toTopOf="@id/iv_character" />
+
+        <ImageView
+            android:id="@+id/iv_coin"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:contentDescription="@string/coins"
+            android:src="@drawable/ic_coin_stack"
+            app:layout_constraintBottom_toBottomOf="@id/iv_character"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_multiply"
+            app:layout_constraintTop_toTopOf="@id/iv_character" />
+
+        <!-- Action Buttons -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_buy"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="36dp"
+            android:background="@drawable/bg_button_primary"
+            android:text="@string/buy"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btn_cancel"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_character" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/bg_button_secondary"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textColor="@color/primary"
+            app:layout_constraintBottom_toBottomOf="@id/btn_buy"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/btn_buy"
+            app:layout_constraintTop_toTopOf="@id/btn_buy" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

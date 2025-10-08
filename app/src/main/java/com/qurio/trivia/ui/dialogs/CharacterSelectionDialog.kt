@@ -77,10 +77,10 @@ class CharacterSelectionDialog : BaseDialogFragment() {
     }
 
     private fun showBuyCharacterDialog(character: Character) {
-     /*   BuyCharacterDialog.newInstance(character).show(
+        BuyCharacterDialog.newInstance(character).show(
             childFragmentManager,
             BuyCharacterDialog.TAG
-        )*/
+        )
     }
 
     fun setOnCharacterSelectedListener(listener: (Character) -> Unit) {

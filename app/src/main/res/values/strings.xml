@@ -103,4 +103,6 @@
     <string name="timer_seconds">%d Sec</string>
     <string name="floating_tag">Floating tag indicator</string>
     <string name="selected">Selected</string>
+    <string name="buy_character">Buy Character</string>
+    <string name="lock_icon">Lock Icon</string>
 </resources>
