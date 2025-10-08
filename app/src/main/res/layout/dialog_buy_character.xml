@@ -96,18 +96,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
 
-    <!-- Lock Icon Overlay -->
-    <ImageView
-        android:id="@+id/iv_lock"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:contentDescription="@string/lock_icon"
-        android:src="@drawable/ic_lock"
-        app:layout_constraintBottom_toBottomOf="@id/iv_character"
-        app:layout_constraintEnd_toEndOf="@id/iv_character"
-        app:layout_constraintStart_toStartOf="@id/iv_character"
-        app:layout_constraintTop_toTopOf="@id/iv_character" />
-
     <!-- Equals Sign -->
     <TextView
         android:id="@+id/tv_equal"
