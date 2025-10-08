@@ -15,7 +15,7 @@
         android:layout_marginTop="13dp"
         android:contentDescription="@string/card_background"
         android:scaleType="fitXY"
-        android:src="@drawable/dialog_border"
+        android:src="@drawable/bg_dialog"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
