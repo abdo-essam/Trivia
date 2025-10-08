@@ -4,6 +4,7 @@ import android.content.Context
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.ui.dialogs.AchievementInfoDialog
 import com.qurio.trivia.ui.dialogs.AchievementsDialog
+import com.qurio.trivia.ui.dialogs.BuyCharacterDialog
 import com.qurio.trivia.ui.dialogs.BuyLifeDialog
 import com.qurio.trivia.ui.dialogs.CharacterInfoDialog
 import com.qurio.trivia.ui.dialogs.CharacterSelectionDialog
@@ -56,4 +57,5 @@ interface AppComponent {
     fun inject(dialog: CharacterInfoDialog)
     fun inject(dialog: DifficultyDialogFragment)
     fun inject(dialog: BuyLifeDialog)
+    fun inject(dialog: BuyCharacterDialog)
 }
