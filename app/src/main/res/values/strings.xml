@@ -108,4 +108,6 @@
     <string name="ok">Ok</string>
     <string name="difficulty_level">Difficulty Level</string>
     <string name="buy_life">Buy Life</string>
+    <string name="x">X</string>
+    <string name="equal">=</string>
 </resources>

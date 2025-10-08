@@ -96,8 +96,8 @@
 
     <ImageView
         android:id="@+id/iv_heart"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="16dp"
         android:contentDescription="@string/lives"
         android:src="@drawable/ic_heart"
@@ -112,7 +112,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
-        android:text="="
+        android:text="@string/equal"
         android:textColor="@color/on_primary"
         app:layout_constraintBottom_toBottomOf="@id/iv_heart"
         app:layout_constraintEnd_toStartOf="@id/tv_cost"
@@ -137,7 +137,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="×"
+        android:text="@string/x"
         android:textColor="@color/on_primary"
         app:layout_constraintBottom_toBottomOf="@id/iv_heart"
         app:layout_constraintEnd_toStartOf="@id/iv_coin"
