@@ -2,7 +2,7 @@ package com.qurio.trivia.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,9 +10,9 @@ import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.ItemAchievementBinding
 
-class AchievementAdapter(
+class AchievementGridAdapter(
     private val onAchievementClick: (Achievement) -> Unit
-) : ListAdapter<Achievement, AchievementAdapter.AchievementViewHolder>(AchievementDiffCallback()) {
+) : ListAdapter<Achievement, AchievementGridAdapter.AchievementViewHolder>(AchievementDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AchievementViewHolder {
         val binding = ItemAchievementBinding.inflate(
@@ -20,52 +20,38 @@ class AchievementAdapter(
             parent,
             false
         )
-        return AchievementViewHolder(binding, onAchievementClick)
+        return AchievementViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AchievementViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    class AchievementViewHolder(
-        private val binding: ItemAchievementBinding,
-        private val onAchievementClick: (Achievement) -> Unit
+    inner class AchievementViewHolder(
+        private val binding: ItemAchievementBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(achievement: Achievement) {
             binding.apply {
-                tvTitle.text = achievement.title
-                tvDescription.text = achievement.description
-
                 // Set icon based on unlock status
                 val iconRes = if (achievement.isUnlocked) {
                     achievement.iconRes
                 } else {
                     achievement.iconLockedRes
                 }
-                ivIcon.setImageResource(iconRes)
+                ivAchievementBadge.setImageResource(iconRes)
 
-                // Show/hide progress
-                val showProgress = achievement.maxProgress > 1
-                progressBar.isVisible = showProgress
-                tvProgress.isVisible = showProgress
+                // Set alpha for locked achievements
+                ivAchievementBadge.alpha = if (achievement.isUnlocked) 1.0f else 0.3f
 
-                if (showProgress) {
-                    tvProgress.text = "${achievement.progress}/${achievement.maxProgress}"
-                    progressBar.max = achievement.maxProgress
-                    progressBar.progress = achievement.progress
-                }
-
-                // Show unlocked state
-                if (achievement.isUnlocked) {
-                    ivIcon.alpha = 1.0f
-                    tvTitle.setTextColor(root.context.getColor(R.color.white))
-                    ivUnlocked.isVisible = true
-                } else {
-                    ivIcon.alpha = 0.5f
-                    tvTitle.setTextColor(root.context.getColor(R.color.shade_tertiary))
-                    ivUnlocked.isVisible = false
-                }
+                // Set name and color
+                tvAchievementName.text = achievement.title
+                tvAchievementName.setTextColor(
+                    ContextCompat.getColor(
+                        root.context,
+                        if (achievement.isUnlocked) R.color.white else R.color.shade_tertiary
+                    )
+                )
 
                 // Click listener
                 root.setOnClickListener {
