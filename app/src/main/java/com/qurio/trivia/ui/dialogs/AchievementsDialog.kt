@@ -1,19 +1,16 @@
 package com.qurio.trivia.ui.dialogs
 
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.R
 import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.DialogAchievementsBinding
 import com.qurio.trivia.ui.achievements.AchievementsPresenter
 import com.qurio.trivia.ui.achievements.AchievementsView
+import com.qurio.trivia.ui.adapters.AchievementGridAdapter
 import javax.inject.Inject
 
 class AchievementsDialog : BaseDialogFragment(), AchievementsView {
@@ -23,6 +20,12 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     @Inject
     lateinit var presenter: AchievementsPresenter
+
+    private val achievementAdapter by lazy {
+        AchievementGridAdapter { achievement ->
+            showAchievementDetail(achievement)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +44,14 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun setupViews() {
+        // Setup RecyclerView
+        binding.rvAchievements.apply {
+            layoutManager = GridLayoutManager(requireContext(), 4)
+            adapter = achievementAdapter
+            setHasFixedSize(true)
+        }
+
+        // Button listeners
         binding.btnClose.setOnClickListener { dismiss() }
         binding.btnOk.setOnClickListener { dismiss() }
     }
@@ -51,54 +62,7 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     override fun displayAchievements(achievements: List<Achievement>) {
-        binding.gridAchievements.removeAllViews()
-
-        achievements.forEach { achievement ->
-            val itemView = createAchievementItem(achievement)
-
-            val params = GridLayout.LayoutParams().apply {
-                width = 0
-                height = GridLayout.LayoutParams.WRAP_CONTENT
-                columnSpec = GridLayout.spec(GridLayout.UNDEFINED, 1f)
-                setGravity(Gravity.CENTER)
-            }
-
-            binding.gridAchievements.addView(itemView, params)
-        }
-    }
-
-    private fun createAchievementItem(achievement: Achievement): View {
-        val itemView = layoutInflater.inflate(R.layout.item_achievement_grid, null)
-
-        val badge = itemView.findViewById<ImageView>(R.id.iv_badge)
-        val name = itemView.findViewById<TextView>(R.id.tv_achievement_title)
-
-        // Set icon based on unlock status
-        val iconRes = if (achievement.isUnlocked) {
-            achievement.iconRes
-        } else {
-            achievement.iconLockedRes
-        }
-        badge.setImageResource(iconRes)
-
-        // Set alpha for locked achievements
-        badge.alpha = if (achievement.isUnlocked) 1.0f else 0.3f
-
-        name.text = achievement.title
-        name.setTextColor(
-            if (achievement.isUnlocked) {
-                requireContext().getColor(R.color.white)
-            } else {
-                requireContext().getColor(R.color.shade_tertiary)
-            }
-        )
-
-        // Click listener
-        itemView.setOnClickListener {
-            showAchievementDetail(achievement)
-        }
-
-        return itemView
+        achievementAdapter.submitList(achievements)
     }
 
     private fun showAchievementDetail(achievement: Achievement) {
@@ -106,8 +70,8 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
             name = achievement.title,
             description = achievement.description,
             howToGet = achievement.howToGet,
-            isUnlocked = achievement.isUnlocked,
-            showShare = achievement.isUnlocked
+            iconRes = if (achievement.isUnlocked) achievement.iconRes else achievement.iconLockedRes,
+            isUnlocked = achievement.isUnlocked
         ).show(childFragmentManager, AchievementInfoDialog.TAG)
     }
 
