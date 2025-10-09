@@ -69,7 +69,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         LastGamesAdapter(::onGameResultClick)
     }
 
-    // Store selected category for dialog flow
     private var selectedCategory: Category? = null
 
     override fun onCreateView(
@@ -90,17 +89,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun setupTopBar() {
-        topBarBinding.btnSettings.setOnClickListener { showSettingsDialog() }
+        topBarBinding.btnSettings.setOnClickListener {
+            showSettingsDialog()
+        }
     }
 
     private fun setupStatsSection() {
         with(statsBinding) {
-            // Lives click listener - Open Buy Life Dialog
             statsLivesContainer.setOnClickListener {
                 showBuyLifeDialog()
             }
 
-            // Awards click listener - Open Achievements Dialog
             statsAwardsContainer.setOnClickListener {
                 showAchievementsDialog()
             }
@@ -108,30 +107,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun setupRecyclerViews() {
-        with(binding) {
-            rvCategories.apply {
-                layoutManager = LinearLayoutManager(
-                    requireContext(),
-                    LinearLayoutManager.HORIZONTAL,
-                    false
-                )
-                adapter = categoryAdapter
-            }
+        binding.rvCategories.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+            adapter = categoryAdapter
+        }
 
-            rvLastGames.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = lastGamesAdapter
-                isNestedScrollingEnabled = false
-            }
+        binding.rvLastGames.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = lastGamesAdapter
+            isNestedScrollingEnabled = false
         }
     }
 
     private fun setupSectionHeaders() {
-        with(sectionHeaderGamesBinding) {
+        sectionHeaderGamesBinding.apply {
             tvSectionTitle.text = getString(R.string.games)
             btnAll.setOnClickListener { navigateToAllCategories() }
         }
-        with(sectionHeaderLastGamesBinding) {
+
+        sectionHeaderLastGamesBinding.apply {
             tvSectionTitle.text = getString(R.string.last_games)
             btnAll.setOnClickListener { navigateToAllGames() }
         }
@@ -147,21 +145,28 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     override fun displayUserProgress(userProgress: UserProgress) {
-        // Update top bar
+        updateTopBar(userProgress)
+        updateStats(userProgress)
+        updateStreakDisplay(userProgress)
+    }
+
+    private fun updateTopBar(userProgress: UserProgress) {
         with(topBarBinding) {
             tvWelcome.text = getString(R.string.welcome_qurio_explorer)
             tvCharacterName.text = userProgress.selectedCharacter.capitalizeFirst()
             ivCharacter.loadCharacterImage(userProgress.selectedCharacter)
         }
+    }
 
-        // Update stats
+    private fun updateStats(userProgress: UserProgress) {
         with(statsBinding) {
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = formatNumber(userProgress.totalCoins)
             tvAwards.text = userProgress.awards.toString()
-        }
 
-        updateStreakDisplay(userProgress)
+            // Show crown if points > 10,000
+            ivCrown.isVisible = userProgress.totalCoins > 10_000
+        }
     }
 
     private fun formatNumber(number: Int): String {
@@ -225,8 +230,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
     override fun displayLastGames(games: List<GameResult>) {
         lastGamesAdapter.submitList(games)
-        val shouldShowSection = games.isNotEmpty()
-        binding.rvLastGames.isVisible = shouldShowSection
+        binding.rvLastGames.isVisible = games.isNotEmpty()
     }
 
     private fun onCategoryClick(category: Category) {
@@ -238,23 +242,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         // TODO: Show game result detail dialog or replay
     }
 
-    // Dialog flow: Category -> Character -> Difficulty -> Game
     private fun showCharacterSelectionDialog() {
-        val dialog = CharacterSelectionDialog()
-        dialog.setOnCharacterSelectedListener { selectedCharacter ->
-            // Character selected, now show difficulty
-            showDifficultyDialog()
-        }
-        dialog.show(childFragmentManager, CharacterSelectionDialog.TAG)
+        CharacterSelectionDialog().apply {
+            setOnCharacterSelectedListener {
+                showDifficultyDialog()
+            }
+        }.show(childFragmentManager, CharacterSelectionDialog.TAG)
     }
 
     private fun showDifficultyDialog() {
-        val dialog = DifficultyDialogFragment()
-        dialog.setOnDifficultySelectedListener { difficulty ->
-            // Difficulty selected, check lives and start game
-            presenter.checkLivesAndStartGame(selectedCategory, difficulty)
-        }
-        dialog.show(childFragmentManager, DifficultyDialogFragment.TAG)
+        DifficultyDialogFragment().apply {
+            setOnDifficultySelectedListener { difficulty ->
+                presenter.checkLivesAndStartGame(selectedCategory, difficulty)
+            }
+        }.show(childFragmentManager, DifficultyDialogFragment.TAG)
     }
 
     override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
@@ -271,11 +272,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
     }
 
     private fun showBuyLifeDialog() {
-        val dialog = BuyLifeDialog()
-        dialog.setOnPurchaseConfirmedListener {
-            presenter.purchaseLife()
-        }
-        dialog.show(childFragmentManager, BuyLifeDialog.TAG)
+        BuyLifeDialog().apply {
+            setOnPurchaseConfirmedListener {
+                presenter.purchaseLife()
+            }
+        }.show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
     private fun showAchievementsDialog() {

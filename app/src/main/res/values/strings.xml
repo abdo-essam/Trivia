@@ -66,7 +66,7 @@
     <string name="loading_game">Loading Game</string>
     <string name="show_all">Show all</string>
     <!-- Stats -->
-    <string name="lives">Lives</string>
+    <string name="lives">lives</string>
     <string name="coins">Coins</string>
     <string name="awards">Awards</string>
     <string name="crown">Crown</string>

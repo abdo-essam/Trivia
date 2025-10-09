@@ -27,10 +27,9 @@ class HomePresenter @Inject constructor(
 
     fun loadUserProgress() {
         CoroutineScope(Dispatchers.IO).launch {
-            val userProgress = userProgressDao.getUserProgress()
-            userProgress?.let {
+            userProgressDao.getUserProgress()?.let { userProgress ->
                 withContext(Dispatchers.Main) {
-                    view?.displayUserProgress(it)
+                    view?.displayUserProgress(userProgress)
                 }
             }
         }
@@ -39,7 +38,7 @@ class HomePresenter @Inject constructor(
     fun loadCategories() {
         CoroutineScope(Dispatchers.Main).launch {
             val categories = DataProvider.getCategories()
-            Log.d("HomePresenter", "Loading categories: ${categories.size}")
+            Log.d(TAG, "Loading categories: ${categories.size}")
             view?.displayCategories(categories)
         }
     }
@@ -48,55 +47,87 @@ class HomePresenter @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             val games = gameResultDao.getLastGames(limit)
             withContext(Dispatchers.Main) {
-                Log.d("HomePresenter", "Loading last games: ${games.size}")
+                Log.d(TAG, "Loading last games: ${games.size}")
                 view?.displayLastGames(games)
             }
         }
     }
 
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
-        if (category == null) return
+        category ?: return
 
         CoroutineScope(Dispatchers.IO).launch {
             val userProgress = userProgressDao.getUserProgress()
 
             withContext(Dispatchers.Main) {
-                if (userProgress != null && userProgress.lives > 0) {
-                    // Deduct one life
-                    CoroutineScope(Dispatchers.IO).launch {
-                        userProgressDao.updateLives(userProgress.lives - 1)
+                when {
+                    userProgress == null -> {
+                        view?.showError("User progress not found")
                     }
-
-                    // Navigate to game
-                    view?.navigateToGame(category.id, category.displayName, difficulty)
-                } else {
-                    // Not enough lives
-                    view?.showNotEnoughLives()
+                    userProgress.lives > 0 -> {
+                        deductLifeAndStartGame(userProgress.lives, category, difficulty)
+                    }
+                    else -> {
+                        view?.showNotEnoughLives()
+                    }
                 }
+            }
+        }
+    }
+
+    private fun deductLifeAndStartGame(currentLives: Int, category: Category, difficulty: Difficulty) {
+        CoroutineScope(Dispatchers.IO).launch {
+            userProgressDao.updateLives(currentLives - 1)
+
+            withContext(Dispatchers.Main) {
+                view?.navigateToGame(category.id, category.displayName, difficulty)
             }
         }
     }
 
     fun purchaseLife() {
         CoroutineScope(Dispatchers.IO).launch {
-            val userProgress = userProgressDao.getUserProgress()
-            userProgress?.let {
-                val lifeCost = 200
+            val userProgress = userProgressDao.getUserProgress() ?: return@launch
 
-                if (it.totalCoins >= lifeCost && it.lives < Constants.MAX_LIVES) {
-                    userProgressDao.updateCoins(it.totalCoins - lifeCost)
-                    userProgressDao.updateLives(it.lives + 1)
+            val result = when {
+                userProgress.totalCoins < LIFE_COST -> {
+                    PurchaseResult.NotEnoughCoins
+                }
+                userProgress.lives >= Constants.MAX_LIVES -> {
+                    PurchaseResult.MaxLivesReached
+                }
+                else -> {
+                    userProgressDao.updateCoins(userProgress.totalCoins - LIFE_COST)
+                    userProgressDao.updateLives(userProgress.lives + 1)
+                    PurchaseResult.Success
+                }
+            }
 
-                    withContext(Dispatchers.Main) {
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    PurchaseResult.Success -> {
                         view?.showError("Life purchased!")
-                        loadUserProgress() // Refresh UI
+                        loadUserProgress()
                     }
-                } else if (it.totalCoins < lifeCost) {
-                    withContext(Dispatchers.Main) {
+                    PurchaseResult.NotEnoughCoins -> {
                         view?.showError("Not enough coins!")
+                    }
+                    PurchaseResult.MaxLivesReached -> {
+                        view?.showError("Maximum lives reached!")
                     }
                 }
             }
         }
+    }
+
+    private sealed class PurchaseResult {
+        object Success : PurchaseResult()
+        object NotEnoughCoins : PurchaseResult()
+        object MaxLivesReached : PurchaseResult()
+    }
+
+    companion object {
+        private const val TAG = "HomePresenter"
+        private const val LIFE_COST = 200
     }
 }
