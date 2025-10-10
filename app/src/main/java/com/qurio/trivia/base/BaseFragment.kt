@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.qurio.trivia.R
-import com.qurio.trivia.ui.dialogs.NoConnectionDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.NoConnectionDialogFragment
 
 abstract class BaseFragment<VB : ViewBinding, P : BasePresenter<*>> : Fragment(), BaseView {
 

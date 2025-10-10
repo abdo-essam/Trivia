@@ -20,7 +20,7 @@
 
         <!-- Splash Activity as launcher -->
         <activity
-            android:name=".ui.splash.SplashActivity"
+            android:name=".presentation.ui.splash.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Qurio.Splash">
             <intent-filter>

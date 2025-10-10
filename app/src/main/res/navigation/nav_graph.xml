@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.qurio.trivia.ui.onboarding.OnboardingFragment"
+        android:name="com.qurio.trivia.presentation.ui.onboarding.OnboardingFragment"
         android:label="OnboardingFragment">
         <action
             android:id="@+id/action_onboarding_to_home"
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.qurio.trivia.ui.home.HomeFragment"
+        android:name="com.qurio.trivia.presentation.ui.home.HomeFragment"
         android:label="HomeFragment">
         <action
             android:id="@+id/action_home_to_game"
@@ -34,7 +34,7 @@
 
     <fragment
         android:id="@+id/gamesFragment"
-        android:name="com.qurio.trivia.ui.games.GamesFragment"
+        android:name="com.qurio.trivia.presentation.ui.games.GamesFragment"
         android:label="@string/games"
         tools:layout="@layout/fragment_games">
         <action
@@ -44,13 +44,13 @@
 
     <fragment
         android:id="@+id/lastGamesFragment"
-        android:name="com.qurio.trivia.ui.lastgames.LastGamesFragment"
+        android:name="com.qurio.trivia.presentation.ui.lastgames.LastGamesFragment"
         android:label="@string/last_games"
         tools:layout="@layout/fragment_last_games" />
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.qurio.trivia.ui.game.GameFragment"
+        android:name="com.qurio.trivia.presentation.ui.game.GameFragment"
         android:label="GameFragment">
         <argument
             android:name="categoryId"
@@ -70,7 +70,7 @@
 
     <fragment
         android:id="@+id/gameResultFragment"
-        android:name="com.qurio.trivia.ui.result.GameResultFragment"
+        android:name="com.qurio.trivia.presentation.ui.result.GameResultFragment"
         android:label="GameResultFragment">
         <argument
             android:name="categoryName"
