@@ -4,12 +4,12 @@ import android.content.Context
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.presentation.ui.dialogs.AchievementInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.AchievementsDialog
-import com.qurio.trivia.presentation.ui.dialogs.BuyCharacterDialog
-import com.qurio.trivia.presentation.ui.dialogs.BuyLifeDialog
+import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
+import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.CharacterInfoDialog
-import com.qurio.trivia.presentation.ui.dialogs.CharacterSelectionDialog
-import com.qurio.trivia.presentation.ui.dialogs.DifficultyDialogFragment
-import com.qurio.trivia.presentation.ui.dialogs.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
 import com.qurio.trivia.presentation.ui.game.GameFragment
 import com.qurio.trivia.presentation.ui.games.GamesFragment
 import com.qurio.trivia.presentation.ui.home.HomeFragment

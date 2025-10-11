@@ -2,7 +2,7 @@ package com.qurio.trivia.presentation.ui.games
 
 import com.qurio.trivia.presentation.base.BaseView
 import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Difficulty
+import com.qurio.trivia.domain.model.Difficulty
 
 interface GamesView : BaseView {
     fun displayCategories(categories: List<Category>)

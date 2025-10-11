@@ -1,57 +1,36 @@
 package com.qurio.trivia.presentation.ui.achievements
 
-import com.qurio.trivia.R
+import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.data.database.GameResultDao
-import com.qurio.trivia.data.database.UserProgressDao
-import com.qurio.trivia.data.model.Achievement
-import com.qurio.trivia.data.model.GameResult
-import com.qurio.trivia.data.model.UserProgress
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.qurio.trivia.data.repository.AchievementsRepository
 import javax.inject.Inject
 
 class AchievementsPresenter @Inject constructor(
-    private val gameResultDao: GameResultDao,
-    private val userProgressDao: UserProgressDao
+    private val repository: AchievementsRepository
 ) : BasePresenter<AchievementsView>() {
 
+    // ========== Load Achievements ==========
+
     fun loadAchievements() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val gameResults = gameResultDao.getAllGames()
-            val userProgress = userProgressDao.getUserProgress()
-
-            val achievements = generateAchievements(gameResults, userProgress)
-
-            withContext(Dispatchers.Main) {
-                view?.displayAchievements(achievements)
-            }
-        }
+        tryToExecute(
+            execute = {
+                repository.getAchievements()
+            },
+            onSuccess = { achievements ->
+                Log.d(TAG, "Loaded ${achievements.size} achievements")
+                val unlockedCount = achievements.count { it.isUnlocked }
+                Log.d(TAG, "Unlocked: $unlockedCount/${achievements.size}")
+                withView { displayAchievements(achievements) }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error loading achievements", error)
+                withView { showError("Failed to load achievements") }
+            },
+            showLoading = false
+        )
     }
 
-    private fun generateAchievements(
-        gameResults: List<GameResult>,
-        userProgress: UserProgress?
-    ): List<Achievement> {
-        val achievements = mutableListOf<Achievement>()
-
-        // Quiz Rookie
-        achievements.add(Achievement(
-            id = "quiz_rookie",
-            title = "Quiz Rookie",
-            description = "Complete your first quiz",
-            howToGet = "Play and complete any quiz game.",
-            iconRes = R.drawable.ic_trophy, // Use existing icon
-            iconLockedRes = R.drawable.ic_trophy, // Or same with alpha
-            isUnlocked = gameResults.isNotEmpty(),
-            progress = if (gameResults.isNotEmpty()) 1 else 0,
-            maxProgress = 1
-        ))
-
-        // Continue with other achievements...
-
-        return achievements
+    companion object {
+        private const val TAG = "AchievementsPresenter"
     }
 }

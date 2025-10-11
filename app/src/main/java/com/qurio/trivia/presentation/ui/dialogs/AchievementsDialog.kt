@@ -1,11 +1,13 @@
 package com.qurio.trivia.presentation.ui.dialogs
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.DialogAchievementsBinding
 import com.qurio.trivia.presentation.ui.achievements.AchievementsPresenter
@@ -22,9 +24,14 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     lateinit var presenter: AchievementsPresenter
 
     private val achievementAdapter by lazy {
-        AchievementGridAdapter { achievement ->
-            showAchievementDetail(achievement)
-        }
+        AchievementGridAdapter(::onAchievementClick)
+    }
+
+    // ========== Lifecycle ==========
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (requireActivity().application as QuriοApp).appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -32,28 +39,36 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
         _binding = DialogAchievementsBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupViews()
+    override fun setupViews() {
+        setupRecyclerView()
+        setupClickListeners()
         loadAchievements()
     }
 
-    private fun setupViews() {
-        // Setup RecyclerView
+    // ========== Setup Methods ==========
+
+    private fun setupRecyclerView() {
         binding.rvAchievements.apply {
-            layoutManager = GridLayoutManager(requireContext(), 4)
+            layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = achievementAdapter
             setHasFixedSize(true)
         }
+    }
 
-        // Button listeners
-        binding.btnClose.setOnClickListener { dismiss() }
-        binding.btnOk.setOnClickListener { dismiss() }
+    private fun setupClickListeners() {
+        binding.btnClose.setOnClickListener {
+            Log.d(TAG, "Close button clicked")
+            dismiss()
+        }
+
+        binding.btnOk.setOnClickListener {
+            Log.d(TAG, "OK button clicked")
+            dismiss()
+        }
     }
 
     private fun loadAchievements() {
@@ -61,8 +76,18 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         presenter.loadAchievements()
     }
 
+    // ========== AchievementsView Implementation ==========
+
     override fun displayAchievements(achievements: List<Achievement>) {
+        Log.d(TAG, "Displaying ${achievements.size} achievements")
         achievementAdapter.submitList(achievements)
+    }
+
+    // ========== User Interactions ==========
+
+    private fun onAchievementClick(achievement: Achievement) {
+        Log.d(TAG, "Achievement clicked: ${achievement.title}")
+        showAchievementDetail(achievement)
     }
 
     private fun showAchievementDetail(achievement: Achievement) {
@@ -71,25 +96,11 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
             description = achievement.description,
             howToGet = achievement.howToGet,
             iconRes = if (achievement.isUnlocked) achievement.iconRes else achievement.iconLockedRes,
-            isUnlocked = achievement.isUnlocked
+            isUnlocked = achievement.isUnlocked,
         ).show(childFragmentManager, AchievementInfoDialog.TAG)
     }
 
-    override fun showLoading() {
-        // Optional: Show loading state
-    }
-
-    override fun hideLoading() {
-        // Optional: Hide loading state
-    }
-
-    override fun showError(message: String) {
-        // Optional: Show error
-    }
-
-    override fun showNoConnection() {
-        // Optional: Show no connection
-    }
+    // ========== Lifecycle ==========
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -99,5 +110,6 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     companion object {
         const val TAG = "AchievementsDialog"
+        private const val GRID_SPAN_COUNT = 4
     }
 }

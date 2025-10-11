@@ -16,7 +16,7 @@ class CharacterGridAdapter(
     private val onLockedCharacterClick: (Character) -> Unit
 ) : ListAdapter<Character, CharacterGridAdapter.CharacterViewHolder>(CharacterDiffCallback()) {
 
-    private var selectedPosition = 0 // First character selected by default
+    private var selectedCharacterName: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val binding = ItemCharacterGridBinding.inflate(
@@ -28,49 +28,59 @@ class CharacterGridAdapter(
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(getItem(position), position == selectedPosition)
+        holder.bind(getItem(position))
     }
 
-    fun selectCharacter(position: Int) {
-        val previousPosition = selectedPosition
-        selectedPosition = position
-        notifyItemChanged(previousPosition)
-        notifyItemChanged(selectedPosition)
+    /**
+     * Set selected character and refresh UI
+     */
+    fun setSelectedCharacter(characterName: String) {
+        val previousSelection = selectedCharacterName
+        selectedCharacterName = characterName
+
+        // Refresh both old and new selection
+        currentList.forEachIndexed { index, character ->
+            if (character.name == previousSelection || character.name == characterName) {
+                notifyItemChanged(index)
+            }
+        }
     }
 
     inner class CharacterViewHolder(
         private val binding: ItemCharacterGridBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(character: Character, isSelected: Boolean) {
+        fun bind(character: Character) {
+            val isSelected = character.name == selectedCharacterName && !character.isLocked
+
             binding.apply {
+                // Character image
                 ivCharacter.setImageResource(
-                    if (character.isLocked) character.lockedImageRes
-                    else character.imageRes
+                    if (character.isLocked) character.lockedImageRes else character.imageRes
                 )
 
-                // Show selection checkmark only for selected unlocked character
-                ivSelectedCheck.isVisible = isSelected && !character.isLocked
+                // Selection check mark
+                ivSelectedCheck.isVisible = isSelected
 
-                // Set character name and color
+                // Character name and color
                 tvName.text = character.displayName
                 tvName.setTextColor(
                     ContextCompat.getColor(
                         root.context,
                         when {
-                            isSelected && !character.isLocked -> R.color.primary
+                            isSelected -> R.color.primary
                             character.isLocked -> R.color.shade_tertiary
                             else -> R.color.shade_secondary
                         }
                     )
                 )
 
-                // Handle clicks
+                // Click listener
                 root.setOnClickListener {
                     if (character.isLocked) {
                         onLockedCharacterClick(character)
                     } else {
-                        selectCharacter(bindingAdapterPosition)
+                        setSelectedCharacter(character.name)
                         onCharacterSelected(character)
                     }
                 }

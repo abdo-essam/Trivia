@@ -96,12 +96,6 @@ data class Category(
     val imageRes: Int
 )
 
-enum class Difficulty(val value: String, val displayName: String) {
-    EASY("easy", "Easy"),
-    MEDIUM("medium", "Medium"),
-    HARD("hard", "Hard")
-}
-
 data class Achievement(
     val id: String,
     val title: String,

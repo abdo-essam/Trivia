@@ -9,13 +9,14 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Difficulty
+import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.presentation.ui.adapters.AllGamesAdapter
-import com.qurio.trivia.presentation.ui.dialogs.BuyLifeDialog
-import com.qurio.trivia.presentation.ui.dialogs.CharacterSelectionDialog
-import com.qurio.trivia.presentation.ui.dialogs.DifficultyDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
+import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
+
 import javax.inject.Inject
 
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresenter>(), GamesView {
@@ -133,13 +134,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     }
 
     private fun showBuyLifeDialog() {
-        BuyLifeDialog().apply {
-            setOnPurchaseConfirmedListener {
-                // User can buy lives and retry
-                showError("Please purchase lives from the home screen")
-                navigateBack()
-            }
-        }.show(childFragmentManager, BuyLifeDialog.TAG)
+        BuyLifeDialog().show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
     // ========== Constants ==========

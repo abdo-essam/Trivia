@@ -4,7 +4,7 @@ import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.data.database.DatabaseSeeder
 import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Difficulty
+import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.repository.HomeRepository
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject

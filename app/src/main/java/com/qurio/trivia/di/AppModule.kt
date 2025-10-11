@@ -9,9 +9,13 @@ import javax.inject.Singleton
 @Module
 class AppModule {
 
+    companion object {
+        private const val PREFS_NAME = "qurio_trivia_prefs"
+    }
+
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences("qurio_prefs", Context.MODE_PRIVATE)
+        return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 }

@@ -12,7 +12,6 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.databinding.FragmentHomeBinding
@@ -20,9 +19,14 @@ import com.qurio.trivia.databinding.ItemStatsBinding
 import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.TopBarHomeBinding
+import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.presentation.ui.adapters.CategoryAdapter
 import com.qurio.trivia.presentation.ui.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.ui.dialogs.*
+import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
+import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
 import com.qurio.trivia.utils.extensions.capitalizeFirst
 import com.qurio.trivia.utils.extensions.loadCharacterImage
 import javax.inject.Inject
@@ -185,7 +189,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
-        // Navigation implementation
+        val action = HomeFragmentDirections
+            .actionHomeToGame(
+                categoryId = categoryId,
+                categoryName = categoryName,
+                difficulty = difficulty.name
+            )
+        findNavController().navigate(action)
     }
 
     override fun showNotEnoughLives() {
@@ -269,7 +279,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     // ========== Dialog Methods ==========
 
     private fun showCharacterSelectionDialog() {
-        CharacterSelectionDialog().apply {
+       CharacterSelectionDialog().apply {
             setOnCharacterSelectedListener {
 
             }
@@ -285,11 +295,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun showBuyLifeDialog() {
-        BuyLifeDialog().apply {
-            setOnPurchaseConfirmedListener {
-                presenter.purchaseLife()
-            }
-        }.show(childFragmentManager, BuyLifeDialog.TAG)
+        BuyLifeDialog().show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
     private fun showAchievementsDialog() {
@@ -297,7 +303,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun showSettingsDialog() {
-        SettingsDialogFragment().show(childFragmentManager, SettingsDialogFragment.TAG)
+       SettingsDialogFragment().show(childFragmentManager, SettingsDialogFragment.TAG)
     }
 
     // ========== Navigation ==========

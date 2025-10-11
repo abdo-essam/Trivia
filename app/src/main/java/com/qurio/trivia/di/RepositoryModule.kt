@@ -1,9 +1,12 @@
 package com.qurio.trivia.di
 
+import android.content.SharedPreferences
 import com.qurio.trivia.data.database.GameResultDao
 import com.qurio.trivia.data.database.UserProgressDao
 import com.qurio.trivia.data.remote.TriviaApiService
 import com.qurio.trivia.data.repository.*
+import com.qurio.trivia.domain.repository.LifeRepository
+import com.qurio.trivia.domain.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -43,6 +46,31 @@ class RepositoryModule {
         userProgressDao: UserProgressDao
     ): GameResultRepository {
         return GameResultRepository(gameResultDao, userProgressDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAchievementsRepository(
+        gameResultDao: GameResultDao,
+        userProgressDao: UserProgressDao
+    ): AchievementsRepository {
+        return AchievementsRepository(gameResultDao, userProgressDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLifeRepository(
+        userProgressDao: UserProgressDao
+    ): LifeRepository {
+        return LifeRepositoryImpl(userProgressDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSettingsRepository(
+        sharedPreferences: SharedPreferences
+    ): SettingsRepository {
+        return SettingsRepositoryImpl(sharedPreferences)
     }
 
     @Provides

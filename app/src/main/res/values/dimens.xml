@@ -47,5 +47,8 @@
     <dimen name="button_min_width">70dp</dimen>
     <dimen name="floating_tag_size">18dp</dimen>
 
+    <!-- Dialog dimensions -->
+    <dimen name="dialog_button_margin">12dp</dimen>
+
 
 </resources>

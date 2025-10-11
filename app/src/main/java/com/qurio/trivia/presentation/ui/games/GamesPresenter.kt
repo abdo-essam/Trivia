@@ -3,7 +3,7 @@ package com.qurio.trivia.presentation.ui.games
 import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Difficulty
+import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.repository.GamesRepository
 import javax.inject.Inject
 
