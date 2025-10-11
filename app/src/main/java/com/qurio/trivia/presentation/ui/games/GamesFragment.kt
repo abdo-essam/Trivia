@@ -12,7 +12,7 @@ import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
-import com.qurio.trivia.presentation.ui.adapters.AllGamesAdapter
+import com.qurio.trivia.presentation.adapters.AllGamesAdapter
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment

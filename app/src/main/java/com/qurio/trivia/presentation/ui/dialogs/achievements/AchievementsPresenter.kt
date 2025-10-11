@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.achievements
+package com.qurio.trivia.presentation.ui.dialogs.achievements
 
 import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter

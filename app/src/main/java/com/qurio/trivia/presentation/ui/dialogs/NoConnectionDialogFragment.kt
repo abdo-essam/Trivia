@@ -3,7 +3,6 @@ package com.qurio.trivia.presentation.ui.dialogs
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.qurio.trivia.R
 import com.qurio.trivia.databinding.DialogNoConnectionBinding
 
 class NoConnectionDialogFragment : DialogFragment() {

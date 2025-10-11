@@ -118,7 +118,9 @@
     <string name="x">X</string>
     <string name="equal">=</string>
     <string name="how_to_get_it">How To Get It</string>
-
+    <string name="achievement_unlocked">Achievement Unlocked!</string>
+    <string name="unlock_achievement_first">Unlock this achievement first to share it!</string>
+    <string name="share_failed">Failed to share achievement</string>
     <string name="onboarding_welcome_title">Welcome to Qurio</string>
     <string name="onboarding_welcome_description">Welcome to the world of Qurio, where questions spark curiosity and prizes await the smartest. Ready to begin the challenge?</string>
     <string name="onboarding_character_title">Choose your character</string>

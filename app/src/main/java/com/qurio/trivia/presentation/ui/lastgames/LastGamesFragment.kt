@@ -12,7 +12,7 @@ import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.databinding.FragmentLastGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
-import com.qurio.trivia.presentation.ui.adapters.LastGamesAdapter
+import com.qurio.trivia.presentation.adapters.LastGamesAdapter
 import javax.inject.Inject
 
 class LastGamesFragment : BaseFragment<FragmentLastGamesBinding, LastGamesView, LastGamesPresenter>(),

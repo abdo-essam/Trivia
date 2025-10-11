@@ -192,14 +192,14 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         skippedAnswers: Int,
         totalTime: Long
     ) {
-     /*   val action = GameFragmentDirections.actionGameToResult(
+        val action = GameFragmentDirections.actionGameToResult(
             categoryName = args.categoryName,
             correctAnswers = correctAnswers,
             incorrectAnswers = incorrectAnswers,
             skippedAnswers = skippedAnswers,
             totalTime = totalTime
         )
-        findNavController().navigate(action)*/
+        findNavController().navigate(action)
     }
 
     override fun updateStats(lives: Int, coins: Int) {

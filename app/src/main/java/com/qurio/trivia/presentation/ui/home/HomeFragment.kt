@@ -20,9 +20,9 @@ import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.domain.model.Difficulty
-import com.qurio.trivia.presentation.ui.adapters.CategoryAdapter
-import com.qurio.trivia.presentation.ui.adapters.LastGamesAdapter
-import com.qurio.trivia.presentation.ui.dialogs.*
+import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
+import com.qurio.trivia.presentation.adapters.CategoryAdapter
+import com.qurio.trivia.presentation.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment

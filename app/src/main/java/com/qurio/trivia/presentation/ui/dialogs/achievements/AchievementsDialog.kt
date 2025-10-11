@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.dialogs
+package com.qurio.trivia.presentation.ui.dialogs.achievements
 
 import android.os.Bundle
 import android.util.Log
@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.DialogAchievementsBinding
-import com.qurio.trivia.presentation.ui.achievements.AchievementsPresenter
-import com.qurio.trivia.presentation.ui.achievements.AchievementsView
-import com.qurio.trivia.presentation.ui.adapters.AchievementGridAdapter
+import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.adapters.AchievementGridAdapter
 import javax.inject.Inject
 
 class AchievementsDialog : BaseDialogFragment(), AchievementsView {
@@ -91,13 +89,13 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun showAchievementDetail(achievement: Achievement) {
-        AchievementInfoDialog.newInstance(
+        AchievementInfoDialog.Companion.newInstance(
             name = achievement.title,
             description = achievement.description,
             howToGet = achievement.howToGet,
             iconRes = if (achievement.isUnlocked) achievement.iconRes else achievement.iconLockedRes,
             isUnlocked = achievement.isUnlocked,
-        ).show(childFragmentManager, AchievementInfoDialog.TAG)
+        ).show(childFragmentManager, AchievementInfoDialog.Companion.TAG)
     }
 
     // ========== Lifecycle ==========

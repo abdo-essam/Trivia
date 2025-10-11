@@ -2,11 +2,11 @@ package com.qurio.trivia.di
 
 import android.content.Context
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.presentation.ui.dialogs.AchievementInfoDialog
-import com.qurio.trivia.presentation.ui.dialogs.AchievementsDialog
+import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.CharacterInfoDialog
+import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment

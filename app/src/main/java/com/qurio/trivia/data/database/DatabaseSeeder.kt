@@ -1,6 +1,5 @@
 package com.qurio.trivia.data.database
 
-import android.content.Context
 import com.qurio.trivia.data.model.UserProgress
 import com.qurio.trivia.data.provider.DataProvider
 import kotlinx.coroutines.CoroutineScope

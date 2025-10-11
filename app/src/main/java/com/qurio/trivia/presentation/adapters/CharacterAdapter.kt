@@ -1,6 +1,7 @@
-package com.qurio.trivia.presentation.ui.adapters
+package com.qurio.trivia.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -46,9 +47,9 @@ class CharacterAdapter(
             // Show selection state
             binding.root.isSelected = isSelected
             binding.viewSelectionBorder.visibility = if (isSelected) {
-                android.view.View.VISIBLE
+                View.VISIBLE
             } else {
-                android.view.View.GONE
+                View.GONE
             }
 
             binding.root.setOnClickListener {
