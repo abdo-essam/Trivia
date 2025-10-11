@@ -1,6 +1,6 @@
 package com.qurio.trivia.presentation.ui.home
 
-import com.qurio.trivia.base.BaseView
+import com.qurio.trivia.presentation.base.BaseView
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.GameResult

@@ -111,4 +111,13 @@
     <string name="x">X</string>
     <string name="equal">=</string>
     <string name="how_to_get_it">How To Get It</string>
+
+    <string name="onboarding_welcome_title">Welcome to Qurio</string>
+    <string name="onboarding_welcome_description">Welcome to the world of Qurio, where questions spark curiosity and prizes await the smartest. Ready to begin the challenge?</string>
+    <string name="onboarding_character_title">Choose your character</string>
+    <string name="onboarding_character_description">Each hero has their own unique style! Choose from unique characters and start your adventure in your own style.</string>
+    <string name="onboarding_challenge_title">Challenge and win</string>
+    <string name="onboarding_challenge_description">Answer quickly, earn points, and share with your friends! Each trivia category is a new experience.</string>
+    <string name="onboarding_collect_title">Collect them all!</string>
+    <string name="onboarding_collect_description">Unlock characters, earn badges, and climb the leaderboards. Qurio is merciless, but you can handle it.</string>
 </resources>

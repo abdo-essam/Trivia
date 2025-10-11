@@ -1,25 +1,34 @@
 package com.qurio.trivia.presentation.ui.lastgames
 
 import android.util.Log
-import com.qurio.trivia.base.BasePresenter
-import com.qurio.trivia.data.database.GameResultDao
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.qurio.trivia.presentation.base.BasePresenter
+import com.qurio.trivia.data.repository.LastGamesRepository
 import javax.inject.Inject
 
 class LastGamesPresenter @Inject constructor(
-    private val gameResultDao: GameResultDao
+    private val repository: LastGamesRepository
 ) : BasePresenter<LastGamesView>() {
 
+    // ========== Load All Games ==========
+
     fun loadAllLastGames() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val games = gameResultDao.getAllGames()
-            withContext(Dispatchers.Main) {
-                Log.d("LastGamesPresenter", "Loaded ${games.size} games")
-                view?.displayLastGames(games)
-            }
-        }
+        tryToExecute(
+            execute = {
+                repository.getAllGames()
+            },
+            onSuccess = { games ->
+                Log.d(TAG, "Loaded ${games.size} games")
+                withView { displayLastGames(games) }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error loading games", error)
+                withView { showError("Failed to load game history") }
+            },
+            showLoading = true
+        )
+    }
+
+    companion object {
+        private const val TAG = "LastGamesPresenter"
     }
 }

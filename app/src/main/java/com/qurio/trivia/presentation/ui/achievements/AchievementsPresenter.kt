@@ -1,7 +1,7 @@
 package com.qurio.trivia.presentation.ui.achievements
 
 import com.qurio.trivia.R
-import com.qurio.trivia.base.BasePresenter
+import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.data.database.GameResultDao
 import com.qurio.trivia.data.database.UserProgressDao
 import com.qurio.trivia.data.model.Achievement

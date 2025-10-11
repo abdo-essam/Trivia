@@ -1,4 +1,4 @@
-package com.qurio.trivia.base
+package com.qurio.trivia.presentation.base
 
 interface BaseView {
     fun showLoading()

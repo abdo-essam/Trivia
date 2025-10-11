@@ -12,9 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
-class LastGamesAdapter(
-    private val onItemClick: (GameResult) -> Unit
-) : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHolder>(LastGameDiffCallback()) {
+class LastGamesAdapter() : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHolder>(LastGameDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LastGameViewHolder {
         val binding = ItemLastGameBinding.inflate(
@@ -22,7 +20,7 @@ class LastGamesAdapter(
             parent,
             false
         )
-        return LastGameViewHolder(binding, onItemClick)
+        return LastGameViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: LastGameViewHolder, position: Int) {
@@ -30,8 +28,7 @@ class LastGamesAdapter(
     }
 
     class LastGameViewHolder(
-        private val binding: ItemLastGameBinding,
-        private val onItemClick: (GameResult) -> Unit
+        private val binding: ItemLastGameBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(gameResult: GameResult) {
@@ -62,11 +59,6 @@ class LastGamesAdapter(
 
                 // Format time
                 tvTime.text = formatTime(gameResult.timeTaken)
-
-                // Click listener
-                root.setOnClickListener {
-                    onItemClick(gameResult)
-                }
             }
         }
 

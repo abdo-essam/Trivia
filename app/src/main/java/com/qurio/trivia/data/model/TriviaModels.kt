@@ -17,8 +17,34 @@ data class TriviaQuestion(
     @SerializedName("correct_answer") val correctAnswer: String,
     @SerializedName("incorrect_answers") val incorrectAnswers: List<String>
 ) {
+    /**
+     * Returns all answers shuffled
+     */
     fun getAllAnswers(): List<String> {
         return (incorrectAnswers + correctAnswer).shuffled()
+    }
+
+    /**
+     * Returns the question with HTML entities decoded
+     */
+    fun getDecodedQuestion(): String {
+        return decodeHtml(question)
+    }
+
+    /**
+     * Returns all answers with HTML entities decoded
+     */
+    fun getDecodedAnswers(): List<String> {
+        return getAllAnswers().map { decodeHtml(it) }
+    }
+
+    private fun decodeHtml(text: String): String {
+        return text
+            .replace("&quot;", "\"")
+            .replace("&#039;", "'")
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
     }
 }
 
@@ -28,7 +54,6 @@ data class GameResult(
     val id: Long = 0,
     val date: String,
     val category: String,
-    val difficulty: String,
     val totalQuestions: Int,
     val correctAnswers: Int,
     val incorrectAnswers: Int,

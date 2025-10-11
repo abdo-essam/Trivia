@@ -2,78 +2,100 @@ package com.qurio.trivia.presentation.ui.lastgames
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.databinding.FragmentLastGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.presentation.ui.adapters.LastGamesAdapter
 import javax.inject.Inject
 
-class LastGamesFragment : BaseFragment<FragmentLastGamesBinding, LastGamesPresenter>(), LastGamesView {
+class LastGamesFragment : BaseFragment<FragmentLastGamesBinding, LastGamesView, LastGamesPresenter>(),
+    LastGamesView {
 
     @Inject
-    override lateinit var presenter: LastGamesPresenter
+    lateinit var lastGamesPresenter: LastGamesPresenter
 
-    override val binding: FragmentLastGamesBinding by lazy {
-        FragmentLastGamesBinding.inflate(layoutInflater)
-    }
+    // ========== Lazy Bindings ==========
 
     private val topBarBinding: TopBarBinding by lazy {
         TopBarBinding.bind(binding.root.findViewById(R.id.top_bar))
     }
 
     private val lastGamesAdapter by lazy {
-        LastGamesAdapter(::onGameResultClick)
+        LastGamesAdapter()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    // ========== BaseFragment Implementation ==========
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
-        return binding.root
+        super.onCreate(savedInstanceState)
     }
+
+    override fun initViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentLastGamesBinding {
+        return FragmentLastGamesBinding.inflate(inflater, container, false)
+    }
+
+    override fun initPresenter(): LastGamesPresenter = lastGamesPresenter
 
     override fun setupViews() {
         setupTopBar()
         setupRecyclerView()
-        presenter.loadAllLastGames()
+        loadData()
     }
+
+    // ========== Setup Methods ==========
 
     private fun setupTopBar() {
         with(topBarBinding) {
             tvTitle.text = getString(R.string.last_games)
             btnBack.setOnClickListener {
-                findNavController().navigateUp()
+                navigateBack()
             }
         }
     }
 
     private fun setupRecyclerView() {
-        with(binding.rvLastGames) {
+        binding.rvLastGames.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = lastGamesAdapter
+            setHasFixedSize(true)
         }
     }
 
-    override fun displayLastGames(games: List<GameResult>) {
-        lastGamesAdapter.submitList(games)
 
-        // Show empty state if no games
-        binding.layoutEmptyState.isVisible = games.isEmpty()
-        binding.rvLastGames.isVisible = games.isNotEmpty()
+    private fun loadData() {
+        presenter.loadAllLastGames()
     }
 
-    private fun onGameResultClick(gameResult: GameResult) {
-        // TODO: Navigate to game result detail if needed
-        // You can implement a detail screen to show full game statistics
+    // ========== LastGamesView Implementation ==========
+
+    override fun displayLastGames(games: List<GameResult>) {
+        lastGamesAdapter.submitList(games)
+        updateEmptyState(games.isEmpty())
+    }
+
+    // ========== UI Updates ==========
+
+    private fun updateEmptyState(isEmpty: Boolean) {
+        binding.apply {
+            layoutEmptyState.isVisible = isEmpty
+            rvLastGames.isVisible = !isEmpty
+        }
+    }
+
+    // ========== Navigation ==========
+
+    private fun navigateBack() {
+        findNavController().navigateUp()
     }
 }

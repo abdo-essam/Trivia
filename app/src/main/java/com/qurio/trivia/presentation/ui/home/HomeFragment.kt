@@ -2,7 +2,6 @@ package com.qurio.trivia.presentation.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.GameResult
@@ -23,23 +22,17 @@ import com.qurio.trivia.databinding.SectionHeaderBinding
 import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.presentation.ui.adapters.CategoryAdapter
 import com.qurio.trivia.presentation.ui.adapters.LastGamesAdapter
-import com.qurio.trivia.presentation.ui.dialogs.AchievementsDialog
-import com.qurio.trivia.presentation.ui.dialogs.BuyLifeDialog
-import com.qurio.trivia.presentation.ui.dialogs.CharacterSelectionDialog
-import com.qurio.trivia.presentation.ui.dialogs.DifficultyDialogFragment
-import com.qurio.trivia.presentation.ui.dialogs.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.*
 import com.qurio.trivia.utils.extensions.capitalizeFirst
 import com.qurio.trivia.utils.extensions.loadCharacterImage
 import javax.inject.Inject
 
-class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeView {
+class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
 
     @Inject
-    override lateinit var presenter: HomePresenter
+    lateinit var homePresenter: HomePresenter
 
-    override val binding: FragmentHomeBinding by lazy {
-        FragmentHomeBinding.inflate(layoutInflater)
-    }
+    // ========== Lazy Bindings ==========
 
     private val topBarBinding: TopBarHomeBinding by lazy {
         TopBarHomeBinding.bind(binding.root.findViewById(R.id.top_bar_home))
@@ -61,36 +54,58 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         SectionHeaderBinding.bind(binding.root.findViewById(R.id.section_header_last_games))
     }
 
+    // ========== Adapters ==========
+
     private val categoryAdapter by lazy {
         CategoryAdapter(::onCategoryClick)
     }
 
     private val lastGamesAdapter by lazy {
-        LastGamesAdapter(::onGameResultClick)
+        LastGamesAdapter()
     }
+
+    // ========== State ==========
 
     private var selectedCategory: Category? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    // ========== BaseFragment Implementation ==========
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
-        return binding.root
+        super.onCreate(savedInstanceState)
     }
+
+    override fun initViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(inflater, container, false)
+    }
+
+    override fun initPresenter(): HomePresenter = homePresenter
 
     override fun setupViews() {
         setupTopBar()
         setupStatsSection()
         setupSectionHeaders()
         setupRecyclerViews()
-        loadData()
+        loadInitialData()
     }
+
+    // ⭐ ADDED: Reload data when returning to fragment
+    override fun onResume() {
+        super.onResume()
+        refreshData()
+    }
+
+    // ========== Setup Methods ==========
 
     private fun setupTopBar() {
         topBarBinding.btnSettings.setOnClickListener {
             showSettingsDialog()
+        }
+        topBarBinding.ivCharacter.setOnClickListener {
+            showCharacterSelectionDialog()
         }
     }
 
@@ -131,24 +146,53 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
 
         sectionHeaderLastGamesBinding.apply {
             tvSectionTitle.text = getString(R.string.last_games)
-            btnAll.setOnClickListener { navigateToAllGames() }
+            btnAll.setOnClickListener { navigateToAllLastGames() }
         }
     }
 
-    private fun loadData() {
+    // ⭐ SPLIT: Initial data load
+    private fun loadInitialData() {
         presenter.apply {
             initializeData()
-            loadUserProgress()
             loadCategories()
-            loadLastGames(LAST_GAMES_LIMIT)
+        }
+        refreshData()
+    }
+
+    // ⭐ NEW: Refresh dynamic data
+    private fun refreshData() {
+        presenter.apply {
+            loadUserProgress()
+            loadLastGames()
         }
     }
+
+    // ========== HomeView Implementation ==========
 
     override fun displayUserProgress(userProgress: UserProgress) {
         updateTopBar(userProgress)
         updateStats(userProgress)
         updateStreakDisplay(userProgress)
     }
+
+    override fun displayCategories(categories: List<Category>) {
+        categoryAdapter.submitList(categories)
+    }
+
+    override fun displayLastGames(games: List<GameResult>) {
+        lastGamesAdapter.submitList(games)
+        binding.rvLastGames.isVisible = games.isNotEmpty()
+    }
+
+    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
+        // Navigation implementation
+    }
+
+    override fun showNotEnoughLives() {
+        showBuyLifeDialog()
+    }
+
+    // ========== UI Update Methods ==========
 
     private fun updateTopBar(userProgress: UserProgress) {
         with(topBarBinding) {
@@ -163,16 +207,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = formatNumber(userProgress.totalCoins)
             tvAwards.text = userProgress.awards.toString()
-
-            // Show crown if points > 10,000
-            ivCrown.isVisible = userProgress.totalCoins > 10_000
-        }
-    }
-
-    private fun formatNumber(number: Int): String {
-        return when {
-            number >= 1000 -> String.format("%,d", number)
-            else -> number.toString()
+            ivCrown.isVisible = userProgress.totalCoins > CROWN_THRESHOLD
         }
     }
 
@@ -218,34 +253,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         }
     }
 
-    private fun getDayViewPair(dayView: View): Pair<ImageView, TextView> {
+    private fun getDayViewPair(dayView: android.view.View): Pair<ImageView, TextView> {
         val fireView = dayView.findViewById<ImageView>(R.id.ivDayFire)
         val labelView = dayView.findViewById<TextView>(R.id.tvDayLabel)
         return Pair(fireView, labelView)
     }
 
-    override fun displayCategories(categories: List<Category>) {
-        categoryAdapter.submitList(categories)
-    }
-
-    override fun displayLastGames(games: List<GameResult>) {
-        lastGamesAdapter.submitList(games)
-        binding.rvLastGames.isVisible = games.isNotEmpty()
-    }
+    // ========== User Interactions ==========
 
     private fun onCategoryClick(category: Category) {
         selectedCategory = category
-        showCharacterSelectionDialog()
+        showDifficultyDialog()
     }
 
-    private fun onGameResultClick(gameResult: GameResult) {
-        // TODO: Show game result detail dialog or replay
-    }
+    // ========== Dialog Methods ==========
 
     private fun showCharacterSelectionDialog() {
         CharacterSelectionDialog().apply {
             setOnCharacterSelectedListener {
-                showDifficultyDialog()
+
             }
         }.show(childFragmentManager, CharacterSelectionDialog.TAG)
     }
@@ -256,19 +282,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
                 presenter.checkLivesAndStartGame(selectedCategory, difficulty)
             }
         }.show(childFragmentManager, DifficultyDialogFragment.TAG)
-    }
-
-    override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
-        val action = HomeFragmentDirections.actionHomeToGame(
-            categoryId = categoryId,
-            categoryName = categoryName,
-            difficulty = difficulty.value
-        )
-        findNavController().navigate(action)
-    }
-
-    override fun showNotEnoughLives() {
-        showBuyLifeDialog()
     }
 
     private fun showBuyLifeDialog() {
@@ -287,15 +300,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomePresenter>(), HomeVie
         SettingsDialogFragment().show(childFragmentManager, SettingsDialogFragment.TAG)
     }
 
+    // ========== Navigation ==========
+
     private fun navigateToAllCategories() {
         findNavController().navigate(R.id.action_home_to_games)
     }
 
-    private fun navigateToAllGames() {
+    private fun navigateToAllLastGames() {
         findNavController().navigate(R.id.action_home_to_last_games)
     }
 
+    // ========== Helper Methods ==========
+
+    private fun formatNumber(number: Int): String {
+        return when {
+            number >= 1000 -> String.format("%,d", number)
+            else -> number.toString()
+        }
+    }
+
     companion object {
-        private const val LAST_GAMES_LIMIT = 3
+        private const val CROWN_THRESHOLD = 10_000
     }
 }

@@ -1,133 +1,212 @@
 package com.qurio.trivia.presentation.ui.home
 
 import android.util.Log
-import com.qurio.trivia.base.BasePresenter
+import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.data.database.DatabaseSeeder
-import com.qurio.trivia.data.database.GameResultDao
-import com.qurio.trivia.data.database.UserProgressDao
 import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.data.model.Difficulty
-import com.qurio.trivia.data.provider.DataProvider
+import com.qurio.trivia.data.repository.HomeRepository
 import com.qurio.trivia.utils.Constants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class HomePresenter @Inject constructor(
-    private val userProgressDao: UserProgressDao,
-    private val gameResultDao: GameResultDao,
+    private val repository: HomeRepository,
     private val databaseSeeder: DatabaseSeeder
 ) : BasePresenter<HomeView>() {
 
+    // ========== Initialization ==========
+
     fun initializeData() {
-        databaseSeeder.seedDatabase()
+        tryToExecute(
+            execute = {
+                databaseSeeder.seedDatabase()
+            },
+            onSuccess = {
+                Log.d(TAG, "Database seeded successfully")
+            },
+            onError = { error ->
+                Log.e(TAG, "Error seeding database", error)
+            },
+            showLoading = false
+        )
     }
+
+    // ========== Load User Progress ==========
 
     fun loadUserProgress() {
-        CoroutineScope(Dispatchers.IO).launch {
-            userProgressDao.getUserProgress()?.let { userProgress ->
-                withContext(Dispatchers.Main) {
-                    view?.displayUserProgress(userProgress)
+        tryToExecute(
+            execute = {
+                repository.getUserProgress()
+            },
+            onSuccess = { userProgress ->
+                userProgress?.let {
+                    withView { displayUserProgress(it) }
+                } ?: withView {
+                    showError("User progress not found")
                 }
-            }
-        }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error loading user progress", error)
+                withView { showError("Failed to load user data") }
+            },
+            showLoading = false
+        )
     }
+
+    // ========== Load Categories ==========
 
     fun loadCategories() {
-        CoroutineScope(Dispatchers.Main).launch {
-            val categories = DataProvider.getCategories()
-            Log.d(TAG, "Loading categories: ${categories.size}")
-            view?.displayCategories(categories)
-        }
+        tryToExecute(
+            execute = {
+                repository.getCategories()
+            },
+            onSuccess = { categories ->
+                Log.d(TAG, "Loaded ${categories.size} categories")
+                withView { displayCategories(categories) }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error loading categories", error)
+                withView { showError("Failed to load categories") }
+            },
+            showLoading = false
+        )
     }
 
-    fun loadLastGames(limit: Int = 3) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val games = gameResultDao.getLastGames(limit)
-            withContext(Dispatchers.Main) {
-                Log.d(TAG, "Loading last games: ${games.size}")
-                view?.displayLastGames(games)
-            }
-        }
+    // ========== Load Last Games ==========
+
+    fun loadLastGames(limit: Int = DEFAULT_GAMES_LIMIT) {
+        tryToExecute(
+            execute = {
+                repository.getLastGames(limit)
+            },
+            onSuccess = { games ->
+                Log.d(TAG, "Loaded ${games.size} games")
+                withView { displayLastGames(games) }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error loading last games", error)
+                withView { showError("Failed to load game history") }
+            },
+            showLoading = false
+        )
     }
+
+    // ========== Check Lives and Start Game ==========
 
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
-        category ?: return
+        if (category == null) {
+            withView { showError("Please select a category") }
+            return
+        }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val userProgress = userProgressDao.getUserProgress()
+        tryToExecute(
+            execute = {
+                repository.getUserProgress()
+            },
+            onSuccess = { userProgress ->
+                handleGameStart(userProgress, category, difficulty)
+            },
+            onError = { error ->
+                Log.e(TAG, "Error checking lives", error)
+                withView { showError("Failed to start game") }
+            },
+            showLoading = true
+        )
+    }
 
-            withContext(Dispatchers.Main) {
-                when {
-                    userProgress == null -> {
-                        view?.showError("User progress not found")
-                    }
-                    userProgress.lives > 0 -> {
-                        deductLifeAndStartGame(userProgress.lives, category, difficulty)
-                    }
-                    else -> {
-                        view?.showNotEnoughLives()
-                    }
+    private fun handleGameStart(
+        userProgress: com.qurio.trivia.data.model.UserProgress?,
+        category: Category,
+        difficulty: Difficulty
+    ) {
+        when {
+            userProgress == null -> {
+                withView { showError("User progress not found") }
+            }
+            userProgress.lives > 0 -> {
+                deductLifeAndStartGame(userProgress.lives, category, difficulty)
+            }
+            else -> {
+                withView { showNotEnoughLives() }
+            }
+        }
+    }
+
+    private fun deductLifeAndStartGame(
+        currentLives: Int,
+        category: Category,
+        difficulty: Difficulty
+    ) {
+        tryToExecute(
+            execute = {
+                repository.updateLives(currentLives - 1)
+                GameStartData(category.id, category.displayName, difficulty)
+            },
+            onSuccess = { gameData ->
+                withView {
+                    navigateToGame(gameData.categoryId, gameData.categoryName, gameData.difficulty)
                 }
-            }
-        }
+            },
+            onError = { error ->
+                Log.e(TAG, "Error starting game", error)
+                withView { showError("Failed to start game") }
+            },
+            showLoading = false
+        )
     }
 
-    private fun deductLifeAndStartGame(currentLives: Int, category: Category, difficulty: Difficulty) {
-        CoroutineScope(Dispatchers.IO).launch {
-            userProgressDao.updateLives(currentLives - 1)
-
-            withContext(Dispatchers.Main) {
-                view?.navigateToGame(category.id, category.displayName, difficulty)
-            }
-        }
-    }
+    // ========== Purchase Life ==========
 
     fun purchaseLife() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val userProgress = userProgressDao.getUserProgress() ?: return@launch
+        tryToExecute(
+            execute = {
+                val userProgress = repository.getUserProgress()
+                    ?: throw IllegalStateException("User progress not found")
 
-            val result = when {
-                userProgress.totalCoins < LIFE_COST -> {
-                    PurchaseResult.NotEnoughCoins
-                }
-                userProgress.lives >= Constants.MAX_LIVES -> {
-                    PurchaseResult.MaxLivesReached
-                }
-                else -> {
-                    userProgressDao.updateCoins(userProgress.totalCoins - LIFE_COST)
-                    userProgressDao.updateLives(userProgress.lives + 1)
-                    PurchaseResult.Success
-                }
+                repository.purchaseLife(
+                    currentCoins = userProgress.totalCoins,
+                    currentLives = userProgress.lives,
+                    lifeCost = LIFE_COST,
+                    maxLives = Constants.MAX_LIVES
+                )
+            },
+            onSuccess = { result ->
+                handlePurchaseResult(result)
+            },
+            onError = { error ->
+                Log.e(TAG, "Error purchasing life", error)
+                withView { showError("Failed to purchase life") }
+            },
+            showLoading = true
+        )
+    }
+
+    private fun handlePurchaseResult(result: HomeRepository.PurchaseResult) {
+        when (result) {
+            HomeRepository.PurchaseResult.Success -> {
+                withView { showError("Life purchased successfully!") }
+                loadUserProgress()
             }
-
-            withContext(Dispatchers.Main) {
-                when (result) {
-                    PurchaseResult.Success -> {
-                        view?.showError("Life purchased!")
-                        loadUserProgress()
-                    }
-                    PurchaseResult.NotEnoughCoins -> {
-                        view?.showError("Not enough coins!")
-                    }
-                    PurchaseResult.MaxLivesReached -> {
-                        view?.showError("Maximum lives reached!")
-                    }
-                }
+            HomeRepository.PurchaseResult.NotEnoughCoins -> {
+                withView { showError("Not enough coins to purchase life") }
+            }
+            HomeRepository.PurchaseResult.MaxLivesReached -> {
+                withView { showError("You already have maximum lives!") }
             }
         }
     }
 
-    private sealed class PurchaseResult {
-        object Success : PurchaseResult()
-        object NotEnoughCoins : PurchaseResult()
-        object MaxLivesReached : PurchaseResult()
-    }
+    // ========== Data Classes ==========
+
+    private data class GameStartData(
+        val categoryId: Int,
+        val categoryName: String,
+        val difficulty: Difficulty
+    )
 
     companion object {
         private const val TAG = "HomePresenter"
         private const val LIFE_COST = 200
+        private const val DEFAULT_GAMES_LIMIT = 3
     }
 }

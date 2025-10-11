@@ -18,7 +18,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.base.BaseFragment
+import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.data.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.databinding.FragmentGameBinding
@@ -28,19 +28,20 @@ import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 import kotlin.random.Random
 
-class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
+class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(),
     GameView, NoConnectionDialogFragment.RetryListener {
 
     @Inject
-    override lateinit var presenter: GamePresenter
-
-    override val binding: FragmentGameBinding by lazy {
-        FragmentGameBinding.inflate(layoutInflater)
-    }
+    lateinit var gamePresenter: GamePresenter
 
     private val args: GameFragmentArgs by navArgs()
+
+    // ========== UI State ==========
+
     private var countDownTimer: CountDownTimer? = null
-    private var selectedAnswerIndex = -1
+    private var selectedAnswerIndex = NO_SELECTION
+
+    // ========== Answer Option Bindings ==========
 
     private lateinit var answerOption1: LayoutAnswerOptionBinding
     private lateinit var answerOption2: LayoutAnswerOptionBinding
@@ -51,20 +52,29 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         listOf(answerOption1, answerOption2, answerOption3, answerOption4)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    // ========== BaseFragment Implementation ==========
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
-        return binding.root
+        super.onCreate(savedInstanceState)
     }
+
+    override fun initViewBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentGameBinding {
+        return FragmentGameBinding.inflate(inflater, container, false)
+    }
+
+    override fun initPresenter(): GamePresenter = gamePresenter
 
     override fun setupViews() {
         initializeAnswerOptions()
         setupClickListeners()
         loadQuestions()
     }
+
+    // ========== Initialization ==========
 
     private fun initializeAnswerOptions() {
         answerOption1 = LayoutAnswerOptionBinding.bind(binding.answerOption1.root)
@@ -74,29 +84,38 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
     }
 
     private fun setupClickListeners() {
-        binding.layoutTopBar.btnBack.setOnClickListener { navigateBack() }
-        binding.actionButtonsContainer.btnCheck.setOnClickListener { handleCheckAnswer() }
-        binding.actionButtonsContainer.btnSkip.setOnClickListener { handleSkipQuestion() }
-        binding.actionButtonsContainer.btnNext.setOnClickListener { handleNextQuestion() }
+        binding.layoutTopBar.btnBack.setOnClickListener {
+            navigateBack()
+        }
+
+        binding.actionButtonsContainer.apply {
+            btnCheck.setOnClickListener { handleCheckAnswer() }
+            btnSkip.setOnClickListener { handleSkipQuestion() }
+            btnNext.setOnClickListener { handleNextQuestion() }
+        }
 
         answerOptions.forEachIndexed { index, option ->
             option.btnAnswer.setOnClickListener { selectAnswer(index) }
         }
     }
 
+    // ========== Data Loading ==========
+
     private fun loadQuestions() {
         presenter.loadQuestions(
-            args.categoryId,
-            Difficulty.valueOf(args.difficulty.uppercase())
+            categoryId = args.categoryId,
+            difficulty = Difficulty.valueOf(args.difficulty.uppercase())
         )
     }
+
+    // ========== User Actions ==========
 
     private fun navigateBack() {
         findNavController().navigateUp()
     }
 
     private fun handleCheckAnswer() {
-        if (selectedAnswerIndex != -1) {
+        if (selectedAnswerIndex != NO_SELECTION) {
             presenter.submitAnswer(selectedAnswerIndex)
         }
     }
@@ -113,30 +132,22 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         if (selectedAnswerIndex == index) return
 
         selectedAnswerIndex = index
-        updateAnswerStates()
+        updateAnswerSelectionUI()
         binding.actionButtonsContainer.btnCheck.isEnabled = true
     }
 
-    private fun updateAnswerStates() {
-        answerOptions.forEachIndexed { index, option ->
-            if (index == selectedAnswerIndex) {
-                option.answerContainer.setBackgroundResource(R.drawable.bg_answer_option_selected)
-            } else {
-                option.answerContainer.setBackgroundResource(R.drawable.bg_answer_option)
-            }
-        }
-    }
+    // ========== GameView Implementation ==========
 
     override fun displayQuestion(
         question: TriviaQuestion,
         questionNumber: Int,
         totalQuestions: Int
     ) {
-        updateQuestionCounter(questionNumber, totalQuestions)
-        updateQuestionText(question.question)
+        updateQuestionHeader(questionNumber, totalQuestions)
+        updateQuestionContent(question)
         hideQuestionImage()
-        updateAnswerTexts(question.getAllAnswers())
-        resetUIState()
+        updateAnswerOptions(question.getAllAnswers())
+        resetUIForNewQuestion()
         startQuestionTimer()
     }
 
@@ -153,18 +164,65 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         }
     }
 
-    private fun updateQuestionCounter(questionNumber: Int, totalQuestions: Int) {
+    override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
+        stopTimer()
+        highlightCorrectAnswer(correctAnswerIndex)
+
+        when {
+            selectedAnswerIndex == NO_SELECTION -> {
+                // User didn't select any answer (time up or skipped)
+                showFloatingTags(isCorrect = false)
+            }
+            !isCorrect -> {
+                highlightWrongAnswer(selectedAnswerIndex)
+                showFloatingTags(isCorrect = false)
+            }
+            else -> {
+                showFloatingTags(isCorrect = true)
+            }
+        }
+
+        disableAllAnswers()
+        showNextButton()
+    }
+
+    override fun navigateToResults(
+        correctAnswers: Int,
+        incorrectAnswers: Int,
+        skippedAnswers: Int,
+        totalTime: Long
+    ) {
+     /*   val action = GameFragmentDirections.actionGameToResult(
+            categoryName = args.categoryName,
+            correctAnswers = correctAnswers,
+            incorrectAnswers = incorrectAnswers,
+            skippedAnswers = skippedAnswers,
+            totalTime = totalTime
+        )
+        findNavController().navigate(action)*/
+    }
+
+    override fun updateStats(lives: Int, coins: Int) {
+        binding.layoutTopBar.tvLives.text = lives.toString()
+       // binding.layoutTopBar.tvCoins.text = coins.toString()
+    }
+
+    // ========== Question UI Updates ==========
+
+    private fun updateQuestionHeader(questionNumber: Int, totalQuestions: Int) {
         binding.questionCounterContainer.tvQuestionCounter.text =
             getString(R.string.question_counter, questionNumber, totalQuestions)
     }
 
-    private fun updateQuestionText(questionText: String) {
-        binding.cardQuestion.tvQuestion.text = questionText
+    private fun updateQuestionContent(question: TriviaQuestion) {
+        binding.cardQuestion.tvQuestion.text = question.question
     }
 
     private fun hideQuestionImage() {
-        binding.cardQuestion.cardImage.isVisible = false
-        binding.cardQuestion.tvImageCaption.isVisible = false
+        binding.cardQuestion.apply {
+            cardImage.isVisible = false
+            tvImageCaption.isVisible = false
+        }
     }
 
     private fun showQuestionImage(imageUrl: String, caption: String) {
@@ -177,56 +235,49 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         Glide.with(this)
             .load(imageUrl)
             .centerCrop()
+            .placeholder(R.drawable.ic_qurio_logo)
+            .error(R.drawable.ic_close)
             .into(binding.cardQuestion.ivQuestionImage)
     }
 
-    private fun updateAnswerTexts(answers: List<String>) {
+    private fun updateAnswerOptions(answers: List<String>) {
         answerOptions.forEachIndexed { index, option ->
             option.btnAnswer.text = answers.getOrNull(index) ?: ""
         }
     }
 
-    private fun resetUIState() {
-        selectedAnswerIndex = -1
-        resetAnswerButtons()
-        resetActionButtons()
-        clearFloatingTags()
-    }
+    // ========== Answer UI Updates ==========
 
-    override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
-        stopTimer()
-        highlightCorrectAnswer(correctAnswerIndex)
-
-        if (selectedAnswerIndex == -1) {
-            // User didn't select any answer (time up or skipped)
-            showFloatingTags(false)
-        } else if (!isCorrect) {
-            highlightWrongAnswer(selectedAnswerIndex)
-            showFloatingTags(false)
-        } else {
-            showFloatingTags(true)
+    private fun updateAnswerSelectionUI() {
+        answerOptions.forEachIndexed { index, option ->
+            val backgroundRes = if (index == selectedAnswerIndex) {
+                R.drawable.bg_answer_option_selected
+            } else {
+                R.drawable.bg_answer_option
+            }
+            option.answerContainer.setBackgroundResource(backgroundRes)
         }
-
-        disableAllAnswers()
-        showNextButton()
     }
 
     private fun highlightCorrectAnswer(index: Int) {
-        answerOptions[index].answerContainer.setBackgroundResource(
+        answerOptions.getOrNull(index)?.answerContainer?.setBackgroundResource(
             R.drawable.bg_answer_option_correct
         )
     }
 
     private fun highlightWrongAnswer(index: Int) {
-        answerOptions[index].answerContainer.setBackgroundResource(
+        answerOptions.getOrNull(index)?.answerContainer?.setBackgroundResource(
             R.drawable.bg_answer_option_wrong
         )
     }
 
     private fun disableAllAnswers() {
         answerOptions.forEach { it.btnAnswer.isEnabled = false }
-        binding.actionButtonsContainer.btnCheck.isEnabled = false
-        binding.actionButtonsContainer.btnSkip.isEnabled = false
+
+        binding.actionButtonsContainer.apply {
+            btnCheck.isEnabled = false
+            btnSkip.isEnabled = false
+        }
     }
 
     private fun showNextButton() {
@@ -237,75 +288,14 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         }
     }
 
-    override fun navigateToResults(
-        correctAnswers: Int,
-        incorrectAnswers: Int,
-        skippedAnswers: Int,
-        totalTime: Long
-    ) {
-        val action = GameFragmentDirections.actionGameToResult(
-            args.categoryName,
-            correctAnswers,
-            incorrectAnswers,
-            skippedAnswers,
-            totalTime
-        )
-        findNavController().navigate(action)
+    // ========== UI Reset ==========
+
+    private fun resetUIForNewQuestion() {
+        selectedAnswerIndex = NO_SELECTION
+        resetAnswerButtons()
+        resetActionButtons()
+        clearFloatingTags()
     }
-
-    override fun updateStats(lives: Int, coins: Int) {
-        binding.layoutTopBar.tvLives.text = lives.toString()
-    }
-
-    // ==================== Timer ====================
-
-    private fun startQuestionTimer() {
-        val timeLimit = Constants.QUESTION_TIME_LIMIT
-
-        binding.timerContainer.progressTimer.apply {
-            max = timeLimit.toInt()
-            progress = timeLimit.toInt()
-        }
-
-        countDownTimer?.cancel()
-        countDownTimer = object : CountDownTimer(timeLimit, 100) {
-            override fun onTick(millisUntilFinished: Long) {
-                updateTimerUI(millisUntilFinished)
-            }
-
-            override fun onFinish() {
-                handleTimerFinish()
-            }
-        }.start()
-    }
-
-    private fun updateTimerUI(millisUntilFinished: Long) {
-        val seconds = millisUntilFinished / 1000
-
-        binding.timerContainer.apply {
-            progressTimer.progress = millisUntilFinished.toInt()
-            tvTimer.text = getString(R.string.timer_seconds, seconds)
-        }
-
-        val colorRes = if (seconds <= 10) R.color.red else R.color.orange
-        binding.timerContainer.progressTimer.progressTintList =
-            ContextCompat.getColorStateList(requireContext(), colorRes)
-    }
-
-    private fun handleTimerFinish() {
-        binding.timerContainer.apply {
-            tvTimer.text = getString(R.string.timer_seconds, 0)
-            progressTimer.progress = 0
-        }
-        presenter.timeUp()
-    }
-
-    private fun stopTimer() {
-        countDownTimer?.cancel()
-        countDownTimer = null
-    }
-
-    // ==================== Reset UI ====================
 
     private fun resetAnswerButtons() {
         answerOptions.forEach { option ->
@@ -324,14 +314,63 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         }
     }
 
-    private fun clearFloatingTags() {
-        binding.floatingTagsContainer.removeAllViews()
+    // ========== Timer Management ==========
+
+    private fun startQuestionTimer() {
+        val timeLimit = Constants.QUESTION_TIME_LIMIT
+
+        binding.timerContainer.progressTimer.apply {
+            max = timeLimit.toInt()
+            progress = timeLimit.toInt()
+        }
+
+        countDownTimer?.cancel()
+        countDownTimer = object : CountDownTimer(timeLimit, TIMER_TICK_INTERVAL) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateTimerUI(millisUntilFinished)
+            }
+
+            override fun onFinish() {
+                handleTimerFinish()
+            }
+        }.start()
     }
 
-// ==================== Floating Tags (18dp Size) ====================
+    private fun updateTimerUI(millisUntilFinished: Long) {
+        val seconds = millisUntilFinished / 1000
+
+        binding.timerContainer.apply {
+            progressTimer.progress = millisUntilFinished.toInt()
+            tvTimer.text = getString(R.string.timer_seconds, seconds)
+        }
+
+        val colorRes = if (seconds <= TIMER_WARNING_THRESHOLD) {
+            R.color.red
+        } else {
+            R.color.orange
+        }
+
+        binding.timerContainer.progressTimer.progressTintList =
+            ContextCompat.getColorStateList(requireContext(), colorRes)
+    }
+
+    private fun handleTimerFinish() {
+        binding.timerContainer.apply {
+            tvTimer.text = getString(R.string.timer_seconds, 0)
+            progressTimer.progress = 0
+        }
+        presenter.timeUp()
+    }
+
+    private fun stopTimer() {
+        countDownTimer?.cancel()
+        countDownTimer = null
+    }
+
+    // ========== Floating Tags Animation ==========
 
     private fun showFloatingTags(isCorrect: Boolean) {
-        val tagCount = Random.nextInt(5, 9)
+        val tagCount = Random.nextInt(MIN_TAGS, MAX_TAGS + 1)
 
         repeat(tagCount) {
             createFloatingTag(isCorrect)
@@ -360,22 +399,34 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
         val containerWidth = container.width
         val containerHeight = container.height
 
+        if (containerWidth <= 0 || containerHeight <= 0) return
+
         val params = view.layoutParams as FrameLayout.LayoutParams
 
-        params.leftMargin = Random.nextInt(50, maxOf(containerWidth - 150, 51))
-        params.topMargin = Random.nextInt(100, maxOf(containerHeight / 2, 101))
+        params.leftMargin = Random.nextInt(
+            TAG_MARGIN_MIN,
+            maxOf(containerWidth - TAG_MARGIN_MAX, TAG_MARGIN_MIN + 1)
+        )
+        params.topMargin = Random.nextInt(
+            TAG_TOP_MARGIN,
+            maxOf(containerHeight / 2, TAG_TOP_MARGIN + 1)
+        )
 
         view.layoutParams = params
     }
 
     private fun animateTag(view: View) {
-        val startDelay = Random.nextLong(0, 300)
+        val startDelay = Random.nextLong(0, TAG_ANIMATION_DELAY_MAX)
 
         val alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f)
-        val translateY = PropertyValuesHolder.ofFloat(View.TRANSLATION_Y, 0f, -150f)
+        val translateY = PropertyValuesHolder.ofFloat(
+            View.TRANSLATION_Y,
+            0f,
+            -TAG_TRANSLATION_Y
+        )
 
         ObjectAnimator.ofPropertyValuesHolder(view, alpha, translateY).apply {
-            duration = 1000
+            duration = TAG_ANIMATION_DURATION
             this.startDelay = startDelay
 
             addListener(object : AnimatorListenerAdapter() {
@@ -391,24 +442,51 @@ class GameFragment : BaseFragment<FragmentGameBinding, GamePresenter>(),
     private fun fadeOutAndRemoveTag(view: View) {
         view.animate()
             .alpha(0f)
-            .setDuration(400)
-            .setStartDelay(300)
+            .setDuration(TAG_FADE_DURATION)
+            .setStartDelay(TAG_FADE_DELAY)
             .withEndAction {
                 (view.parent as? ViewGroup)?.removeView(view)
             }
             .start()
     }
 
+    private fun clearFloatingTags() {
+        binding.floatingTagsContainer.removeAllViews()
+    }
 
-    // ==================== Lifecycle ====================
+    // ========== NoConnectionDialogFragment.RetryListener ==========
 
     override fun onRetryClicked() {
         loadQuestions()
     }
 
+    // ========== Lifecycle ==========
+
     override fun onDestroyView() {
-        super.onDestroyView()
         stopTimer()
         clearFloatingTags()
+        super.onDestroyView()
+    }
+
+    // ========== Constants ==========
+
+    companion object {
+        private const val NO_SELECTION = -1
+
+        // Timer
+        private const val TIMER_TICK_INTERVAL = 100L
+        private const val TIMER_WARNING_THRESHOLD = 10L
+
+        // Floating Tags
+        private const val MIN_TAGS = 5
+        private const val MAX_TAGS = 8
+        private const val TAG_MARGIN_MIN = 50
+        private const val TAG_MARGIN_MAX = 150
+        private const val TAG_TOP_MARGIN = 100
+        private const val TAG_TRANSLATION_Y = 150f
+        private const val TAG_ANIMATION_DURATION = 1000L
+        private const val TAG_ANIMATION_DELAY_MAX = 300L
+        private const val TAG_FADE_DURATION = 400L
+        private const val TAG_FADE_DELAY = 300L
     }
 }
