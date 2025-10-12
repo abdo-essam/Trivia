@@ -48,7 +48,7 @@
             android:id="@+id/action_game_to_result"
             app:destination="@id/gameResultFragment"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="true" />
     </fragment>
 
    <fragment
@@ -91,7 +91,7 @@
                   android:id="@+id/action_result_to_home"
                   app:destination="@id/homeFragment"
                   app:popUpTo="@id/homeFragment"
-                  app:popUpToInclusive="false" />
+                  app:popUpToInclusive="true" />
           </fragment>
 
 </navigation>

@@ -121,12 +121,25 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     override fun displayCategories(categories: List<Category>) {
+        val hasCategories = categories.isNotEmpty()
+
+        // Show/hide section and data
+        binding.sectionHeaderGames.root.isVisible = hasCategories
+        binding.rvCategories.isVisible = hasCategories
+
+        // Update adapter
         categoryAdapter.submitList(categories)
     }
 
     override fun displayLastGames(games: List<GameResult>) {
+        val hasGames = games.isNotEmpty()
+
+        // Show/hide section and data
+        binding.sectionHeaderLastGames.root.isVisible = hasGames
+        binding.rvLastGames.isVisible = hasGames
+
+        // Update adapter
         lastGamesAdapter.submitList(games)
-        binding.rvLastGames.isVisible = games.isNotEmpty()
     }
 
     override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
