@@ -1,6 +1,6 @@
 package com.qurio.trivia.data.repository
 
-import com.qurio.trivia.data.database.UserProgressDao
+import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.domain.model.PurchaseResult
 import com.qurio.trivia.domain.repository.LifeRepository
 import kotlinx.coroutines.Dispatchers

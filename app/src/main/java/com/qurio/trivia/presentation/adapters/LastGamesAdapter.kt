@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.qurio.trivia.data.model.GameResult
 import com.qurio.trivia.databinding.ItemLastGameBinding
+import com.qurio.trivia.domain.model.GameResult
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.TimeUnit

@@ -7,16 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.databinding.FragmentGameResultBinding
+import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
+/**
+ * Fragment displaying game results with statistics and actions
+ */
 class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultView, GameResultPresenter>(),
     GameResultView {
 
@@ -24,6 +28,10 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     lateinit var gameResultPresenter: GameResultPresenter
 
     private val args: GameResultFragmentArgs by navArgs()
+
+    companion object {
+        private const val TAG = "GameResultFragment"
+    }
 
     // ========== BaseFragment Implementation ==========
 
@@ -42,12 +50,13 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     override fun initPresenter(): GameResultPresenter = gameResultPresenter
 
     override fun setupViews() {
-        displayResults()
+        val gameStats = calculateGameStats()
+        displayResults(gameStats)
         setupClickListeners()
-        saveGameResult()
+        saveGameResult(gameStats)
     }
 
-    // ========== Setup Methods ==========
+    // ========== Setup ==========
 
     private fun setupClickListeners() {
         binding.layoutActionButtons.apply {
@@ -55,10 +64,12 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
                 Log.d(TAG, "Play Again clicked")
                 presenter.playAgain()
             }
+
             btnBackToHome.setOnClickListener {
                 Log.d(TAG, "Back to Home clicked")
                 presenter.backToHome()
             }
+
             btnShare.setOnClickListener {
                 Log.d(TAG, "Share clicked")
                 shareResults()
@@ -66,22 +77,48 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         }
     }
 
+    // ========== Calculate Stats ==========
+
+    private fun calculateGameStats(): GameStats {
+        val stars = presenter.calculateStars(
+            correct = args.correctAnswers,
+            skipped = args.skippedAnswers,
+            total = Constants.QUESTIONS_PER_GAME
+        )
+
+        val coins = presenter.calculateCoins(stars)
+
+        val percentage = if (Constants.QUESTIONS_PER_GAME > 0) {
+            ((args.correctAnswers.toFloat() / Constants.QUESTIONS_PER_GAME) * 100).toInt()
+        } else 0
+
+        return GameStats(
+            correct = args.correctAnswers,
+            incorrect = args.incorrectAnswers,
+            skipped = args.skippedAnswers,
+            stars = stars,
+            coins = coins,
+            isWon = stars > 0,
+            percentage = percentage
+        )
+    }
+
     // ========== Display Results ==========
 
-    private fun displayResults() {
-        val gameStats = GameStats.from(args, Constants.QUESTIONS_PER_GAME)
+    private fun displayResults(stats: GameStats) {
+        Log.d(TAG, "Displaying results: $stats")
 
-        Log.d(TAG, "Displaying results: $gameStats")
+        toggleResultSections(stats.isWon)
 
-        toggleResultSections(gameStats.isWon)
-
-        if (gameStats.isWon) {
-            displayStars(gameStats.stars)
+        if (stats.isWon) {
+            displayVictorySection(stats.stars)
+        } else {
+            displayLoseSection()
         }
 
-        displayReward(gameStats.coins)
-        displayStatistics(gameStats)
-        updateShareButton(gameStats.isWon)
+        displayReward(stats.coins)
+        displayStatistics(stats)
+        updateShareButton(stats.isWon)
     }
 
     private fun toggleResultSections(isWon: Boolean) {
@@ -89,7 +126,7 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         binding.loseSection.root.isVisible = !isWon
     }
 
-    private fun displayStars(stars: Int) {
+    private fun displayVictorySection(stars: Int) {
         binding.victorySection.apply {
             ivStar1.isVisible = stars >= 1
             ivStar2.isVisible = stars >= 2
@@ -97,47 +134,56 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         }
     }
 
+    private fun displayLoseSection() {
+        // Lose section is already set up in XML
+        // Could add animations here if needed
+    }
+
     private fun displayReward(coins: Int) {
         val sign = if (coins >= 0) "+" else ""
-        binding.layoutResultContent.tvCoinsEarned.text = "$sign$coins"
+        val text = "$sign$coins"
+
+        binding.layoutResultContent.tvCoinsEarned.apply {
+            this.text = text
+            setTextColor(ContextCompat.getColor(
+                requireContext(),
+                if (coins >= 0) R.color.green else R.color.red
+            ))
+        }
     }
 
     private fun displayStatistics(stats: GameStats) {
         binding.layoutResultContent.layoutStatistics.apply {
-            // Correct stats
             setupStatCard(
-                cardCorrect,
-                getString(R.string.correct),
-                stats.correct.toString(),
-                R.color.green
+                card = cardCorrect,
+                label = getString(R.string.correct),
+                value = stats.correct.toString(),
+                colorRes = R.color.green
             )
 
-            // Incorrect stats
             setupStatCard(
-                cardIncorrect,
-                getString(R.string.incorrect),
-                stats.incorrect.toString(),
-                R.color.red
+                card = cardIncorrect,
+                label = getString(R.string.incorrect),
+                value = stats.incorrect.toString(),
+                colorRes = R.color.red
             )
 
-            // Skipped stats
             setupStatCard(
-                cardSkipped,
-                getString(R.string.skipped),
-                stats.skipped.toString(),
-                R.color.orange
+                card = cardSkipped,
+                label = getString(R.string.skipped),
+                value = stats.skipped.toString(),
+                colorRes = R.color.orange
             )
         }
     }
 
     private fun setupStatCard(card: View, label: String, value: String, colorRes: Int) {
-        card.findViewById<TextView>(R.id.tv_stat_label).text = label
-        card.findViewById<TextView>(R.id.tv_stat_value).apply {
+        card.findViewById<TextView>(R.id.tv_stat_label)?.text = label
+        card.findViewById<TextView>(R.id.tv_stat_value)?.apply {
             text = value
-            setTextColor(requireContext().getColor(colorRes))
+            setTextColor(ContextCompat.getColor(requireContext(), colorRes))
         }
     }
-
 
     private fun updateShareButton(isWon: Boolean) {
         binding.layoutActionButtons.btnShare.text = getString(
@@ -147,17 +193,12 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
 
     // ========== Save Game Result ==========
 
-    private fun saveGameResult() {
-        val gameStats = GameStats.from(args, Constants.QUESTIONS_PER_GAME)
-
+    private fun saveGameResult(stats: GameStats) {
         presenter.saveGameResult(
             category = args.categoryName,
-            totalQuestions = Constants.QUESTIONS_PER_GAME,
             correctAnswers = args.correctAnswers,
             incorrectAnswers = args.incorrectAnswers,
             skippedAnswers = args.skippedAnswers,
-            stars = gameStats.stars,
-            coins = gameStats.coins,
             timeTaken = args.totalTime
         )
     }
@@ -165,40 +206,44 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     // ========== GameResultView Implementation ==========
 
     override fun navigateToHome() {
-        if (isAdded) {
+        if (isAdded && view != null) {
             findNavController().navigate(R.id.action_result_to_home)
         }
     }
 
     override fun navigateToPlayAgain() {
-        if (isAdded) {
-            // Navigate back to home, user can select category again
+        if (isAdded && view != null) {
             findNavController().navigate(R.id.action_result_to_home)
         }
     }
 
     override fun onGameResultSaved(coins: Int, stars: Int) {
-        Log.d(TAG, "Game result saved successfully: coins=$coins, stars=$stars")
-        // Optional: Show a success animation or toast
+        Log.d(TAG, "✓ Game result saved: coins=$coins, stars=$stars")
+        // Could show success animation here
     }
 
     // ========== Share Functionality ==========
 
     private fun shareResults() {
-        val gameStats = GameStats.from(args, Constants.QUESTIONS_PER_GAME)
-        val shareText = buildShareMessage(gameStats)
+        val stats = calculateGameStats()
+        val shareText = buildShareMessage(stats)
 
-        val shareIntent = Intent().apply {
-            action = Intent.ACTION_SEND
-            type = "text/plain"
-            putExtra(Intent.EXTRA_TEXT, shareText)
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+        try {
+            val shareIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, shareText)
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
+            }
+
+            startActivity(Intent.createChooser(
+                shareIntent,
+                getString(R.string.share_with_friends)
+            ))
+        } catch (e: Exception) {
+            Log.e(TAG, "Error sharing results", e)
+            showError(getString(R.string.share_failed))
         }
-
-        startActivity(Intent.createChooser(
-            shareIntent,
-            getString(R.string.share_with_friends)
-        ))
     }
 
     private fun buildShareMessage(stats: GameStats): String {
@@ -207,10 +252,13 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
                 R.string.share_win_message,
                 args.categoryName,
                 stats.correct,
-                Constants.QUESTIONS_PER_GAME,
+                Constants.QUESTIONS_PER_GAME
             )
         } else {
-            getString(R.string.share_lose_message, args.categoryName)
+            getString(
+                R.string.share_lose_message,
+                args.categoryName,
+            )
         }
     }
 
@@ -224,58 +272,5 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         val coins: Int,
         val isWon: Boolean,
         val percentage: Int
-    ) {
-        companion object {
-            fun from(args: GameResultFragmentArgs, totalQuestions: Int): GameStats {
-                val stars = calculateStars(
-                    correct = args.correctAnswers,
-                    skipped = args.skippedAnswers,
-                    total = totalQuestions
-                )
-                val percentage = calculatePercentage(args.correctAnswers, totalQuestions)
-
-                return GameStats(
-                    correct = args.correctAnswers,
-                    incorrect = args.incorrectAnswers,
-                    skipped = args.skippedAnswers,
-                    stars = stars,
-                    coins = calculateCoins(stars),
-                    isWon = stars > 0,
-                    percentage = percentage
-                )
-            }
-
-            private fun calculateStars(correct: Int, skipped: Int, total: Int): Int {
-                val correctPercentage = (correct.toFloat() / total) * 100
-                return when {
-                    correct == total && skipped == 0 -> Constants.Stars.THREE_STARS
-                    correctPercentage >= PERCENTAGE_TWO_STARS && skipped <= MAX_SKIPS_TWO_STARS ->
-                        Constants.Stars.TWO_STARS
-                    correctPercentage >= PERCENTAGE_ONE_STAR -> Constants.Stars.ONE_STAR
-                    else -> 0
-                }
-            }
-
-            private fun calculateCoins(stars: Int): Int {
-                return when (stars) {
-                    3 -> Constants.Rewards.THREE_STAR_COINS
-                    2 -> Constants.Rewards.TWO_STAR_COINS
-                    1 -> Constants.Rewards.ONE_STAR_COINS
-                    else -> Constants.Rewards.LOSE_COINS
-                }
-            }
-
-            private fun calculatePercentage(correct: Int, total: Int): Int {
-                return ((correct.toFloat() / total) * 100).toInt()
-            }
-
-            private const val PERCENTAGE_TWO_STARS = 80f
-            private const val PERCENTAGE_ONE_STAR = 50f
-            private const val MAX_SKIPS_TWO_STARS = 2
-        }
-    }
-
-    companion object {
-        private const val TAG = "GameResultFragment"
-    }
+    )
 }

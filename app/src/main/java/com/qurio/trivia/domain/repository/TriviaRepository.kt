@@ -1,7 +1,6 @@
-package com.qurio.trivia.data.repository
+package com.qurio.trivia.domain.repository
 
 import com.qurio.trivia.data.model.TriviaResponse
-
 
 interface TriviaRepository {
     suspend fun getQuestions(

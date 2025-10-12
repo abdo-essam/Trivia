@@ -2,7 +2,7 @@ package com.qurio.trivia.presentation.ui.dialogs.buycharacter
 
 import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.data.repository.CharacterRepository
+import com.qurio.trivia.domain.repository.CharacterRepository
 import javax.inject.Inject
 
 class BuyCharacterPresenter @Inject constructor(

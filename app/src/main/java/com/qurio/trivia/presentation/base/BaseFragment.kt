@@ -1,6 +1,7 @@
 package com.qurio.trivia.presentation.base
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,13 +54,14 @@ abstract class BaseFragment<VB : ViewBinding, V : BaseView, P : BasePresenter<V>
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        Log.d("BaseFragment", "onCreateView: Initializing view binding ${this::class.java.simpleName} ")
         _binding = initViewBinding(inflater, container)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("BaseFragment", "onViewCreated: View created, setting up presenter and views  ${this::class.java.simpleName}")
         // Find loading overlay in the layout (optional)
         loadingOverlay = view.findViewById(R.id.loading_overlay)
         lottieAnimation = loadingOverlay?.findViewById(R.id.lottie_loading)
@@ -74,7 +76,7 @@ abstract class BaseFragment<VB : ViewBinding, V : BaseView, P : BasePresenter<V>
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        Log.d("BaseFragment", "onDestroyView: Cleaning up resources  ${this::class.java.simpleName}")
         // Detach presenter and cancel ongoing operations
         presenter.detachView()
 
@@ -90,22 +92,26 @@ abstract class BaseFragment<VB : ViewBinding, V : BaseView, P : BasePresenter<V>
     // ========== BaseView Implementation ==========
 
     override fun showLoading() {
+        Log.d("BaseFragment", "showLoading: Displaying loading overlay  ${this::class.java.simpleName}")
         loadingOverlay?.isVisible = true
         lottieAnimation?.playAnimation()
     }
 
     override fun hideLoading() {
+        Log.d("BaseFragment", "hideLoading: Hiding loading overlay  ${this::class.java.simpleName}")
         loadingOverlay?.isVisible = false
         lottieAnimation?.cancelAnimation()
     }
 
     override fun showError(message: String) {
+        Log.d("BaseFragment", "showError: Displaying error message: $message ${this::class.java.simpleName}")
         if (isAdded) {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
     }
 
     override fun showNoConnection() {
+        Log.d("BaseFragment", "showNoConnection: Displaying no connection message ${this::class.java.simpleName}")
         if (isAdded && !childFragmentManager.isStateSaved) {
             showError("No internet connection")
         }

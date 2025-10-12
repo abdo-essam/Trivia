@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
-import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
+import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.presentation.adapters.AllGamesAdapter
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog

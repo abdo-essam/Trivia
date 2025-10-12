@@ -7,13 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.databinding.DialogCharacterSelectionBinding
-import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.presentation.adapters.CharacterGridAdapter
+import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import javax.inject.Inject
 
+/**
+ * Dialog for selecting and purchasing characters
+ * Displays all available characters in a grid layout
+ */
 class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
 
     private var _binding: DialogCharacterSelectionBinding? = null
@@ -22,19 +26,27 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
     @Inject
     lateinit var presenter: CharacterSelectionPresenter
 
-    // ========== State ==========
-
+    // State
     private var onCharacterSelectedListener: ((Character) -> Unit)? = null
     private var selectedCharacter: Character? = null
-    private var allCharacters: List<Character> = emptyList()
 
-    // ========== Adapter ==========
-
+    // Adapter
     private val characterAdapter by lazy {
         CharacterGridAdapter(
-            onCharacterSelected = ::handleCharacterSelection,
-            onLockedCharacterClick = ::handleLockedCharacterClick
+            onCharacterSelected = ::onCharacterSelected,
+            onLockedCharacterClick = ::onLockedCharacterClick
         )
+    }
+
+    companion object {
+        const val TAG = "CharacterSelectionDialog"
+        private const val GRID_SPAN_COUNT = 5
+        private const val BUTTON_ENABLED_ALPHA = 1.0f
+        private const val BUTTON_DISABLED_ALPHA = 0.5f
+
+        fun newInstance(): CharacterSelectionDialog {
+            return CharacterSelectionDialog()
+        }
     }
 
     // ========== Lifecycle ==========
@@ -59,7 +71,7 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
         loadCharacters()
     }
 
-    // ========== Setup Methods ==========
+    // ========== Setup ==========
 
     private fun setupRecyclerView() {
         binding.rvCharacters.apply {
@@ -97,99 +109,126 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
 
     override fun displayCharacters(characters: List<Character>) {
         Log.d(TAG, "Displaying ${characters.size} characters")
-        allCharacters = characters
         characterAdapter.submitList(characters)
 
-        // Select first unlocked character by default
-        selectDefaultCharacter(characters)
+        // Auto-select first unlocked or already selected character
+        selectInitialCharacter(characters)
     }
 
-    override fun onCharacterSaved() {
-        Log.d(TAG, "Character saved successfully")
-        selectedCharacter?.let { character ->
-            onCharacterSelectedListener?.invoke(character)
-        }
+    override fun onCharacterSaved(character: Character) {
+        Log.d(TAG, "Character saved successfully: ${character.displayName}")
+
+        //showMessage("Character ${character.displayName} selected!")
+        onCharacterSelectedListener?.invoke(character)
+
         dismiss()
+    }
+
+    override fun onCharacterPurchased(characterName: String) {
+        Log.d(TAG, "Character purchased: $characterName, reloading list")
+        presenter.loadCharacters()
     }
 
     // ========== Character Selection ==========
 
-    private fun selectDefaultCharacter(characters: List<Character>) {
-        val defaultCharacter = characters.firstOrNull { !it.isLocked }
-        if (defaultCharacter != null) {
-            selectedCharacter = defaultCharacter
-            updateConfirmButton(true)
-            characterAdapter.setSelectedCharacter(defaultCharacter.name)
+    private fun selectInitialCharacter(characters: List<Character>) {
+        val defaultCharacter = characters.firstOrNull { it.isSelected }
+            ?: characters.firstOrNull { !it.isLocked }
+
+        defaultCharacter?.let {
+            selectCharacter(it)
         }
     }
 
-    private fun handleCharacterSelection(character: Character) {
-        Log.d(TAG, "Character selected: ${character.name}")
+    private fun onCharacterSelected(character: Character) {
+        Log.d(TAG, "Character selected: ${character.displayName}")
 
         if (character.isLocked) {
-            handleLockedCharacterClick(character)
+            onLockedCharacterClick(character)
             return
         }
 
-        selectedCharacter = character
-        updateConfirmButton(true)
+        selectCharacter(character)
     }
 
-    private fun handleLockedCharacterClick(character: Character) {
-        Log.d(TAG, "Locked character clicked: ${character.name}")
+    private fun selectCharacter(character: Character) {
+        selectedCharacter = character
+        updateConfirmButtonState(true)
+        characterAdapter.setSelectedCharacter(character.name)
+    }
+
+    private fun onLockedCharacterClick(character: Character) {
+        Log.d(TAG, "Locked character clicked: ${character.displayName}")
         showBuyCharacterDialog(character)
     }
 
     private fun confirmSelection() {
-        selectedCharacter?.let { character ->
-            if (character.isLocked) {
-                showError("Please select an unlocked character")
-                return
-            }
+        val character = selectedCharacter
 
-            // Save the selected character
-            presenter.saveSelectedCharacter(character.name)
-        } ?: showError("Please select a character")
+        when {
+            character == null -> {
+                Log.w(TAG, "No character selected")
+                showError("Please select a character")
+            }
+            character.isLocked -> {
+                Log.w(TAG, "Attempted to select locked character: ${character.name}")
+                showError("Please unlock this character first")
+            }
+            else -> {
+                Log.d(TAG, "Saving character selection: ${character.displayName}")
+                presenter.saveSelectedCharacter(character.name)
+            }
+        }
     }
 
     // ========== UI Updates ==========
 
-    private fun updateConfirmButton(isEnabled: Boolean) {
+    private fun updateConfirmButtonState(isEnabled: Boolean) {
         binding.btnConfirm.apply {
             this.isEnabled = isEnabled
-            alpha = if (isEnabled) 1.0f else 0.5f
+            alpha = if (isEnabled) BUTTON_ENABLED_ALPHA else BUTTON_DISABLED_ALPHA
         }
     }
 
     override fun showLoading() {
-        binding.btnConfirm.isEnabled = false
+        binding.apply {
+            btnConfirm.isEnabled = false
+            btnCancel.isEnabled = false
+        }
     }
 
     override fun hideLoading() {
-        updateConfirmButton(selectedCharacter != null)
+        binding.btnCancel.isEnabled = true
+        updateConfirmButtonState(selectedCharacter != null)
     }
 
     // ========== Dialogs ==========
 
     private fun showBuyCharacterDialog(character: Character) {
-        BuyCharacterDialog.newInstance(character).apply {
+        BuyCharacterDialog.newInstance(
+            Character(
+                name = character.name,
+                displayName = character.displayName,
+                age = character.age,
+                description = character.description,
+                imageRes = character.imageRes,
+                lockedImageRes = character.lockedImageRes,
+                unlockCost = character.unlockCost,
+                isLocked = character.isLocked,
+                isSelected = false
+            )
+        ).apply {
             setOnCharacterPurchasedListener { characterName ->
-                Log.d(TAG, "Character purchased: $characterName")
-                // Refresh character list
-                //presenter.loadCharacters()
-
-                // Automatically select the purchased character
-                val purchasedCharacter = allCharacters.find { it.name == characterName }
-                purchasedCharacter?.let {
-                    handleCharacterSelection(it)
-                    characterAdapter.setSelectedCharacter(it.name)
-                }
+                //presenter.onCharacterPurchased(characterName)
             }
         }.show(childFragmentManager, BuyCharacterDialog.TAG)
     }
 
     // ========== Public API ==========
 
+    /**
+     * Set listener to be notified when character is selected
+     */
     fun setOnCharacterSelectedListener(listener: (Character) -> Unit) {
         onCharacterSelectedListener = listener
     }
@@ -200,10 +239,5 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
         super.onDestroyView()
         presenter.detachView()
         _binding = null
-    }
-
-    companion object {
-        const val TAG = "CharacterSelectionDialog"
-        private const val GRID_SPAN_COUNT = 5
     }
 }

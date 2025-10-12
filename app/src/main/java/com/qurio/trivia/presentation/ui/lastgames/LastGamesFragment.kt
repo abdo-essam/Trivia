@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
-import com.qurio.trivia.data.model.GameResult
+import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.databinding.FragmentLastGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.presentation.adapters.LastGamesAdapter

@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
-import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.ItemAchievementBinding
+import com.qurio.trivia.domain.model.Achievement
 
 class AchievementGridAdapter(
     private val onAchievementClick: (Achievement) -> Unit

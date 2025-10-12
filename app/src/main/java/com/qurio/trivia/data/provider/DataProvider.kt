@@ -1,13 +1,13 @@
 package com.qurio.trivia.data.provider
 
 import com.qurio.trivia.R
-import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.Character
-import com.qurio.trivia.data.model.GameResult
+import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.utils.Constants
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+import com.qurio.trivia.domain.model.Character
+import com.qurio.trivia.domain.model.GameResult
 
 object DataProvider {
 
@@ -186,7 +186,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 3,
                 coins = 304,
-                timeTaken = 93000 // 1m 33sec
+                timeTaken = 93000 ,// 1m 33sec,
+                timestamp = 0L
             ),
             GameResult(
                 id = 2,
@@ -198,7 +199,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 0,
                 coins = -12,
-                timeTaken = 56000 // 56sec
+                timeTaken = 56000 ,// 56sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 3,
@@ -210,11 +212,18 @@ object DataProvider {
                 skippedAnswers = 1,
                 stars = 0,
                 coins = 304,
-                timeTaken = 182000 // 3m 02sec
+                timeTaken = 182000, // 3m 02sec
+                timestamp = 0L
+
             ),
             GameResult(
                 id = 4,
-                date = dateFormat.format(calendar.apply { add(Calendar.DAY_OF_MONTH, -26) }.time), // 05-07-2025
+                date = dateFormat.format(calendar.apply {
+                    add(
+                        Calendar.DAY_OF_MONTH,
+                        -26
+                    )
+                }.time), // 05-07-2025
                 category = "Video Games",
                 totalQuestions = 10,
                 correctAnswers = 9,
@@ -222,7 +231,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 1,
                 coins = 568,
-                timeTaken = 182000 // 3m 02sec
+                timeTaken = 182000, // 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 5,
@@ -234,7 +244,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 0,
                 coins = 304,
-                timeTaken = 182000 // 3m 02sec
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 6,
@@ -246,7 +257,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 3,
                 coins = 450,
-                timeTaken = 120000 // 2m
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 7,
@@ -258,7 +270,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 1,
                 coins = 120,
-                timeTaken = 150000 // 2m 30sec
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 8,
@@ -270,7 +283,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 0,
                 coins = -50,
-                timeTaken = 200000 // 3m 20sec
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 9,
@@ -282,7 +296,8 @@ object DataProvider {
                 skippedAnswers = 1,
                 stars = 2,
                 coins = 280,
-                timeTaken = 95000 // 1m 35sec
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             ),
             GameResult(
                 id = 10,
@@ -294,7 +309,8 @@ object DataProvider {
                 skippedAnswers = 0,
                 stars = 1,
                 coins = 180,
-                timeTaken = 165000 // 2m 45sec
+                timeTaken = 182000 ,// 3m 02sec
+                timestamp = 0L
             )
         )
     }

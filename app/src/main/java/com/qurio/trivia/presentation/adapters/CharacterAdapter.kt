@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.qurio.trivia.data.model.Character
+import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.databinding.ItemCharacterBinding
 
 class CharacterAdapter(

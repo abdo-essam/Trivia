@@ -2,9 +2,10 @@ package com.qurio.trivia.presentation.ui.games
 
 import android.util.Log
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.repository.GamesRepository
+import com.qurio.trivia.domain.model.UserProgress
 import javax.inject.Inject
 
 class GamesPresenter @Inject constructor(
@@ -54,7 +55,7 @@ class GamesPresenter @Inject constructor(
     }
 
     private fun handleGameStart(
-        userProgress: com.qurio.trivia.data.model.UserProgress?,
+        userProgress: UserProgress?,
         category: Category,
         difficulty: Difficulty
     ) {

@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.databinding.DialogBuyCharacterBinding
+import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import javax.inject.Inject
 

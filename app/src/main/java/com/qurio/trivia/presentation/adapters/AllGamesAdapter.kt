@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.databinding.ItemGameCardBinding
+import com.qurio.trivia.domain.model.Category
 
 class AllGamesAdapter(
     private val onCategoryClick: (Category) -> Unit

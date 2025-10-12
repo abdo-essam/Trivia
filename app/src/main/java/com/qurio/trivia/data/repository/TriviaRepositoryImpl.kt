@@ -2,6 +2,7 @@ package com.qurio.trivia.data.repository
 
 import com.qurio.trivia.data.model.TriviaResponse
 import com.qurio.trivia.data.remote.TriviaApiService
+import com.qurio.trivia.domain.repository.TriviaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.IOException

@@ -1,9 +1,9 @@
 package com.qurio.trivia.data.repository
 
-import com.qurio.trivia.data.database.UserProgressDao
-import com.qurio.trivia.data.model.Category
-import com.qurio.trivia.data.model.UserProgress
+import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.provider.DataProvider
+import com.qurio.trivia.domain.model.Category
+import com.qurio.trivia.domain.model.UserProgress
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,7 +23,9 @@ class GamesRepository @Inject constructor(
      * Get current user progress
      */
     suspend fun getUserProgress(): UserProgress? {
-        return userProgressDao.getUserProgress()
+        // todo: implement user progress tracking
+        //return userProgressDao.getUserProgress()
+        return UserProgress.DEFAULT
     }
 
     /**

@@ -9,7 +9,7 @@ import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.qurio.trivia.MainActivity
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.data.database.UserProgressDao
+import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.databinding.ActivitySplashBinding
 import com.qurio.trivia.utils.PreferenceKeys.IS_FIRST_LAUNCH
 import javax.inject.Inject

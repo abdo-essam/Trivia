@@ -8,79 +8,92 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
-import com.qurio.trivia.data.model.Character
 import com.qurio.trivia.databinding.ItemCharacterGridBinding
+import com.qurio.trivia.domain.model.Character
 
+/**
+ * Adapter for displaying characters in a grid
+ */
 class CharacterGridAdapter(
     private val onCharacterSelected: (Character) -> Unit,
     private val onLockedCharacterClick: (Character) -> Unit
-) : ListAdapter<Character, CharacterGridAdapter.CharacterViewHolder>(CharacterDiffCallback()) {
+) : ListAdapter<Character, CharacterGridAdapter.ViewHolder>(DiffCallback()) {
 
     private var selectedCharacterName: String? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val binding = ItemCharacterGridBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            ItemCharacterGridBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            ),
+            onCharacterSelected,
+            onLockedCharacterClick
         )
-        return CharacterViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(getItem(position), selectedCharacterName)
     }
 
     /**
-     * Set selected character and refresh UI
+     * Update selected character and refresh UI
      */
     fun setSelectedCharacter(characterName: String) {
-        val previousSelection = selectedCharacterName
+        val oldSelection = selectedCharacterName
         selectedCharacterName = characterName
 
-        // Refresh both old and new selection
+        // Refresh only affected items
         currentList.forEachIndexed { index, character ->
-            if (character.name == previousSelection || character.name == characterName) {
+            if (character.name == oldSelection || character.name == characterName) {
                 notifyItemChanged(index)
             }
         }
     }
 
-    inner class CharacterViewHolder(
-        private val binding: ItemCharacterGridBinding
+    class ViewHolder(
+        private val binding: ItemCharacterGridBinding,
+        private val onCharacterSelected: (Character) -> Unit,
+        private val onLockedCharacterClick: (Character) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(character: Character) {
+        fun bind(character: Character, selectedCharacterName: String?) {
             val isSelected = character.name == selectedCharacterName && !character.isLocked
 
             binding.apply {
                 // Character image
                 ivCharacter.setImageResource(
-                    if (character.isLocked) character.lockedImageRes else character.imageRes
+                    if (character.isLocked) {
+                        character.lockedImageRes
+                    } else {
+                        character.imageRes
+                    }
                 )
 
-                // Selection check mark
+                // Selection indicator
                 ivSelectedCheck.isVisible = isSelected
 
-                // Character name and color
-                tvName.text = character.displayName
-                tvName.setTextColor(
-                    ContextCompat.getColor(
-                        root.context,
-                        when {
-                            isSelected -> R.color.primary
-                            character.isLocked -> R.color.shade_tertiary
-                            else -> R.color.shade_secondary
-                        }
+                // Character name styling
+                tvName.apply {
+                    text = character.displayName
+                    setTextColor(
+                        ContextCompat.getColor(
+                            context,
+                            when {
+                                isSelected -> R.color.primary
+                                character.isLocked -> R.color.shade_tertiary
+                                else -> R.color.shade_secondary
+                            }
+                        )
                     )
-                )
+                }
 
-                // Click listener
+                // Click handling
                 root.setOnClickListener {
                     if (character.isLocked) {
                         onLockedCharacterClick(character)
                     } else {
-                        setSelectedCharacter(character.name)
                         onCharacterSelected(character)
                     }
                 }
@@ -88,13 +101,11 @@ class CharacterGridAdapter(
         }
     }
 
-    private class CharacterDiffCallback : DiffUtil.ItemCallback<Character>() {
-        override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
-            return oldItem.name == newItem.name
-        }
+    private class DiffCallback : DiffUtil.ItemCallback<Character>() {
+        override fun areItemsTheSame(oldItem: Character, newItem: Character) =
+            oldItem.name == newItem.name
 
-        override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: Character, newItem: Character) =
+            oldItem == newItem
     }
 }

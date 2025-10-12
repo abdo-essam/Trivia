@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.data.model.Achievement
 import com.qurio.trivia.databinding.DialogAchievementsBinding
-import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.domain.model.Achievement
 import com.qurio.trivia.presentation.adapters.AchievementGridAdapter
+import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.achievement.AchievementInfoDialog
 import javax.inject.Inject
 
+/**
+ * Dialog displaying all achievements with unlock status
+ */
 class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     private var _binding: DialogAchievementsBinding? = null
@@ -21,8 +25,18 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     @Inject
     lateinit var presenter: AchievementsPresenter
 
+    // Adapter
     private val achievementAdapter by lazy {
         AchievementGridAdapter(::onAchievementClick)
+    }
+
+    companion object {
+        const val TAG = "AchievementsDialog"
+        private const val GRID_SPAN_COUNT = 4
+
+        fun newInstance(): AchievementsDialog {
+            return AchievementsDialog()
+        }
     }
 
     // ========== Lifecycle ==========
@@ -47,7 +61,7 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         loadAchievements()
     }
 
-    // ========== Setup Methods ==========
+    // ========== Setup ==========
 
     private fun setupRecyclerView() {
         binding.rvAchievements.apply {
@@ -58,14 +72,16 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun setupClickListeners() {
-        binding.btnClose.setOnClickListener {
-            Log.d(TAG, "Close button clicked")
-            dismiss()
-        }
+        binding.apply {
+            btnClose.setOnClickListener {
+                Log.d(TAG, "Close button clicked")
+                dismiss()
+            }
 
-        binding.btnOk.setOnClickListener {
-            Log.d(TAG, "OK button clicked")
-            dismiss()
+            btnOk.setOnClickListener {
+                Log.d(TAG, "OK button clicked")
+                dismiss()
+            }
         }
     }
 
@@ -78,6 +94,10 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     override fun displayAchievements(achievements: List<Achievement>) {
         Log.d(TAG, "Displaying ${achievements.size} achievements")
+
+        val unlockedCount = achievements.count { it.isUnlocked }
+        Log.d(TAG, "Unlocked: $unlockedCount/${achievements.size}")
+
         achievementAdapter.submitList(achievements)
     }
 
@@ -89,13 +109,8 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun showAchievementDetail(achievement: Achievement) {
-        AchievementInfoDialog.Companion.newInstance(
-            name = achievement.title,
-            description = achievement.description,
-            howToGet = achievement.howToGet,
-            iconRes = if (achievement.isUnlocked) achievement.iconRes else achievement.iconLockedRes,
-            isUnlocked = achievement.isUnlocked,
-        ).show(childFragmentManager, AchievementInfoDialog.Companion.TAG)
+        AchievementInfoDialog.newInstance(achievement)
+            .show(childFragmentManager, AchievementInfoDialog.TAG)
     }
 
     // ========== Lifecycle ==========
@@ -104,10 +119,5 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         super.onDestroyView()
         presenter.detachView()
         _binding = null
-    }
-
-    companion object {
-        const val TAG = "AchievementsDialog"
-        private const val GRID_SPAN_COUNT = 4
     }
 }

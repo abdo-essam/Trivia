@@ -1,18 +1,26 @@
 package com.qurio.trivia.presentation.ui.home
 
 import android.util.Log
-import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.data.database.DatabaseSeeder
-import com.qurio.trivia.data.model.Category
+import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
-import com.qurio.trivia.data.repository.HomeRepository
-import com.qurio.trivia.utils.Constants
+import com.qurio.trivia.domain.repository.HomeRepository
+import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
+/**
+ * Presenter for Home screen
+ * Handles loading user data, categories, and game management
+ */
 class HomePresenter @Inject constructor(
-    private val repository: HomeRepository,
+    private val homeRepository: HomeRepository,
     private val databaseSeeder: DatabaseSeeder
 ) : BasePresenter<HomeView>() {
+
+    companion object {
+        private const val TAG = "HomePresenter"
+        private const val DEFAULT_GAMES_LIMIT = 3
+    }
 
     // ========== Initialization ==========
 
@@ -22,92 +30,93 @@ class HomePresenter @Inject constructor(
                 databaseSeeder.seedDatabase()
             },
             onSuccess = {
-                Log.d(TAG, "Database seeded successfully")
+                Log.d(TAG, "✓ Database initialized successfully")
             },
             onError = { error ->
-                Log.e(TAG, "Error seeding database", error)
+                Log.e(TAG, "✗ Database initialization failed", error)
             },
             showLoading = false
         )
     }
 
-    // ========== Load User Progress ==========
+    // ========== Load Data ==========
 
     fun loadUserProgress() {
         tryToExecute(
             execute = {
-                repository.getUserProgress()
+                homeRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
-                userProgress?.let {
-                    withView { displayUserProgress(it) }
-                } ?: withView {
-                    showError("User progress not found")
+                if (userProgress != null) {
+                    Log.d(TAG, "✓ User progress loaded: ${userProgress.lives} lives, ${userProgress.totalCoins} coins")
+                    withView { displayUserProgress(userProgress) }
+                } else {
+                    Log.w(TAG, "✗ User progress not found")
+                    withView { showError("User data not found") }
                 }
             },
             onError = { error ->
-                Log.e(TAG, "Error loading user progress", error)
+                Log.e(TAG, "✗ Failed to load user progress", error)
                 withView { showError("Failed to load user data") }
             },
             showLoading = false
         )
     }
 
-    // ========== Load Categories ==========
-
     fun loadCategories() {
         tryToExecute(
             execute = {
-                repository.getCategories()
+                homeRepository.getCategories()
             },
             onSuccess = { categories ->
-                Log.d(TAG, "Loaded ${categories.size} categories")
+                Log.d(TAG, "✓ Loaded ${categories.size} categories")
                 withView { displayCategories(categories) }
             },
             onError = { error ->
-                Log.e(TAG, "Error loading categories", error)
+                Log.e(TAG, "✗ Failed to load categories", error)
                 withView { showError("Failed to load categories") }
             },
             showLoading = false
         )
     }
 
-    // ========== Load Last Games ==========
-
     fun loadLastGames(limit: Int = DEFAULT_GAMES_LIMIT) {
         tryToExecute(
             execute = {
-                repository.getLastGames(limit)
+                homeRepository.getLastGames(limit)
             },
             onSuccess = { games ->
-                Log.d(TAG, "Loaded ${games.size} games")
+                Log.d(TAG, "✓ Loaded ${games.size} recent games")
                 withView { displayLastGames(games) }
             },
             onError = { error ->
-                Log.e(TAG, "Error loading last games", error)
+                Log.e(TAG, "✗ Failed to load game history", error)
                 withView { showError("Failed to load game history") }
             },
             showLoading = false
         )
     }
 
-    // ========== Check Lives and Start Game ==========
+    // ========== Game Start Logic ==========
 
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
         if (category == null) {
+            Log.w(TAG, "✗ Cannot start game: category is null")
             withView { showError("Please select a category") }
             return
         }
 
+        Log.d(TAG, "Checking lives for game: ${category.displayName} (${difficulty.displayName})")
+
         tryToExecute(
             execute = {
-                repository.getUserProgress()
+                homeRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
                 handleGameStart(userProgress, category, difficulty)
             },
             onError = { error ->
-                Log.e(TAG, "Error checking lives", error)
+                Log.e(TAG, "✗ Failed to check lives", error)
                 withView { showError("Failed to start game") }
             },
             showLoading = true
@@ -115,18 +124,21 @@ class HomePresenter @Inject constructor(
     }
 
     private fun handleGameStart(
-        userProgress: com.qurio.trivia.data.model.UserProgress?,
+        userProgress: com.qurio.trivia.domain.model.UserProgress?,
         category: Category,
         difficulty: Difficulty
     ) {
         when {
             userProgress == null -> {
-                withView { showError("User progress not found") }
+                Log.e(TAG, "✗ User progress is null")
+                withView { showError("User data not found") }
             }
-            userProgress.lives > 0 -> {
+            userProgress.hasEnoughLives() -> {
+                Log.d(TAG, "✓ User has ${userProgress.lives} lives, starting game")
                 deductLifeAndStartGame(userProgress.lives, category, difficulty)
             }
             else -> {
+                Log.w(TAG, "✗ Not enough lives: ${userProgress.lives}")
                 withView { showNotEnoughLives() }
             }
         }
@@ -139,74 +151,22 @@ class HomePresenter @Inject constructor(
     ) {
         tryToExecute(
             execute = {
-                repository.updateLives(currentLives - 1)
-                GameStartData(category.id, category.displayName, difficulty)
+                val newLives = currentLives - 1
+                homeRepository.updateLives(newLives)
+                Log.d(TAG, "✓ Life deducted: $currentLives -> $newLives")
+                Triple(category.id, category.displayName, difficulty)
             },
-            onSuccess = { gameData ->
+            onSuccess = { (categoryId, categoryName, diff) ->
+                Log.d(TAG, "✓ Navigating to game: $categoryName")
                 withView {
-                    navigateToGame(gameData.categoryId, gameData.categoryName, gameData.difficulty)
+                    navigateToGame(categoryId, categoryName, diff)
                 }
             },
             onError = { error ->
-                Log.e(TAG, "Error starting game", error)
+                Log.e(TAG, "✗ Failed to start game", error)
                 withView { showError("Failed to start game") }
             },
             showLoading = false
         )
-    }
-
-    // ========== Purchase Life ==========
-
-    fun purchaseLife() {
-        tryToExecute(
-            execute = {
-                val userProgress = repository.getUserProgress()
-                    ?: throw IllegalStateException("User progress not found")
-
-                repository.purchaseLife(
-                    currentCoins = userProgress.totalCoins,
-                    currentLives = userProgress.lives,
-                    lifeCost = LIFE_COST,
-                    maxLives = Constants.MAX_LIVES
-                )
-            },
-            onSuccess = { result ->
-                handlePurchaseResult(result)
-            },
-            onError = { error ->
-                Log.e(TAG, "Error purchasing life", error)
-                withView { showError("Failed to purchase life") }
-            },
-            showLoading = true
-        )
-    }
-
-    private fun handlePurchaseResult(result: HomeRepository.PurchaseResult) {
-        when (result) {
-            HomeRepository.PurchaseResult.Success -> {
-                withView { showError("Life purchased successfully!") }
-                loadUserProgress()
-            }
-            HomeRepository.PurchaseResult.NotEnoughCoins -> {
-                withView { showError("Not enough coins to purchase life") }
-            }
-            HomeRepository.PurchaseResult.MaxLivesReached -> {
-                withView { showError("You already have maximum lives!") }
-            }
-        }
-    }
-
-    // ========== Data Classes ==========
-
-    private data class GameStartData(
-        val categoryId: Int,
-        val categoryName: String,
-        val difficulty: Difficulty
-    )
-
-    companion object {
-        private const val TAG = "HomePresenter"
-        private const val LIFE_COST = 200
-        private const val DEFAULT_GAMES_LIMIT = 3
     }
 }

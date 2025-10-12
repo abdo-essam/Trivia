@@ -1,18 +1,18 @@
-package com.qurio.trivia.data.database
+package com.qurio.trivia.data.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.qurio.trivia.data.model.UserProgress
+import com.qurio.trivia.data.database.entity.UserProgressEntity
 
 @Dao
 interface UserProgressDao {
     @Query("SELECT * FROM user_progress WHERE id = 1")
-    suspend fun getUserProgress(): UserProgress?
+    suspend fun getUserProgress(): UserProgressEntity?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateUserProgress(userProgress: UserProgress)
+    suspend fun insertOrUpdateUserProgress(userProgress: UserProgressEntity)
 
     @Query("UPDATE user_progress SET lives = :lives WHERE id = 1")
     suspend fun updateLives(lives: Int)

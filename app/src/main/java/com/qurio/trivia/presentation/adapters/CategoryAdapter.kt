@@ -5,43 +5,48 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.qurio.trivia.data.model.Category
 import com.qurio.trivia.databinding.ItemCategoryBinding
+import com.qurio.trivia.domain.model.Category
 
+/**
+ * Adapter for displaying trivia categories
+ */
 class CategoryAdapter(
     private val onCategoryClick: (Category) -> Unit
-) : ListAdapter<Category, CategoryAdapter.CategoryViewHolder>(CategoryDiffCallback()) {
+) : ListAdapter<Category, CategoryAdapter.ViewHolder>(DiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
-        return CategoryViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
             ItemCategoryBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
-            )
+            ),
+            onCategoryClick
         )
     }
 
-    override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class CategoryViewHolder(
-        private val binding: ItemCategoryBinding
+    class ViewHolder(
+        private val binding: ItemCategoryBinding,
+        private val onCategoryClick: (Category) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
-            binding.btnPlayNow.setOnClickListener {
+            binding.root.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onCategoryClick(getItem(position))
+                    // Get item from adapter
                 }
             }
 
-            binding.ivCategoryImage.setOnClickListener {
+            binding.btnPlayNow.setOnClickListener {
                 val position = bindingAdapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    onCategoryClick(getItem(position))
+                    // Handled in bind
                 }
             }
         }
@@ -50,11 +55,19 @@ class CategoryAdapter(
             binding.apply {
                 tvCategoryName.text = category.displayName
                 ivCategoryImage.setImageResource(category.imageRes)
+
+                btnPlayNow.setOnClickListener {
+                    onCategoryClick(category)
+                }
+
+                root.setOnClickListener {
+                    onCategoryClick(category)
+                }
             }
         }
     }
 
-    private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
+    private class DiffCallback : DiffUtil.ItemCallback<Category>() {
         override fun areItemsTheSame(oldItem: Category, newItem: Category) =
             oldItem.id == newItem.id
 
