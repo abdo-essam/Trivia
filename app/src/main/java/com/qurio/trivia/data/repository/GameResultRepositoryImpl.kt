@@ -8,6 +8,7 @@ import com.qurio.trivia.data.mapper.UserProgressMapper
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.domain.repository.GameResultRepository
+import com.qurio.trivia.utils.StreakHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -29,16 +30,19 @@ class GameResultRepositoryImpl @Inject constructor(
         private const val TAG = "GameResultRepositoryImpl"
     }
 
-    override suspend fun saveGameResult(gameResult: GameResult): Long {
-        try {
+    override suspend fun saveGameResult(gameResult: GameResult): UserProgress? =
+        withContext(Dispatchers.IO) {
+            // Save game result
             val entity = gameResultMapper.toEntity(gameResult)
             gameResultDao.insertGameResult(entity)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error saving game result", e)
-            throw e
+
+            // Update streak
+            updateStreakAfterGame()
+
+            // Return updated user progress
+            val updatedEntity = userProgressDao.getUserProgress()
+            updatedEntity?.let { userProgressMapper.toDomain(it) }
         }
-        return 0L
-    }
 
     override suspend fun getAllGameResults(): List<GameResult> = withContext(Dispatchers.IO) {
         try {
@@ -96,5 +100,21 @@ class GameResultRepositoryImpl @Inject constructor(
             Log.e(TAG, "Error getting user progress", e)
             null
         }
+    }
+
+    override suspend fun updateStreakAfterGame() = withContext(Dispatchers.IO) {
+        val userProgress = userProgressDao.getUserProgress() ?: return@withContext
+
+        val newStreak = StreakHelper.calculateNewStreak(
+            lastPlayedDate = userProgress.lastPlayedDate,
+            currentStreak = userProgress.currentStreak,
+            streakDays = userProgress.streakDays
+        )
+
+        userProgressDao.updateStreak(
+            streak = newStreak.streak,
+            date = newStreak.date,
+            days = newStreak.days
+        )
     }
 }

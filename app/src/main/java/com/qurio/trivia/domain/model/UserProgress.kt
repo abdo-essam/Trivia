@@ -26,5 +26,30 @@ data class UserProgress(
     }
 
     fun hasEnoughLives(): Boolean = lives > 0
+
     fun canAfford(cost: Int): Boolean = totalCoins >= cost
+
+    /**
+     * Get active days as set of integers (0-6)
+     */
+    fun getActiveDays(): Set<Int> {
+        return streakDays
+            .split(",")
+            .mapNotNull { it.trim().toIntOrNull() }
+            .toSet()
+    }
+
+    /**
+     * Check if played today
+     */
+    fun hasPlayedToday(): Boolean {
+        return lastPlayedDate == com.qurio.trivia.utils.StreakHelper.getCurrentDate()
+    }
+
+    /**
+     * Check if streak should be reset
+     */
+    fun shouldResetStreak(): Boolean {
+        return com.qurio.trivia.utils.StreakHelper.shouldResetStreak(lastPlayedDate)
+    }
 }

@@ -21,10 +21,8 @@ class StreakUpdater(
     }
 
     fun update(userProgress: UserProgress) {
-        val hasStreak = userProgress.currentStreak > 0
-
         updateStreakText(userProgress.currentStreak)
-        updateStreakDays(userProgress.streakDays, hasStreak)
+        updateStreakDays(userProgress.streakDays, userProgress.currentStreak)
     }
 
     private fun updateStreakText(currentStreak: Int) {
@@ -39,21 +37,16 @@ class StreakUpdater(
         }
     }
 
-    private fun updateStreakDays(streakDays: String, hasStreak: Boolean) {
-        val activeDays = if (hasStreak) parseActiveDays(streakDays) else emptySet()
+    private fun updateStreakDays(streakDays: String, currentStreak: Int) {
+        val activeDays = if (currentStreak > 0) parseActiveDays(streakDays) else emptySet()
         val dayViews = getDayViews()
 
         dayViews.forEachIndexed { index, (fireIcon, labelView) ->
-            if (hasStreak) {
-                // Has streak: show fire icon for active days, hide labels
-                fireIcon.isVisible = index in activeDays
-                labelView.isVisible = false
-            } else {
-                // No streak: hide all fire icons, show labels
-                fireIcon.isVisible = false
-                labelView.isVisible = true
-                labelView.text = dayLabels[index]
-            }
+            // Day labels are ALWAYS visible
+            labelView.text = dayLabels[index]
+
+            // Fire icons only show for active days when there's a streak
+            fireIcon.isVisible = currentStreak > 0 && index in activeDays
         }
     }
 

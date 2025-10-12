@@ -11,7 +11,7 @@ interface GameResultRepository {
     /**
      * Save a game result
      */
-    suspend fun saveGameResult(gameResult: GameResult): Long
+    suspend fun saveGameResult(gameResult: GameResult): UserProgress?
 
     /**
      * Get all game results
@@ -37,4 +37,9 @@ interface GameResultRepository {
      * Get user progress
      */
     suspend fun getUserProgress(): UserProgress?
+
+    /**
+     * Update streak after a game
+     */
+    suspend fun updateStreakAfterGame()
 }

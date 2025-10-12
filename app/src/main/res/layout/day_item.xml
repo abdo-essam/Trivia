@@ -8,7 +8,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <!-- Circle Background Container (Always visible) -->
+    <!-- Circle Background with Fire Icon Container -->
     <FrameLayout
         android:id="@+id/circleContainer"
         android:layout_width="28dp"
@@ -22,7 +22,7 @@
             android:contentDescription="@null"
             android:src="@drawable/bg_day_circle" />
 
-        <!-- Fire Icon (Toggles based on streak) -->
+        <!-- Fire Icon (Shows on active days only) -->
         <ImageView
             android:id="@+id/ivDayFire"
             android:layout_width="match_parent"
@@ -36,7 +36,7 @@
 
     </FrameLayout>
 
-    <!-- Day Label -->
+    <!-- Day Label (ALWAYS VISIBLE) -->
     <TextView
         android:id="@+id/tvDayLabel"
         android:layout_width="wrap_content"
@@ -45,7 +45,6 @@
         android:textAppearance="@style/TextAppearance.Label.XSmall"
         android:textColor="@color/shade_tertiary"
         android:textSize="10sp"
-        android:visibility="visible"
         tools:ignore="SmallSp"
         tools:text="S" />
 
