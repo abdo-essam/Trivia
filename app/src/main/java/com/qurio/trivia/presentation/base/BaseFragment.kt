@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
 import com.airbnb.lottie.LottieAnimationView
 import com.qurio.trivia.R
-import com.qurio.trivia.presentation.ui.dialogs.NoConnectionDialogFragment
 
 /**
  * Base Fragment with ViewBinding and MVP support
@@ -108,14 +107,7 @@ abstract class BaseFragment<VB : ViewBinding, V : BaseView, P : BasePresenter<V>
 
     override fun showNoConnection() {
         if (isAdded && !childFragmentManager.isStateSaved) {
-            val existingDialog = childFragmentManager.findFragmentByTag(NO_CONNECTION_TAG)
-            if (existingDialog == null) {
-                NoConnectionDialogFragment().show(childFragmentManager, NO_CONNECTION_TAG)
-            }
+            showError("No internet connection")
         }
-    }
-
-    companion object {
-        private const val NO_CONNECTION_TAG = "no_connection"
     }
 }

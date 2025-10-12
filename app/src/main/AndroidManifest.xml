@@ -8,6 +8,7 @@
     <application
         android:name=".QuriοApp"
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Qurio"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="33">
 
         <!-- Splash Activity as launcher -->
         <activity

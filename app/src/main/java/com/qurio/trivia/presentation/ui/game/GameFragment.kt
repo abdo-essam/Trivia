@@ -23,13 +23,12 @@ import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.databinding.FragmentGameBinding
 import com.qurio.trivia.databinding.LayoutAnswerOptionBinding
-import com.qurio.trivia.presentation.ui.dialogs.NoConnectionDialogFragment
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 import kotlin.random.Random
 
 class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(),
-    GameView, NoConnectionDialogFragment.RetryListener {
+    GameView {
 
     @Inject
     lateinit var gamePresenter: GamePresenter
@@ -452,12 +451,6 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     private fun clearFloatingTags() {
         binding.floatingTagsContainer.removeAllViews()
-    }
-
-    // ========== NoConnectionDialogFragment.RetryListener ==========
-
-    override fun onRetryClicked() {
-        loadQuestions()
     }
 
     // ========== Lifecycle ==========

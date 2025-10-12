@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.dialogs
+package com.qurio.trivia.presentation.ui.dialogs.buycharacter
 
 import android.os.Bundle
 import android.util.Log

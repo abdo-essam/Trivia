@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.addCallback
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -42,11 +41,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
 
     override fun initPresenter(): GameResultPresenter = gameResultPresenter
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        setupBackPressHandler()
-    }
-
     override fun setupViews() {
         displayResults()
         setupClickListeners()
@@ -54,12 +48,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     }
 
     // ========== Setup Methods ==========
-
-    private fun setupBackPressHandler() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            presenter.backToHome()
-        }
-    }
 
     private fun setupClickListeners() {
         binding.layoutActionButtons.apply {
