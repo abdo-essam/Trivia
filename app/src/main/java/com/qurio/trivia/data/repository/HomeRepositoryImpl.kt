@@ -8,6 +8,7 @@ import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.domain.repository.HomeRepository
+import com.qurio.trivia.utils.StreakHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -35,5 +36,19 @@ class HomeRepositoryImpl @Inject constructor(
 
     override suspend fun updateLives(lives: Int) = withContext(Dispatchers.IO) {
         userProgressDao.updateLives(lives)
+    }
+    override suspend fun checkAndUpdateStreak(): UserProgress? = withContext(Dispatchers.IO) {
+        val entity = userProgressDao.getUserProgress() ?: return@withContext null
+
+        // Check if streak should be reset
+        if (StreakHelper.shouldResetStreak(entity.lastPlayedDate)) {
+            userProgressDao.updateStreak(
+                streak = 0,
+                date = "",
+                days = ""
+            )
+        }
+
+        getUserProgress()
     }
 }

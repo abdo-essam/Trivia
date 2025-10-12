@@ -16,13 +16,10 @@ class HomePresenter @Inject constructor(
     private val homeRepository: HomeRepository,
     private val databaseSeeder: DatabaseSeeder
 ) : BasePresenter<HomeView>() {
-
     companion object {
         private const val TAG = "HomePresenter"
         private const val DEFAULT_GAMES_LIMIT = 3
     }
-
-    // ========== Initialization ==========
 
     fun initializeData() {
         tryToExecute(
@@ -31,6 +28,7 @@ class HomePresenter @Inject constructor(
             },
             onSuccess = {
                 Log.d(TAG, "✓ Database initialized successfully")
+                checkStreak() // Check streak after initialization
             },
             onError = { error ->
                 Log.e(TAG, "✗ Database initialization failed", error)
@@ -39,7 +37,22 @@ class HomePresenter @Inject constructor(
         )
     }
 
-    // ========== Load Data ==========
+    private fun checkStreak() {
+        tryToExecute(
+            execute = {
+                homeRepository.checkAndUpdateStreak()
+            },
+            onSuccess = { userProgress ->
+                userProgress?.let {
+                    Log.d(TAG, "✓ Streak checked: ${it.currentStreak} days")
+                }
+            },
+            onError = { error ->
+                Log.e(TAG, "✗ Failed to check streak", error)
+            },
+            showLoading = false
+        )
+    }
 
     fun loadUserProgress() {
         tryToExecute(
@@ -48,7 +61,7 @@ class HomePresenter @Inject constructor(
             },
             onSuccess = { userProgress ->
                 if (userProgress != null) {
-                    Log.d(TAG, "✓ User progress loaded: ${userProgress.lives} lives, ${userProgress.totalCoins} coins")
+                    Log.d(TAG, "✓ User progress loaded: ${userProgress.lives} lives, ${userProgress.totalCoins} coins, ${userProgress.currentStreak} day streak")
                     withView { displayUserProgress(userProgress) }
                 } else {
                     Log.w(TAG, "✗ User progress not found")
