@@ -87,14 +87,14 @@ enum class Category(
          * Find category by API ID
          */
         fun fromId(id: Int): Category? {
-            return values().find { it.id == id }
+            return Category.entries.find { it.id == id }
         }
 
         /**
          * Find category by name (case-insensitive)
          */
         fun fromName(name: String): Category? {
-            return values().find {
+            return Category.entries.find {
                 it.categoryName.equals(name, ignoreCase = true)
             }
         }
@@ -102,7 +102,7 @@ enum class Category(
         /**
          * Get all categories as list
          */
-        fun all(): List<Category> = values().toList()
+        fun all(): List<Category> = Category.entries
 
         /**
          * Get default category

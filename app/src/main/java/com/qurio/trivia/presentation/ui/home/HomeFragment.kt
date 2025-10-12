@@ -31,14 +31,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     @Inject
     lateinit var homePresenter: HomePresenter
 
-    // Adapters
     private val categoryAdapter by lazy { CategoryAdapter(::onCategoryClick) }
     private val lastGamesAdapter by lazy { LastGamesAdapter() }
-
-    // UI Updater
     private lateinit var uiUpdater: HomeUIUpdater
-
-    // State
     private var selectedCategory: Category? = null
 
     // ========== Lifecycle ==========
@@ -104,8 +99,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun loadInitialData() {
-        presenter.initializeData()
+
+        // Check streak when entering home
+        presenter.checkAndUpdateStreak()
+
+        // Load categories (from enum) - THIS IS CRITICAL
         presenter.loadCategories()
+
+        // Load dynamic data
         refreshDynamicData()
     }
 
@@ -113,6 +114,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         presenter.loadUserProgress()
         presenter.loadLastGames()
     }
+
 
     // ========== HomeView Implementation ==========
 
@@ -122,23 +124,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     override fun displayCategories(categories: List<Category>) {
         val hasCategories = categories.isNotEmpty()
-
-        // Show/hide section and data
         binding.sectionHeaderGames.root.isVisible = hasCategories
         binding.rvCategories.isVisible = hasCategories
-
-        // Update adapter
         categoryAdapter.submitList(categories)
     }
 
     override fun displayLastGames(games: List<GameResult>) {
         val hasGames = games.isNotEmpty()
-
-        // Show/hide section and data
         binding.sectionHeaderLastGames.root.isVisible = hasGames
         binding.rvLastGames.isVisible = hasGames
-
-        // Update adapter
         lastGamesAdapter.submitList(games)
     }
 

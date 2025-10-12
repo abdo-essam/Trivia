@@ -13,14 +13,17 @@ abstract class BasePresenter<V : BaseView> {
     protected var view: V? = null
         private set
 
-    private val job = SupervisorJob()
-    private val presenterScope = CoroutineScope(Dispatchers.Main.immediate + job)
+    private var job: Job? = null
+    private var presenterScope: CoroutineScope? = null
 
     /**
-     * Attach view to presenter
+     * Attach view to presenter and create new coroutine scope
      */
     open fun attachView(view: V) {
         this.view = view
+        // Create new job and scope each time view is attached
+        job = SupervisorJob()
+        presenterScope = CoroutineScope(Dispatchers.Main.immediate + job!!)
     }
 
     /**
@@ -28,7 +31,9 @@ abstract class BasePresenter<V : BaseView> {
      */
     open fun detachView() {
         view = null
-        job.cancel()
+        job?.cancel()
+        job = null
+        presenterScope = null
     }
 
     /**
@@ -58,8 +63,10 @@ abstract class BasePresenter<V : BaseView> {
         onError: (Throwable) -> Unit = {},
         showLoading: Boolean = true,
         dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    ): Job {
-        return presenterScope.launch {
+    ): Job? {
+        val scope = presenterScope ?: return null
+
+        return scope.launch {
             try {
                 if (showLoading) {
                     withView { showLoading() }
@@ -90,7 +97,7 @@ abstract class BasePresenter<V : BaseView> {
      * Execute suspend function without automatic error handling
      * Useful when you want manual control over loading/error states
      */
-    protected fun launch(block: suspend CoroutineScope.() -> Unit): Job {
-        return presenterScope.launch(block = block)
+    protected fun launch(block: suspend CoroutineScope.() -> Unit): Job? {
+        return presenterScope?.launch(block = block)
     }
 }

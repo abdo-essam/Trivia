@@ -3,7 +3,6 @@ package com.qurio.trivia.presentation.ui.onboarding
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.GestureDetector
 import android.view.HapticFeedbackConstants
