@@ -1,34 +1,53 @@
 package com.qurio.trivia.presentation.ui.lastgames
 
 import android.util.Log
+import com.qurio.trivia.domain.model.GameResult
+import com.qurio.trivia.domain.repository.GameHistoryRepository
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.data.repository.LastGamesRepository
 import javax.inject.Inject
 
+/**
+ * Presenter for LastGames screen
+ * Handles loading and displaying game history
+ */
 class LastGamesPresenter @Inject constructor(
-    private val repository: LastGamesRepository
+    private val gameHistoryRepository: GameHistoryRepository
 ) : BasePresenter<LastGamesView>() {
 
-    // ========== Load All Games ==========
+    companion object {
+        private const val TAG = "LastGamesPresenter"
+    }
 
-    fun loadAllLastGames() {
+    /**
+     * Load all game results
+     */
+    fun loadAllGames() {
         tryToExecute(
             execute = {
-                repository.getAllGames()
+                gameHistoryRepository.getAllGames()
             },
             onSuccess = { games ->
-                Log.d(TAG, "Loaded ${games.size} games")
-                withView { displayLastGames(games) }
+                Log.d(TAG, "✓ Loaded ${games.size} games")
+                handleGamesLoaded(games)
             },
             onError = { error ->
-                Log.e(TAG, "Error loading games", error)
+                Log.e(TAG, "✗ Failed to load games", error)
                 withView { showError("Failed to load game history") }
             },
             showLoading = true
         )
     }
 
-    companion object {
-        private const val TAG = "LastGamesPresenter"
+    private fun handleGamesLoaded(games: List<GameResult>) {
+        withView {
+            if (games.isEmpty()) {
+                Log.d(TAG, "No games found, showing empty state")
+                showEmptyState()
+            } else {
+                Log.d(TAG, "Displaying ${games.size} games")
+                hideEmptyState()
+                displayLastGames(games)
+            }
+        }
     }
 }

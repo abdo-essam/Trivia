@@ -42,14 +42,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideLastGamesRepository(
-        gameResultDao: GameResultDao
-    ): LastGamesRepository {
-        return LastGamesRepository(gameResultDao)
-    }
-
-    @Provides
-    @Singleton
     fun provideGameResultRepository(
         gameResultDao: GameResultDao,
         userProgressDao: UserProgressDao,
@@ -107,5 +99,14 @@ class RepositoryModule {
             characterDao,
             userProgressDao
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideGameHistoryRepository(
+        gameResultDao: GameResultDao,
+        gameResultMapper: GameResultMapper
+    ): GameHistoryRepository {
+        return GameHistoryRepositoryImpl(gameResultDao, gameResultMapper)
     }
 }

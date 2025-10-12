@@ -3,7 +3,7 @@ package com.qurio.trivia.domain.model
 data class GameResult(
     val id: Long,
     val date: String,
-    val category: String,
+    val category: String, // Display name stored
     val totalQuestions: Int,
     val correctAnswers: Int,
     val incorrectAnswers: Int,
@@ -27,60 +27,50 @@ data class GameResult(
             timeTaken = 0L,
             timestamp = 0L
         )
-
-        fun sampleData(): List<GameResult> {
-            return listOf(
-                GameResult(
-                    id = 1L,
-                    date = "2024-06-01",
-                    category = "Science",
-                    totalQuestions = 10,
-                    correctAnswers = 8,
-                    incorrectAnswers = 1,
-                    skippedAnswers = 1,
-                    stars = 4,
-                    coins = 50,
-                    timeTaken = 120000L,
-                    timestamp = 1712131200000L
-                ),
-                GameResult(
-                    id = 2L,
-                    date = "2024-06-02",
-                    category = "History",
-                    totalQuestions = 10,
-                    correctAnswers = 6,
-                    incorrectAnswers = 3,
-                    skippedAnswers = 1,
-                    stars = 3,
-                    coins = 30,
-                    timeTaken = 150000L,
-                    timestamp = 1712217600000L
-                ),
-                GameResult(
-                    id = 3L,
-                    date = "2024-06-03",
-                    category = "Geography",
-                    totalQuestions = 10,
-                    correctAnswers = 9,
-                    incorrectAnswers = 0,
-                    skippedAnswers = 1,
-                    stars = 5,
-                    coins = 70,
-                    timeTaken = 110000L,
-                    timestamp = 1712304000000L
-                )
-            )
-        }
     }
+
+    /**
+     * Calculate accuracy percentage
+     */
     val accuracyPercentage: Int
         get() = if (totalQuestions > 0) {
             ((correctAnswers.toFloat() / totalQuestions) * 100).toInt()
         } else 0
 
+    /**
+     * Format time taken as readable string
+     */
     val formattedTime: String
         get() {
             val minutes = (timeTaken / 1000) / 60
             val seconds = (timeTaken / 1000) % 60
             return String.format("%dm %02ds", minutes, seconds)
         }
+
+    /**
+     * Get category enum from stored name (if it matches)
+     */
+    fun getCategoryEnum(): Category? {
+        return Category.entries.find {
+            it.displayName.equals(category, ignoreCase = true)
+        }
+    }
+
+    /**
+     * Get category image resource
+     */
+    val categoryImageRes: Int?
+        get() = getCategoryEnum()?.imageRes
+
+    /**
+     * Check if game was perfect (all answers correct)
+     */
+    val isPerfect: Boolean
+        get() = correctAnswers == totalQuestions && incorrectAnswers == 0 && skippedAnswers == 0
+
+    /**
+     * Check if game was won (at least 1 star)
+     */
+    val isWon: Boolean
+        get() = stars > 0
 }
