@@ -21,13 +21,29 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
     @Inject
     lateinit var presenter: BuyCharacterPresenter
 
-    private var onCharacterPurchasedListener: ((String) -> Unit)? = null
+    private lateinit var character: Character
+    private var onCharacterPurchasedListener: ((Character) -> Unit)? = null
+
+    companion object {
+        const val TAG = "BuyCharacterDialog"
+        private const val ARG_CHARACTER_NAME = "character_name"
+
+        fun newInstance(character: Character): BuyCharacterDialog {
+            return BuyCharacterDialog().apply {
+                arguments = bundleOf(ARG_CHARACTER_NAME to character.characterName)
+            }
+        }
+    }
 
     // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().application as QuriοApp).appComponent.inject(this)
+
+        // Get character from enum
+        val characterName = arguments?.getString(ARG_CHARACTER_NAME)
+        character = Character.fromName(characterName ?: "") ?: Character.default()
     }
 
     override fun onCreateView(
@@ -69,26 +85,9 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
     // ========== Display Data ==========
 
     private fun displayCharacterData() {
-        val characterData = extractArguments() ?: run {
-            Log.e(TAG, "Missing character data")
-            dismiss()
-            return
-        }
-
-        with(binding) {
-            tvCost.text = characterData.cost.toString()
-            ivCharacter.setImageResource(characterData.lockedImageRes)
-        }
-    }
-
-    private fun extractArguments(): CharacterData? {
-        return arguments?.let { args ->
-            CharacterData(
-                name = args.getString(ARG_CHARACTER_NAME) ?: return null,
-                displayName = args.getString(ARG_CHARACTER_DISPLAY_NAME) ?: return null,
-                cost = args.getInt(ARG_COST, -1).takeIf { it != -1 } ?: return null,
-                lockedImageRes = args.getInt(ARG_IMAGE_RES, -1).takeIf { it != -1 } ?: return null
-            )
+        binding.apply {
+            tvCost.text = character.unlockCost.toString()
+            ivCharacter.setImageResource(character.lockedImageRes)
         }
     }
 
@@ -100,24 +99,19 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
     // ========== Purchase Logic ==========
 
     private fun handlePurchase() {
-        val characterData = extractArguments() ?: return
-        presenter.purchaseCharacter(characterData.name, characterData.cost)
+        presenter.purchaseCharacter(character)
     }
 
     // ========== BuyCharacterView Implementation ==========
 
     override fun updateUserCoins(coins: Int) {
-
-        val characterData = extractArguments() ?: return
-        updateBuyButtonState(coins >= characterData.cost)
+        updateBuyButtonState(coins >= character.unlockCost)
     }
 
-    override fun onPurchaseSuccess(characterName: String, remainingCoins: Int) {
-        Log.d(TAG, "Purchase successful: $characterName, remaining: $remainingCoins")
-
-        showSuccessMessage(characterName)
-        onCharacterPurchasedListener?.invoke(characterName)
-
+    override fun onPurchaseSuccess(character: Character, remainingCoins: Int) {
+        Log.d(TAG, "Purchase successful: ${character.displayName}, remaining: $remainingCoins")
+        showMessage(getString(R.string.character_purchased, character.displayName))
+        onCharacterPurchasedListener?.invoke(character)
         dismiss()
     }
 
@@ -135,21 +129,22 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
         }
     }
 
-    private fun showSuccessMessage(characterName: String) {
-        showError(getString(R.string.character_purchased, characterName))
-    }
-
     override fun showLoading() {
-        binding.btnBuy.isEnabled = false
+        binding.apply {
+            btnBuy.isEnabled = false
+            btnCancel.isEnabled = false
+        }
     }
 
     override fun hideLoading() {
-        binding.btnBuy.isEnabled = true
+        binding.btnCancel.isEnabled = true
+        // Buy button state is controlled by coin balance
+        presenter.loadUserCoins()
     }
 
     // ========== Listener ==========
 
-    fun setOnCharacterPurchasedListener(listener: (String) -> Unit) {
+    fun setOnCharacterPurchasedListener(listener: (Character) -> Unit) {
         onCharacterPurchasedListener = listener
     }
 
@@ -159,36 +154,5 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
         super.onDestroyView()
         presenter.detachView()
         _binding = null
-    }
-
-    // ========== Data Classes ==========
-
-    private data class CharacterData(
-        val name: String,
-        val displayName: String,
-        val cost: Int,
-        val lockedImageRes: Int
-    )
-
-    // ========== Companion Object ==========
-
-    companion object {
-        const val TAG = "BuyCharacterDialog"
-
-        private const val ARG_CHARACTER_NAME = "character_name"
-        private const val ARG_CHARACTER_DISPLAY_NAME = "character_display_name"
-        private const val ARG_COST = "cost"
-        private const val ARG_IMAGE_RES = "image_res"
-
-        fun newInstance(character: Character): BuyCharacterDialog {
-            return BuyCharacterDialog().apply {
-                arguments = bundleOf(
-                    ARG_CHARACTER_NAME to character.name,
-                    ARG_CHARACTER_DISPLAY_NAME to character.displayName,
-                    ARG_COST to character.unlockCost,
-                    ARG_IMAGE_RES to character.lockedImageRes
-                )
-            }
-        }
     }
 }

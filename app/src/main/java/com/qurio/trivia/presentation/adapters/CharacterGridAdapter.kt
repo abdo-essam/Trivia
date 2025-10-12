@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemCharacterGridBinding
 import com.qurio.trivia.domain.model.Character
+import com.qurio.trivia.domain.repository.CharacterRepository
 
 /**
- * Adapter for displaying characters in a grid
+ * Adapter for displaying characters in a grid with lock status
  */
 class CharacterGridAdapter(
-    private val onCharacterSelected: (Character) -> Unit,
+    private val onCharacterSelected: (CharacterRepository.CharacterWithStatus) -> Unit,
     private val onLockedCharacterClick: (Character) -> Unit
-) : ListAdapter<Character, CharacterGridAdapter.ViewHolder>(DiffCallback()) {
+) : ListAdapter<CharacterRepository.CharacterWithStatus, CharacterGridAdapter.ViewHolder>(DiffCallback()) {
 
     private var selectedCharacterName: String? = null
 
@@ -45,8 +46,9 @@ class CharacterGridAdapter(
         selectedCharacterName = characterName
 
         // Refresh only affected items
-        currentList.forEachIndexed { index, character ->
-            if (character.name == oldSelection || character.name == characterName) {
+        currentList.forEachIndexed { index, item ->
+            if (item.character.characterName == oldSelection ||
+                item.character.characterName == characterName) {
                 notifyItemChanged(index)
             }
         }
@@ -54,21 +56,22 @@ class CharacterGridAdapter(
 
     class ViewHolder(
         private val binding: ItemCharacterGridBinding,
-        private val onCharacterSelected: (Character) -> Unit,
+        private val onCharacterSelected: (CharacterRepository.CharacterWithStatus) -> Unit,
         private val onLockedCharacterClick: (Character) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(character: Character, selectedCharacterName: String?) {
-            val isSelected = character.name == selectedCharacterName && !character.isLocked
+        fun bind(
+            item: CharacterRepository.CharacterWithStatus,
+            selectedCharacterName: String?
+        ) {
+            val character = item.character
+            val isSelected = character.characterName == selectedCharacterName && item.isUnlocked
 
             binding.apply {
                 // Character image
                 ivCharacter.setImageResource(
-                    if (character.isLocked) {
-                        character.lockedImageRes
-                    } else {
-                        character.imageRes
-                    }
+                    if (item.isUnlocked) character.imageRes
+                    else character.lockedImageRes
                 )
 
                 // Selection indicator
@@ -82,7 +85,7 @@ class CharacterGridAdapter(
                             context,
                             when {
                                 isSelected -> R.color.primary
-                                character.isLocked -> R.color.shade_tertiary
+                                !item.isUnlocked -> R.color.shade_tertiary
                                 else -> R.color.shade_secondary
                             }
                         )
@@ -91,21 +94,25 @@ class CharacterGridAdapter(
 
                 // Click handling
                 root.setOnClickListener {
-                    if (character.isLocked) {
-                        onLockedCharacterClick(character)
+                    if (item.isUnlocked) {
+                        onCharacterSelected(item)
                     } else {
-                        onCharacterSelected(character)
+                        onLockedCharacterClick(character)
                     }
                 }
             }
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<Character>() {
-        override fun areItemsTheSame(oldItem: Character, newItem: Character) =
-            oldItem.name == newItem.name
+    private class DiffCallback : DiffUtil.ItemCallback<CharacterRepository.CharacterWithStatus>() {
+        override fun areItemsTheSame(
+            oldItem: CharacterRepository.CharacterWithStatus,
+            newItem: CharacterRepository.CharacterWithStatus
+        ) = oldItem.character.characterName == newItem.character.characterName
 
-        override fun areContentsTheSame(oldItem: Character, newItem: Character) =
-            oldItem == newItem
+        override fun areContentsTheSame(
+            oldItem: CharacterRepository.CharacterWithStatus,
+            newItem: CharacterRepository.CharacterWithStatus
+        ) = oldItem == newItem
     }
 }

@@ -31,9 +31,6 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
     @Inject
     lateinit var onboardingPresenter: OnboardingPresenter
 
-    @Inject
-    lateinit var sharedPreferences: SharedPreferences
-
     // ========== UI Components ==========
 
     private lateinit var onboardingAdapter: OnboardingAdapter

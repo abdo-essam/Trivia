@@ -20,7 +20,6 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
         setupDialog()
         setupViews()
     }
-
     /**
      * Setup dialog window properties
      */
@@ -46,6 +45,7 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
      */
     protected abstract fun setupViews()
 
+
     // ========== BaseView Implementation ==========
 
     override fun showLoading() {
@@ -57,6 +57,12 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
     }
 
     override fun showError(message: String) {
+        if (isAdded) {
+            Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun showMessage(message: String){
         if (isAdded) {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }

@@ -1,14 +1,11 @@
 package com.qurio.trivia.presentation.ui.dialogs.characterselection
 
 import android.util.Log
+import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.repository.CharacterRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
-/**
- * Presenter for CharacterSelectionDialog
- * Handles character loading and selection logic
- */
 class CharacterSelectionPresenter @Inject constructor(
     private val characterRepository: CharacterRepository
 ) : BasePresenter<CharacterSelectionView>() {
@@ -17,19 +14,14 @@ class CharacterSelectionPresenter @Inject constructor(
         private const val TAG = "CharacterSelectionPresenter"
     }
 
-    // ========== Load Characters ==========
-
-    /**
-     * Load all characters with lock status
-     */
     fun loadCharacters() {
         tryToExecute(
             execute = {
-                characterRepository.getAllCharacters()
+                characterRepository.getAllCharactersWithUnlockStatus()
             },
-            onSuccess = { characters ->
-                Log.d(TAG, "✓ Loaded ${characters.size} characters")
-                withView { displayCharacters(characters) }
+            onSuccess = { charactersWithStatus ->
+                Log.d(TAG, "✓ Loaded ${charactersWithStatus.size} characters")
+                withView { displayCharacters(charactersWithStatus) }
             },
             onError = { error ->
                 Log.e(TAG, "✗ Failed to load characters", error)
@@ -39,27 +31,17 @@ class CharacterSelectionPresenter @Inject constructor(
         )
     }
 
-    // ========== Save Selection ==========
-
-    /**
-     * Save selected character to user preferences
-     */
-    fun saveSelectedCharacter(characterName: String) {
-        Log.d(TAG, "Saving character selection: $characterName")
+    fun saveSelectedCharacter(character: Character) {
+        Log.d(TAG, "Saving character selection: ${character.displayName}")
 
         tryToExecute(
             execute = {
-                characterRepository.selectCharacter(characterName)
-                characterRepository.getCharacterByName(characterName)
+                characterRepository.selectCharacter(character)
+                character
             },
-            onSuccess = { character ->
-                character?.let {
-                    Log.d(TAG, "✓ Character saved: ${it.displayName}")
-                    withView { onCharacterSaved(it) }
-                } ?: run {
-                    Log.e(TAG, "✗ Character not found after save")
-                    withView { showError("Failed to save character") }
-                }
+            onSuccess = { selectedCharacter ->
+                Log.d(TAG, "✓ Character saved: ${selectedCharacter.displayName}")
+                withView { onCharacterSaved(selectedCharacter) }
             },
             onError = { error ->
                 Log.e(TAG, "✗ Failed to save character", error)
@@ -67,15 +49,5 @@ class CharacterSelectionPresenter @Inject constructor(
             },
             showLoading = true
         )
-    }
-
-    // ========== Purchase Callback ==========
-
-    /**
-     * Handle character purchase completion
-     */
-    fun onCharacterPurchased(characterName: String) {
-        Log.d(TAG, "Character purchased: $characterName, refreshing list")
-        withView { onCharacterPurchased(characterName) }
     }
 }

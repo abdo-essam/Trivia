@@ -6,7 +6,7 @@ import com.qurio.trivia.presentation.ui.dialogs.achievement.AchievementInfoDialo
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
-import com.qurio.trivia.presentation.ui.dialogs.buycharacter.CharacterInfoDialog
+import com.qurio.trivia.presentation.ui.dialogs.characterinfo.CharacterInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment

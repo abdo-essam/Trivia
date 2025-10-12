@@ -4,23 +4,17 @@ import android.content.SharedPreferences
 import com.qurio.trivia.data.database.dao.CharacterDao
 import com.qurio.trivia.data.database.dao.GameResultDao
 import com.qurio.trivia.data.database.dao.UserProgressDao
-import com.qurio.trivia.data.mapper.CharacterMapper
 import com.qurio.trivia.data.mapper.GameResultMapper
 import com.qurio.trivia.data.mapper.UserProgressMapper
 import com.qurio.trivia.data.remote.TriviaApiService
 import com.qurio.trivia.data.repository.*
-import com.qurio.trivia.domain.repository.AchievementsRepository
-import com.qurio.trivia.domain.repository.GameResultRepository
-import com.qurio.trivia.domain.repository.HomeRepository
-import com.qurio.trivia.domain.repository.LifeRepository
-import com.qurio.trivia.domain.repository.SettingsRepository
-import com.qurio.trivia.domain.repository.TriviaRepository
+import com.qurio.trivia.domain.repository.*
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-class RepositoryModule{
+class RepositoryModule {
 
     @Provides
     @Singleton
@@ -30,7 +24,12 @@ class RepositoryModule{
         userProgressMapper: UserProgressMapper,
         gameResultMapper: GameResultMapper
     ): HomeRepository {
-        return HomeRepositoryImpl(userProgressDao, gameResultDao, userProgressMapper, gameResultMapper)
+        return HomeRepositoryImpl(
+            userProgressDao,
+            gameResultDao,
+            userProgressMapper,
+            gameResultMapper
+        )
     }
 
     @Provides
@@ -65,7 +64,6 @@ class RepositoryModule{
         )
     }
 
-
     @Provides
     @Singleton
     fun provideTriviaRepository(
@@ -73,7 +71,6 @@ class RepositoryModule{
     ): TriviaRepository {
         return TriviaRepositoryImpl(apiService)
     }
-
 
     @Provides
     @Singleton
@@ -100,15 +97,15 @@ class RepositoryModule{
         return SettingsRepositoryImpl(sharedPreferences)
     }
 
-
     @Provides
     @Singleton
     fun provideCharacterRepository(
         characterDao: CharacterDao,
-        userProgressDao: UserProgressDao,
-        characterMapper: CharacterMapper
-    ): com.qurio.trivia.domain.repository.CharacterRepository {
-        return CharacterRepositoryImpl(characterDao, userProgressDao, characterMapper)
+        userProgressDao: UserProgressDao
+    ): CharacterRepository {
+        return CharacterRepositoryImpl(
+            characterDao,
+            userProgressDao
+        )
     }
-
 }

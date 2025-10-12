@@ -41,9 +41,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     // State
     private var selectedCategory: Category? = null
 
-    companion object {
-        private const val TAG = "HomeFragment"
-    }
 
     // ========== Lifecycle ==========
 

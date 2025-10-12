@@ -59,10 +59,6 @@ class CategoryAdapter(
                 btnPlayNow.setOnClickListener {
                     onCategoryClick(category)
                 }
-
-                root.setOnClickListener {
-                    onCategoryClick(category)
-                }
             }
         }
     }

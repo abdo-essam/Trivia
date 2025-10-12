@@ -1,5 +1,6 @@
 package com.qurio.trivia.presentation.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.ImageView
 import android.widget.TextView
@@ -87,7 +88,7 @@ class HomeUIUpdater(
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = formatNumber(userProgress.totalCoins)
             tvAwards.text = userProgress.awards.toString()
-            ivCrown.isVisible = userProgress.totalCoins > CROWN_THRESHOLD
+            ivCrown.isVisible = userProgress.totalCoins >= CROWN_THRESHOLD
         }
     }
 
@@ -144,6 +145,7 @@ class HomeUIUpdater(
         return Pair(fireView, labelView)
     }
 
+    @SuppressLint("DefaultLocale")
     private fun formatNumber(number: Int): String {
         return when {
             number >= 1000 -> String.format("%,d", number)

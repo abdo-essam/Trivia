@@ -1,13 +1,18 @@
 package com.qurio.trivia.presentation.ui.dialogs.buycharacter
 
 import android.util.Log
-import com.qurio.trivia.presentation.base.BasePresenter
+import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.repository.CharacterRepository
+import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class BuyCharacterPresenter @Inject constructor(
     private val repository: CharacterRepository
 ) : BasePresenter<BuyCharacterView>() {
+
+    companion object {
+        private const val TAG = "BuyCharacterPresenter"
+    }
 
     // ========== Get User Coins ==========
 
@@ -17,11 +22,11 @@ class BuyCharacterPresenter @Inject constructor(
                 repository.getUserCoins()
             },
             onSuccess = { coins ->
-                Log.d(TAG, "User has $coins coins")
+                Log.d(TAG, "✓ User has $coins coins")
                 withView { updateUserCoins(coins) }
             },
             onError = { error ->
-                Log.e(TAG, "Error loading user coins", error)
+                Log.e(TAG, "✗ Error loading user coins", error)
                 withView { showError("Failed to load coins") }
             },
             showLoading = false
@@ -30,16 +35,18 @@ class BuyCharacterPresenter @Inject constructor(
 
     // ========== Purchase Character ==========
 
-    fun purchaseCharacter(characterName: String, cost: Int) {
+    fun purchaseCharacter(character: Character) {
+        Log.d(TAG, "Attempting to purchase: ${character.displayName}")
+
         tryToExecute(
             execute = {
-                repository.purchaseCharacter(characterName, cost)
+                repository.purchaseCharacter(character)
             },
             onSuccess = { result ->
-                handlePurchaseResult(result, characterName)
+                handlePurchaseResult(result, character)
             },
             onError = { error ->
-                Log.e(TAG, "Error purchasing character", error)
+                Log.e(TAG, "✗ Error purchasing character", error)
                 withView { showError("Purchase failed") }
             },
             showLoading = true
@@ -48,29 +55,25 @@ class BuyCharacterPresenter @Inject constructor(
 
     private fun handlePurchaseResult(
         result: CharacterRepository.PurchaseResult,
-        characterName: String
+        character: Character
     ) {
         when (result) {
             is CharacterRepository.PurchaseResult.Success -> {
-                Log.d(TAG, "Character purchased successfully. Remaining coins: ${result.remainingCoins}")
+                Log.d(TAG, "✓ Character purchased successfully. Remaining: ${result.remainingCoins}")
                 withView {
-                    onPurchaseSuccess(characterName, result.remainingCoins)
+                    onPurchaseSuccess(character, result.remainingCoins)
                 }
             }
             is CharacterRepository.PurchaseResult.InsufficientCoins -> {
-                Log.d(TAG, "Insufficient coins: ${result.currentCoins}/${result.requiredCoins}")
+                Log.w(TAG, "✗ Insufficient coins: ${result.currentCoins}/${result.requiredCoins}")
                 withView {
                     showInsufficientCoins(result.currentCoins, result.requiredCoins)
                 }
             }
             is CharacterRepository.PurchaseResult.Error -> {
-                Log.e(TAG, "Purchase error: ${result.message}")
+                Log.e(TAG, "✗ Purchase error: ${result.message}")
                 withView { showError(result.message) }
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "BuyCharacterPresenter"
     }
 }
