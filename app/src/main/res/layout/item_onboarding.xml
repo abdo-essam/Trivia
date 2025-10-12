@@ -8,7 +8,7 @@
     android:background="@color/surface">
 
     <!-- Background Title with stroke effect (5% opacity) -->
-    <com.qurio.trivia.ui.custom.StrokeTextView
+    <com.qurio.trivia.presentation.ui.custom.StrokeTextView
         android:id="@+id/tv_title_background"
         android:layout_width="380dp"
         android:layout_height="wrap_content"
