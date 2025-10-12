@@ -5,20 +5,6 @@ object Constants {
     const val QUESTION_TIME_LIMIT = 60000L // 60 seconds
     const val QUESTIONS_PER_GAME = 12
 
-    // Categories from Open Trivia DB
-    object Categories {
-        const val GENERAL_KNOWLEDGE = 9
-        const val SCIENCE_NATURE = 17
-        const val GEOGRAPHY = 22
-        const val HISTORY = 23
-        const val SPORTS = 21
-        const val FILM_TV = 11
-        const val MUSIC = 12
-        const val ART_LITERATURE = 25
-        const val FOOD_DRINK = 20
-        const val SOCIETY_CULTURE = 27
-    }
-
     // Star ratings
     object Stars {
         const val THREE_STARS = 3 // Perfect score

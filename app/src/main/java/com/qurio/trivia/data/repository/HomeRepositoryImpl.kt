@@ -4,7 +4,6 @@ import com.qurio.trivia.data.database.dao.GameResultDao
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.mapper.GameResultMapper
 import com.qurio.trivia.data.mapper.UserProgressMapper
-import com.qurio.trivia.data.provider.DataProvider
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
@@ -26,7 +25,7 @@ class HomeRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getCategories(): List<Category> = withContext(Dispatchers.IO) {
-        DataProvider.getCategories()
+        Category.all()
     }
 
     override suspend fun getLastGames(limit: Int): List<GameResult> = withContext(Dispatchers.IO) {

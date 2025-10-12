@@ -1,53 +1,56 @@
 package com.qurio.trivia.presentation.ui.games
 
 import android.util.Log
-import com.qurio.trivia.presentation.base.BasePresenter
+import com.qurio.trivia.data.repository.GamesRepository
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
-import com.qurio.trivia.data.repository.GamesRepository
 import com.qurio.trivia.domain.model.UserProgress
+import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class GamesPresenter @Inject constructor(
-    private val repository: GamesRepository
+    private val gamesRepository: GamesRepository
 ) : BasePresenter<GamesView>() {
 
-    // ========== Load Categories ==========
+    companion object {
+        private const val TAG = "GamesPresenter"
+    }
 
     fun loadAllCategories() {
         tryToExecute(
             execute = {
-                repository.getAllCategories()
+                gamesRepository.getAllCategories()
             },
             onSuccess = { categories ->
-                Log.d(TAG, "Loaded ${categories.size} categories")
+                Log.d(TAG, "✓ Loaded ${categories.size} categories")
                 withView { displayCategories(categories) }
             },
             onError = { error ->
-                Log.e(TAG, "Error loading categories", error)
+                Log.e(TAG, "✗ Failed to load categories", error)
                 withView { showError("Failed to load categories") }
             },
-            showLoading = false
+            showLoading = true
         )
     }
 
-    // ========== Check Lives and Start Game ==========
-
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
         if (category == null) {
+            Log.w(TAG, "✗ Cannot start game: category is null")
             withView { showError("Please select a category") }
             return
         }
 
+        Log.d(TAG, "Checking lives for game: ${category.displayName} (${difficulty.displayName})")
+
         tryToExecute(
             execute = {
-                repository.getUserProgress()
+                gamesRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
                 handleGameStart(userProgress, category, difficulty)
             },
             onError = { error ->
-                Log.e(TAG, "Error checking lives", error)
+                Log.e(TAG, "✗ Failed to check lives", error)
                 withView { showError("Failed to start game") }
             },
             showLoading = true
@@ -61,12 +64,15 @@ class GamesPresenter @Inject constructor(
     ) {
         when {
             userProgress == null -> {
-                withView { showError("User progress not found") }
+                Log.e(TAG, "✗ User progress is null")
+                withView { showError("User data not found") }
             }
-            userProgress.lives > 0 -> {
+            userProgress.hasEnoughLives() -> {
+                Log.d(TAG, "✓ User has ${userProgress.lives} lives, deducting and starting game")
                 deductLifeAndStartGame(category, difficulty)
             }
             else -> {
+                Log.w(TAG, "✗ Not enough lives: ${userProgress.lives}")
                 withView { showNotEnoughLives() }
             }
         }
@@ -78,42 +84,21 @@ class GamesPresenter @Inject constructor(
     ) {
         tryToExecute(
             execute = {
-                val remainingLives = repository.deductLife()
-                GameStartData(
-                    categoryId = category.id,
-                    categoryName = category.displayName,
-                    difficulty = difficulty,
-                    remainingLives = remainingLives
-                )
+                val newLives = gamesRepository.deductLife()
+                Log.d(TAG, "✓ Life deducted, remaining: $newLives")
+                Triple(category.id, category.displayName, difficulty)
             },
-            onSuccess = { gameData ->
-                Log.d(TAG, "Starting game. Remaining lives: ${gameData.remainingLives}")
+            onSuccess = { (categoryId, categoryName, diff) ->
+                Log.d(TAG, "✓ Navigating to game: $categoryName")
                 withView {
-                    navigateToGame(
-                        gameData.categoryId,
-                        gameData.categoryName,
-                        gameData.difficulty
-                    )
+                    navigateToGame(categoryId, categoryName, diff)
                 }
             },
             onError = { error ->
-                Log.e(TAG, "Error starting game", error)
+                Log.e(TAG, "✗ Failed to start game", error)
                 withView { showError("Failed to start game") }
             },
             showLoading = false
         )
-    }
-
-    // ========== Data Classes ==========
-
-    private data class GameStartData(
-        val categoryId: Int,
-        val categoryName: String,
-        val difficulty: Difficulty,
-        val remainingLives: Int
-    )
-
-    companion object {
-        private const val TAG = "GamesPresenter"
     }
 }

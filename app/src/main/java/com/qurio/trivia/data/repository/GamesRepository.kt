@@ -1,7 +1,6 @@
 package com.qurio.trivia.data.repository
 
 import com.qurio.trivia.data.database.dao.UserProgressDao
-import com.qurio.trivia.data.provider.DataProvider
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.UserProgress
 import javax.inject.Inject
@@ -16,15 +15,13 @@ class GamesRepository @Inject constructor(
      * Get all available game categories
      */
     suspend fun getAllCategories(): List<Category> {
-        return DataProvider.getCategories()
+        return Category.all()
     }
 
     /**
      * Get current user progress
      */
     suspend fun getUserProgress(): UserProgress? {
-        // todo: implement user progress tracking
-        //return userProgressDao.getUserProgress()
         return UserProgress.DEFAULT
     }
 
