@@ -129,4 +129,26 @@
     <string name="onboarding_challenge_description">Answer quickly, earn points, and share with your friends! Each trivia category is a new experience.</string>
     <string name="onboarding_collect_title">Collect them all!</string>
     <string name="onboarding_collect_description">Unlock characters, earn badges, and climb the leaderboards. Qurio is merciless, but you can handle it.</string>
+
+    <!-- Day abbreviations -->
+    <string name="day_sunday_short">S</string>
+    <string name="day_monday_short">M</string>
+    <string name="day_tuesday_short">T</string>
+    <string name="day_wednesday_short">W</string>
+    <string name="day_thursday_short">Th</string>
+    <string name="day_friday_short">F</string>
+    <string name="day_saturday_short">S</string>
+
+    <!-- Day array -->
+    <string-array name="day_labels_short">
+        <item>@string/day_sunday_short</item>
+        <item>@string/day_monday_short</item>
+        <item>@string/day_tuesday_short</item>
+        <item>@string/day_wednesday_short</item>
+        <item>@string/day_thursday_short</item>
+        <item>@string/day_friday_short</item>
+        <item>@string/day_saturday_short</item>
+    </string-array>
+
+
 </resources>

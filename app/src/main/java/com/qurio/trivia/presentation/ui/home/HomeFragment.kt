@@ -35,12 +35,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     private val categoryAdapter by lazy { CategoryAdapter(::onCategoryClick) }
     private val lastGamesAdapter by lazy { LastGamesAdapter() }
 
-    // UI Helpers
+    // UI Updater
     private lateinit var uiUpdater: HomeUIUpdater
 
     // State
     private var selectedCategory: Category? = null
-
 
     // ========== Lifecycle ==========
 
@@ -74,23 +73,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     // ========== Setup ==========
 
     private fun setupClickListeners() {
-        with(uiUpdater.topBar) {
-            btnSettings.setOnClickListener {
-                showSettingsDialog()
-            }
-            ivCharacter.setOnClickListener {
-                showCharacterSelectionDialog()
-            }
-        }
-
-        with(uiUpdater.stats) {
-            statsLivesContainer.setOnClickListener {
-                showBuyLifeDialog()
-            }
-            statsAwardsContainer.setOnClickListener {
-                showAchievementsDialog()
-            }
-        }
+        uiUpdater.setupClickListeners(
+            onSettingsClick = ::showSettingsDialog,
+            onCharacterClick = ::showCharacterSelectionDialog,
+            onLivesClick = ::showBuyLifeDialog,
+            onAwardsClick = ::showAchievementsDialog
+        )
     }
 
     private fun setupRecyclerViews() {
@@ -110,24 +98,20 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         uiUpdater.setupSectionHeaders(
             gamesTitle = getString(R.string.games),
             lastGamesTitle = getString(R.string.last_games),
-            onAllGamesClick = { navigateToAllCategories() },
-            onAllLastGamesClick = {navigateToAllLastGames() }
+            onAllGamesClick = ::navigateToAllCategories,
+            onAllLastGamesClick = ::navigateToAllLastGames
         )
     }
 
     private fun loadInitialData() {
-        presenter.apply {
-            initializeData()
-            loadCategories()
-        }
+        presenter.initializeData()
+        presenter.loadCategories()
         refreshDynamicData()
     }
 
     private fun refreshDynamicData() {
-        presenter.apply {
-            loadUserProgress()
-            loadLastGames()
-        }
+        presenter.loadUserProgress()
+        presenter.loadLastGames()
     }
 
     // ========== HomeView Implementation ==========
@@ -169,7 +153,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun showCharacterSelectionDialog() {
         CharacterSelectionDialog.newInstance().apply {
-            setOnCharacterSelectedListener { characterName ->
+            setOnCharacterSelectedListener {
                 refreshDynamicData()
             }
         }.show(childFragmentManager, CharacterSelectionDialog.TAG)
@@ -197,7 +181,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun showSettingsDialog() {
-        SettingsDialogFragment.newInstance().show(childFragmentManager, SettingsDialogFragment.TAG)
+        SettingsDialogFragment.newInstance()
+            .show(childFragmentManager, SettingsDialogFragment.TAG)
     }
 
     // ========== Navigation ==========
