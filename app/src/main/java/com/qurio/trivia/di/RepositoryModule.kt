@@ -35,9 +35,10 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideGamesRepository(
-        userProgressDao: UserProgressDao
+        userProgressDao: UserProgressDao,
+        userProgressMapper: UserProgressMapper
     ): GamesRepository {
-        return GamesRepository(userProgressDao)
+        return GamesRepositoryImpl(userProgressDao, userProgressMapper)
     }
 
     @Provides

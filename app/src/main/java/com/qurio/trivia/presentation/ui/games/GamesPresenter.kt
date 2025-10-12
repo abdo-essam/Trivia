@@ -1,13 +1,17 @@
 package com.qurio.trivia.presentation.ui.games
 
 import android.util.Log
-import com.qurio.trivia.data.repository.GamesRepository
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.model.UserProgress
+import com.qurio.trivia.domain.repository.GamesRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
+/**
+ * Presenter for Games screen
+ * Handles category loading and game start logic
+ */
 class GamesPresenter @Inject constructor(
     private val gamesRepository: GamesRepository
 ) : BasePresenter<GamesView>() {
@@ -16,6 +20,11 @@ class GamesPresenter @Inject constructor(
         private const val TAG = "GamesPresenter"
     }
 
+    // ========== Load Categories ==========
+
+    /**
+     * Load all available game categories
+     */
     fun loadAllCategories() {
         tryToExecute(
             execute = {
@@ -33,6 +42,11 @@ class GamesPresenter @Inject constructor(
         )
     }
 
+    // ========== Game Start Logic ==========
+
+    /**
+     * Check if user has enough lives and start game
+     */
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
         if (category == null) {
             Log.w(TAG, "✗ Cannot start game: category is null")
@@ -68,7 +82,7 @@ class GamesPresenter @Inject constructor(
                 withView { showError("User data not found") }
             }
             userProgress.hasEnoughLives() -> {
-                Log.d(TAG, "✓ User has ${userProgress.lives} lives, deducting and starting game")
+                Log.d(TAG, "✓ User has ${userProgress.lives} lives, starting game")
                 deductLifeAndStartGame(category, difficulty)
             }
             else -> {

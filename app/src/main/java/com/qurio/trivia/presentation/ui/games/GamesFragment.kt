@@ -7,24 +7,24 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.presentation.base.BaseFragment
-import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.domain.model.Category
+import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.presentation.adapters.AllGamesAdapter
+import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
-import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
-
 import javax.inject.Inject
 
+/**
+ * Fragment displaying all available game categories
+ * Users can select a category and difficulty to start a game
+ */
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresenter>(), GamesView {
 
     @Inject
     lateinit var gamesPresenter: GamesPresenter
-
-    // ========== Lazy Bindings ==========
 
     private val topBarBinding: TopBarBinding by lazy {
         TopBarBinding.bind(binding.root.findViewById(R.id.top_bar))
@@ -34,11 +34,14 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
         AllGamesAdapter(::onCategoryClick)
     }
 
-    // ========== State ==========
-
+    // Selected category state
     private var selectedCategory: Category? = null
 
-    // ========== BaseFragment Implementation ==========
+    companion object {
+        private const val GRID_SPAN_COUNT = 2
+    }
+
+    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
@@ -60,14 +63,12 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
         loadData()
     }
 
-    // ========== Setup Methods ==========
+    // ========== Setup ==========
 
     private fun setupTopBar() {
-        with(topBarBinding) {
+        topBarBinding.apply {
             tvTitle.text = getString(R.string.games)
-            btnBack.setOnClickListener {
-                navigateBack()
-            }
+            btnBack.setOnClickListener { navigateBack() }
         }
     }
 
@@ -106,7 +107,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
 
     private fun onCategoryClick(category: Category) {
         selectedCategory = category
-        showCharacterSelectionDialog()
+        showDifficultyDialog()
     }
 
     // ========== Navigation ==========
@@ -115,18 +116,10 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
         findNavController().navigateUp()
     }
 
-    // ========== Dialog Flow ==========
-
-    private fun showCharacterSelectionDialog() {
-        CharacterSelectionDialog().apply {
-            setOnCharacterSelectedListener {
-                showDifficultyDialog()
-            }
-        }.show(childFragmentManager, CharacterSelectionDialog.TAG)
-    }
+    // ========== Dialogs ==========
 
     private fun showDifficultyDialog() {
-        DifficultyDialogFragment().apply {
+        DifficultyDialogFragment.newInstance().apply {
             setOnDifficultySelectedListener { difficulty ->
                 presenter.checkLivesAndStartGame(selectedCategory, difficulty)
             }
@@ -134,12 +127,6 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     }
 
     private fun showBuyLifeDialog() {
-        BuyLifeDialog().show(childFragmentManager, BuyLifeDialog.TAG)
-    }
-
-    // ========== Constants ==========
-
-    companion object {
-        private const val GRID_SPAN_COUNT = 2
+        BuyLifeDialog.newInstance().show(childFragmentManager, BuyLifeDialog.TAG)
     }
 }
