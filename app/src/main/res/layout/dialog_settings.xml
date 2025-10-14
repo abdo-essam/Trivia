@@ -6,9 +6,9 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp">
 
-    <!-- Background Border Shape -->
+    <!-- Background -->
     <ImageView
-        android:id="@+id/corners_cut_shape"
+        android:id="@+id/bg_dialog"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="13dp"
@@ -29,8 +29,8 @@
         android:rotation="180"
         android:translationX="5dp"
         app:layout_constraintDimensionRatio="56:1"
-        app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintEnd_toStartOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog" />
 
     <!-- Right Gradient -->
     <View
@@ -40,153 +40,154 @@
         android:background="@drawable/bg_gradient_blue_fade"
         android:translationX="-5dp"
         app:layout_constraintDimensionRatio="56:1"
-        app:layout_constraintStart_toEndOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintStart_toEndOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog" />
 
-    <!-- Heptagon Title Background -->
+    <!-- Title Background -->
     <ImageView
-        android:id="@+id/heptagon_shape"
+        android:id="@+id/title_bg"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:contentDescription="@null"
         android:src="@drawable/heptagon_shape"
         app:layout_constraintDimensionRatio="145:40"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title Text -->
+    <!-- Title -->
     <TextView
-        android:id="@+id/tv_dialog_title"
+        android:id="@+id/tv_title"
         style="@style/TextAppearance.Title.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings"
         android:textColor="@color/on_primary"
-        app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
-        app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
-        app:layout_constraintStart_toStartOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/heptagon_shape" />
+        app:layout_constraintBottom_toBottomOf="@id/title_bg"
+        app:layout_constraintEnd_toEndOf="@id/title_bg"
+        app:layout_constraintStart_toStartOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/title_bg" />
 
     <!-- Close Button -->
     <ImageView
         android:id="@+id/btn_close"
-        android:layout_width="22dp"
-        android:layout_height="26dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/back"
         android:focusable="true"
+        android:padding="3dp"
         android:src="@drawable/ic_cancel"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog"
+        app:tint="@color/primary" />
 
     <!-- Sound Section -->
-    <ImageView
-        android:id="@+id/iv_sound"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+    <LinearLayout
+        android:id="@+id/layout_sound"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="40dp"
-        android:contentDescription="@string/sound"
-        android:src="@drawable/ic_sound"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/heptagon_shape"
-        app:tint="@color/shade_secondary" />
-
-    <TextView
-        android:id="@+id/tv_sound"
-        style="@style/TextAppearance.Title.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/sound"
-        android:textColor="@color/shade_secondary"
-        app:layout_constraintBottom_toBottomOf="@id/iv_sound"
-        app:layout_constraintStart_toEndOf="@id/iv_sound"
-        app:layout_constraintTop_toTopOf="@id/iv_sound" />
-
-    <!-- Sound Slider -->
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider_sound"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
         android:layout_marginEnd="12dp"
-        android:stepSize="1"
-        android:value="80"
-        android:valueFrom="0"
-        android:valueTo="100"
-        app:labelBehavior="gone"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/iv_sound"
-        app:thumbColor="@color/primary"
-        app:thumbRadius="16dp"
-        app:trackColorActive="@color/primary"
-        app:trackColorInactive="@color/surface"
-        app:trackHeight="4dp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/title_bg">
+
+        <ImageView
+            android:id="@+id/iv_sound"
+            android:layout_width="22dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/sound"
+            android:src="@drawable/ic_sound"
+            app:tint="@color/shade_secondary" />
+
+        <TextView
+            android:id="@+id/tv_sound"
+            style="@style/TextAppearance.Body.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="0.3"
+            android:text="@string/sound"
+            android:textColor="@color/shade_secondary" />
+
+        <SeekBar
+            android:id="@+id/seekbar_sound"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:max="100"
+            android:progress="80"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_thumb" />
+    </LinearLayout>
 
     <!-- Music Section -->
-    <ImageView
-        android:id="@+id/iv_music"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="32dp"
-        android:contentDescription="@string/music"
-        android:src="@drawable/ic_music"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/slider_sound"
-        app:tint="@color/shade_secondary" />
-
-    <TextView
-        android:id="@+id/tv_music"
-        style="@style/TextAppearance.Title.Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:text="@string/music"
-        android:textColor="@color/shade_secondary"
-        app:layout_constraintBottom_toBottomOf="@id/iv_music"
-        app:layout_constraintStart_toEndOf="@id/iv_music"
-        app:layout_constraintTop_toTopOf="@id/iv_music" />
-
-    <!-- Music Slider -->
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider_music"
+    <LinearLayout
+        android:id="@+id/layout_music"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="12dp"
-        android:stepSize="1"
-        android:value="60"
-        android:valueFrom="0"
-        android:valueTo="100"
-        app:labelBehavior="gone"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/iv_music"
-        app:thumbColor="@color/primary"
-        app:thumbRadius="16dp"
-        app:trackColorActive="@color/primary"
-        app:trackColorInactive="@color/surface"
-        app:trackHeight="4dp" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/layout_sound">
 
-    <!-- Divider Line -->
-    <View
+        <ImageView
+            android:id="@+id/iv_music"
+            android:layout_width="22dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/music"
+            android:src="@drawable/ic_music"
+            app:tint="@color/shade_secondary" />
+
+        <TextView
+            android:id="@+id/tv_music"
+            style="@style/TextAppearance.Body.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="0.3"
+            android:text="@string/music"
+            android:textColor="@color/shade_secondary" />
+
+        <SeekBar
+            android:id="@+id/seekbar_music"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:max="100"
+            android:progress="60"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_thumb"
+            />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <ImageView
         android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginHorizontal="12dp"
+        android:layout_height="3dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="32dp"
-        android:background="@color/primary"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/slider_music" />
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/divider_line"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/layout_music" />
 
-    <!-- Save Changes Button -->
+    <!-- Save Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_save"
         style="@style/TextAppearance.Label.Medium"
@@ -194,16 +195,16 @@
         android:layout_height="44dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="2dp"
+        android:layout_marginEnd="4dp"
         android:layout_marginBottom="36dp"
         android:background="@drawable/bg_button_primary"
         android:text="@string/save_changes"
         android:textAllCaps="false"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="@id/corners_cut_shape"
+        app:layout_constraintBottom_toBottomOf="@id/bg_dialog"
         app:layout_constraintEnd_toStartOf="@id/btn_discard"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
         app:layout_constraintTop_toBottomOf="@id/divider" />
 
     <!-- Discard Button -->
@@ -212,14 +213,15 @@
         style="@style/TextAppearance.Label.Medium"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="4dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/bg_button_secondary"
         android:text="@string/discard"
         android:textAllCaps="false"
         android:textColor="@color/primary"
         app:layout_constraintBottom_toBottomOf="@id/btn_save"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/btn_save"
         app:layout_constraintTop_toTopOf="@id/btn_save" />
 

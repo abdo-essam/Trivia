@@ -17,19 +17,13 @@ class SettingsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getSettings(): Settings = withContext(Dispatchers.IO) {
-        val soundVolume = sharedPreferences.getFloat(
-            KEY_SOUND_VOLUME,
-            Settings.DEFAULT.soundVolume
+        Settings(
+            soundVolume = sharedPreferences.getFloat(KEY_SOUND_VOLUME, Settings.DEFAULT.soundVolume),
+            musicVolume = sharedPreferences.getFloat(KEY_MUSIC_VOLUME, Settings.DEFAULT.musicVolume)
         )
-        val musicVolume = sharedPreferences.getFloat(
-            KEY_MUSIC_VOLUME,
-            Settings.DEFAULT.musicVolume
-        )
-
-        Settings(soundVolume, musicVolume)
     }
 
-    override suspend fun saveSettings(settings: Settings): Unit = withContext(Dispatchers.IO) {
+    override suspend fun saveSettings(settings: Settings) {
         sharedPreferences.edit().apply {
             putFloat(KEY_SOUND_VOLUME, settings.soundVolume)
             putFloat(KEY_MUSIC_VOLUME, settings.musicVolume)
