@@ -1,12 +1,10 @@
 package com.qurio.trivia.presentation.ui.dialogs.settings
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.R
 import com.qurio.trivia.databinding.DialogSettingsBinding
 import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.presentation.base.BaseDialogFragment
@@ -24,13 +22,8 @@ class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
 
     companion object {
         const val TAG = "SettingsDialogFragment"
-
-        fun newInstance(): SettingsDialogFragment {
-            return SettingsDialogFragment()
-        }
+        fun newInstance() = SettingsDialogFragment()
     }
-
-    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,102 +40,73 @@ class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
     }
 
     override fun setupViews() {
-        setupClickListeners()
-        loadSettings()
-    }
-
-    // ========== Setup Methods ==========
-
-    private fun setupClickListeners() {
-        binding.apply {
-            btnClose.setOnClickListener {
-                Log.d(TAG, "Close button clicked")
-                presenter.discardChanges()
-            }
-
-            btnSave.setOnClickListener {
-                Log.d(TAG, "Save button clicked")
-                handleSaveSettings()
-            }
-
-            btnDiscard.setOnClickListener {
-                Log.d(TAG, "Discard button clicked")
-                presenter.discardChanges()
-            }
-        }
-    }
-
-    private fun loadSettings() {
+        setupListeners()
         presenter.attachView(this)
         presenter.loadSettings()
     }
 
-    // ========== Save Logic ==========
+    private fun setupListeners() {
+        binding.apply {
+            btnClose.setOnClickListener {
+                presenter.discardChanges()
+            }
 
-    private fun handleSaveSettings() {
-        val soundVolume = binding.sliderSound.value
-        val musicVolume = binding.sliderMusic.value
+            btnSave.setOnClickListener {
+                saveSettings()
+            }
 
-        Log.d(TAG, "Saving settings: sound=$soundVolume, music=$musicVolume")
+            btnDiscard.setOnClickListener {
+                presenter.discardChanges()
+            }
+        }
+    }
+
+    private fun saveSettings() {
+        val soundVolume = binding.seekbarSound.progress.toFloat()
+        val musicVolume = binding.seekbarMusic.progress.toFloat()
         presenter.saveSettings(soundVolume, musicVolume)
     }
 
-    // ========== SettingsView Implementation ==========
-
     override fun displaySettings(settings: Settings) {
-        Log.d(TAG, "Displaying settings: $settings")
-
         binding.apply {
-            sliderSound.value = settings.soundVolume
-            sliderMusic.value = settings.musicVolume
+            seekbarSound.progress = settings.soundVolume.toInt()
+            seekbarMusic.progress = settings.musicVolume.toInt()
         }
     }
 
     override fun onSettingsSaved() {
-        Log.d(TAG, "Settings saved successfully")
-
-        val savedSettings = Settings(
-            soundVolume = binding.sliderSound.value,
-            musicVolume = binding.sliderMusic.value
+        val settings = Settings(
+            soundVolume = binding.seekbarSound.progress.toFloat(),
+            musicVolume = binding.seekbarMusic.progress.toFloat()
         )
-
-        //showMessage(getString(R.string.settings_saved))
-        onSettingsSavedListener?.invoke(savedSettings)
-
+        onSettingsSavedListener?.invoke(settings)
         dismiss()
     }
 
     override fun onSettingsDiscarded() {
-        Log.d(TAG, "Settings discarded")
-        //showMessage(getString(R.string.settings_discarded))
         dismiss()
     }
 
     override fun showLoading() {
-        binding.apply {
-            btnSave.isEnabled = false
-            btnDiscard.isEnabled = false
-            sliderSound.isEnabled = false
-            sliderMusic.isEnabled = false
-        }
+        setControlsEnabled(false)
     }
 
     override fun hideLoading() {
-        binding.apply {
-            btnSave.isEnabled = true
-            btnDiscard.isEnabled = true
-            sliderSound.isEnabled = true
-            sliderMusic.isEnabled = true
-        }
+        setControlsEnabled(true)
     }
 
-    // ========== Listener ==========
+    private fun setControlsEnabled(enabled: Boolean) {
+        binding.apply {
+            btnSave.isEnabled = enabled
+            btnDiscard.isEnabled = enabled
+            seekbarSound.isEnabled = enabled
+            seekbarMusic.isEnabled = enabled
+        }
+    }
 
     fun setOnSettingsSavedListener(listener: (Settings) -> Unit) {
         onSettingsSavedListener = listener
     }
-
-    // ========== Lifecycle ==========
 
     override fun onDestroyView() {
         super.onDestroyView()
