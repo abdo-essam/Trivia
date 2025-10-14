@@ -25,14 +25,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupNavigation() {
+        val sharedPrefs = getSharedPreferences("qurio_trivia_prefs", MODE_PRIVATE)
+        val isFirstLaunch = sharedPrefs.getBoolean(IS_FIRST_LAUNCH, true)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-        val isFirstLaunch = intent.getBooleanExtra(
-            IS_FIRST_LAUNCH,
-            true
-        )
 
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         val startDestination = if (isFirstLaunch) {

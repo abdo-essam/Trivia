@@ -40,6 +40,9 @@ interface AppComponent {
     // App
     fun inject(app: QuriοApp)
 
+    // Activities
+    // fun inject(activity: MainActivity) // If you have a MainActivity to inject
+
 
     // Fragments
     fun inject(fragment: OnboardingFragment)
