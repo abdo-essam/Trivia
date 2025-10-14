@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
@@ -21,10 +22,11 @@ import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import javax.inject.Inject
 
 /**
- * Home screen displaying user stats, categories, and recent game history
+ * Home screen displaying user stats, categories carousel, and recent game history
  */
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
 
@@ -34,6 +36,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     private val categoryAdapter by lazy { CategoryAdapter(::onCategoryClick) }
     private val lastGamesAdapter by lazy { LastGamesAdapter() }
     private lateinit var uiUpdater: HomeUIUpdater
+    private lateinit var carouselConfigurator: CarouselConfigurator
     private var selectedCategory: Category? = null
 
     // ========== Lifecycle ==========
@@ -55,6 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     override fun setupViews() {
         uiUpdater = HomeUIUpdater(binding, requireContext())
         setupClickListeners()
+        setupCategoryCarousel()
         setupRecyclerViews()
         setupSectionHeaders()
         loadInitialData()
@@ -76,12 +80,19 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         )
     }
 
-    private fun setupRecyclerViews() {
-        binding.rvCategories.apply {
-            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = categoryAdapter
-        }
+    private fun setupCategoryCarousel() {
+        binding.vpCategories.adapter = categoryAdapter
 
+        carouselConfigurator = CarouselConfigurator(
+            viewPager = binding.vpCategories,
+            resources = resources,
+            coroutineScope = lifecycleScope
+        )
+
+        lifecycle.addObserver(carouselConfigurator)
+    }
+
+    private fun setupRecyclerViews() {
         binding.rvLastGames.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = lastGamesAdapter
@@ -99,14 +110,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun loadInitialData() {
-
-        // Check streak when entering home
         presenter.checkAndUpdateStreak()
-
-        // Load categories (from enum) - THIS IS CRITICAL
         presenter.loadCategories()
-
-        // Load dynamic data
         refreshDynamicData()
     }
 
@@ -114,7 +119,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         presenter.loadUserProgress()
         presenter.loadLastGames()
     }
-
 
     // ========== HomeView Implementation ==========
 
@@ -125,8 +129,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     override fun displayCategories(categories: List<Category>) {
         val hasCategories = categories.isNotEmpty()
         binding.sectionHeaderGames.root.isVisible = hasCategories
-        binding.rvCategories.isVisible = hasCategories
+        binding.vpCategories.isVisible = hasCategories
+
         categoryAdapter.submitList(categories)
+
+        if (hasCategories) {
+            carouselConfigurator.start(categories.size)
+        }
     }
 
     override fun displayLastGames(games: List<GameResult>) {
@@ -160,9 +169,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun showCharacterSelectionDialog() {
         CharacterSelectionDialog.newInstance().apply {
-            setOnCharacterSelectedListener {
-                refreshDynamicData()
-            }
+            setOnCharacterSelectedListener { refreshDynamicData() }
         }.show(childFragmentManager, CharacterSelectionDialog.TAG)
     }
 
@@ -176,9 +183,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun showBuyLifeDialog() {
         BuyLifeDialog.newInstance().apply {
-            setOnLifePurchasedListener { _, _ ->
-                refreshDynamicData()
-            }
+            setOnLifePurchasedListener { _, _ -> refreshDynamicData() }
         }.show(childFragmentManager, BuyLifeDialog.TAG)
     }
 
@@ -200,5 +205,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun navigateToAllLastGames() {
         findNavController().navigate(R.id.action_home_to_last_games)
+    }
+
+    override fun onDestroyView() {
+        carouselConfigurator.stop()
+        super.onDestroyView()
     }
 }
