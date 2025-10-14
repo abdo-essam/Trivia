@@ -22,21 +22,18 @@ class GamePresenter @Inject constructor(
     private var incorrectAnswers = 0
     private var skippedAnswers = 0
     private var gameStartTime = 0L
-    private var hasShownImageInSession = false
 
     // ========== Load Questions ==========
 
     fun loadQuestions(categoryId: Int, difficulty: Difficulty) {
         gameStartTime = System.currentTimeMillis()
-        hasShownImageInSession = false
         resetGameState()
-
         tryToExecute(
             execute = {
                 triviaRepository.getQuestions(
                     amount = Constants.QUESTIONS_PER_GAME,
-                    category = categoryId,  // ⭐ Changed from categoryId to category
-                    difficulty = difficulty.value  // ⭐ Convert Difficulty enum to String
+                    category = categoryId,
+                    difficulty = difficulty.value
                 )
             },
             onSuccess = { result ->
@@ -120,20 +117,6 @@ class GamePresenter @Inject constructor(
 
     private fun showCurrentQuestion() {
         val question = getCurrentQuestion() ?: return
-
-        val shouldShowImage = shouldShowQuestionImage(question)
-
-        if (shouldShowImage) {
-            hasShownImageInSession = true
-            withView {
-                displayQuestionWithImage(
-                    question = question,
-                    imageUrl = generateRandomImageUrl(),
-                    questionNumber = currentQuestionIndex + 1,
-                    totalQuestions = questions.size
-                )
-            }
-        } else {
             withView {
                 displayQuestion(
                     question = question,
@@ -141,21 +124,6 @@ class GamePresenter @Inject constructor(
                     totalQuestions = questions.size
                 )
             }
-        }
-    }
-
-    private fun shouldShowQuestionImage(question: TriviaQuestion): Boolean {
-        if (hasShownImageInSession) return false
-
-        val isEligibleCategory = CATEGORIES_WITH_IMAGES.any { category ->
-            question.category.contains(category, ignoreCase = true)
-        }
-
-        return isEligibleCategory && Math.random() < IMAGE_PROBABILITY
-    }
-
-    private fun generateRandomImageUrl(): String {
-        return "https://picsum.photos/${IMAGE_WIDTH}/${IMAGE_HEIGHT}"
     }
 
     // ========== Game End ==========
@@ -267,21 +235,8 @@ class GamePresenter @Inject constructor(
 
     companion object {
         private const val TAG = "GamePresenter"
-
-        private const val IMAGE_PROBABILITY = 0.3 // 30% chance
-        private const val IMAGE_WIDTH = 600
-        private const val IMAGE_HEIGHT = 400
-
         private const val PERCENTAGE_TWO_STARS = 80f
         private const val PERCENTAGE_ONE_STAR = 50f
         private const val MAX_SKIPS_TWO_STARS = 2
-
-        private val CATEGORIES_WITH_IMAGES = listOf(
-            "Art",
-            "Film",
-            "Science",
-            "Geography",
-            "Nature"
-        )
     }
 }

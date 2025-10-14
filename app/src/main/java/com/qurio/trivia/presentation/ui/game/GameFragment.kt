@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.bumptech.glide.Glide
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
@@ -150,18 +149,6 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         startQuestionTimer()
     }
 
-    override fun displayQuestionWithImage(
-        question: TriviaQuestion,
-        imageUrl: String?,
-        questionNumber: Int,
-        totalQuestions: Int
-    ) {
-        displayQuestion(question, questionNumber, totalQuestions)
-
-        if (!imageUrl.isNullOrEmpty()) {
-            showQuestionImage(imageUrl, question.category)
-        }
-    }
 
     override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
         stopTimer()
@@ -222,21 +209,6 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
             cardImage.isVisible = false
             tvImageCaption.isVisible = false
         }
-    }
-
-    private fun showQuestionImage(imageUrl: String, caption: String) {
-        binding.cardQuestion.apply {
-            cardImage.isVisible = true
-            tvImageCaption.isVisible = true
-            tvImageCaption.text = caption
-        }
-
-        Glide.with(this)
-            .load(imageUrl)
-            .centerCrop()
-            .placeholder(R.drawable.ic_qurio_logo)
-            .error(R.drawable.ic_close)
-            .into(binding.cardQuestion.ivQuestionImage)
     }
 
     private fun updateAnswerOptions(answers: List<String>) {
