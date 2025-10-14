@@ -117,13 +117,13 @@ class GamePresenter @Inject constructor(
 
     private fun showCurrentQuestion() {
         val question = getCurrentQuestion() ?: return
-            withView {
-                displayQuestion(
-                    question = question,
-                    questionNumber = currentQuestionIndex + 1,
-                    totalQuestions = questions.size
-                )
-            }
+        withView {
+            displayQuestion(
+                question = question,
+                questionNumber = currentQuestionIndex + 1,
+                totalQuestions = questions.size
+            )
+        }
     }
 
     // ========== Game End ==========
