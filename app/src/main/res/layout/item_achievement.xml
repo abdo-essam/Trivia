@@ -3,19 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:clickable="true"
-    android:focusable="true">
+    android:padding="8dp">
 
-    <!-- Achievement Badge -->
+    <!-- Achievement Badge Icon -->
     <ImageView
         android:id="@+id/iv_achievement_badge"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:contentDescription="@string/awards"
-        tools:src="@drawable/ic_trophy"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/achievement_badge"
+        android:scaleType="fitCenter"
+        tools:src="@drawable/ic_achievement_explorer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,14 +22,14 @@
     <!-- Achievement Name -->
     <TextView
         android:id="@+id/tv_achievement_name"
-        style="@style/TextAppearance.Label.Small"
+        style="@style/TextAppearance.Body.Small"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:ellipsize="end"
         android:gravity="center"
-        android:maxLines="1"
-        android:textColor="@color/shade_secondary"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="@color/shade_primary"
         tools:text="Explorer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

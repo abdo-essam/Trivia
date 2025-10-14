@@ -2,7 +2,7 @@ package com.qurio.trivia.di
 
 import android.content.Context
 import com.qurio.trivia.QuriοApp
-import com.qurio.trivia.presentation.ui.dialogs.achievement.AchievementInfoDialog
+import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog

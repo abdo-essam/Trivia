@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.dialogs.achievement
+package com.qurio.trivia.presentation.ui.dialogs.achievements
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,55 +13,42 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.DialogAchievementDetailBinding
 import com.qurio.trivia.domain.model.Achievement
+import com.qurio.trivia.domain.model.AchievementState
 import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.mapper.getIcon
 
-/**
- * Dialog showing detailed information about an achievement
- * Displays title, description, how to unlock, and share option for unlocked achievements
- */
 class AchievementInfoDialog : BaseDialogFragment() {
 
     private var _binding: DialogAchievementDetailBinding? = null
     private val binding get() = _binding!!
 
-    private var achievement: Achievement? = null
+    private var achievementState: AchievementState? = null
 
     companion object {
         const val TAG = "AchievementInfoDialog"
 
-        // Bundle argument keys
-        private const val ARG_ID = "id"
+        private const val ARG_ACHIEVEMENT_ID = "achievement_id"
         private const val ARG_TITLE = "title"
         private const val ARG_DESCRIPTION = "description"
         private const val ARG_HOW_TO_GET = "how_to_get"
-        private const val ARG_ICON_RES = "icon_res"
-        private const val ARG_ICON_LOCKED_RES = "icon_locked_res"
         private const val ARG_IS_UNLOCKED = "is_unlocked"
         private const val ARG_PROGRESS = "progress"
         private const val ARG_MAX_PROGRESS = "max_progress"
-        private const val ARG_UNLOCKED_AT = "unlocked_at"
 
-        /**
-         * Create new instance with Achievement domain model
-         */
-        fun newInstance(achievement: Achievement): AchievementInfoDialog {
+        fun newInstance(state: AchievementState): AchievementInfoDialog {
             return AchievementInfoDialog().apply {
                 arguments = bundleOf(
-                    ARG_ID to achievement.id,
-                    ARG_TITLE to achievement.title,
-                    ARG_DESCRIPTION to achievement.description,
-                    ARG_HOW_TO_GET to achievement.howToGet,
-                    ARG_ICON_RES to achievement.iconRes,
-                    ARG_ICON_LOCKED_RES to achievement.iconLockedRes,
-                    ARG_IS_UNLOCKED to achievement.isUnlocked,
-                    ARG_PROGRESS to achievement.progress,
-                    ARG_MAX_PROGRESS to achievement.maxProgress
+                    ARG_ACHIEVEMENT_ID to state.achievement.id,
+                    ARG_TITLE to state.title,
+                    ARG_DESCRIPTION to state.description,
+                    ARG_HOW_TO_GET to state.howToGet,
+                    ARG_IS_UNLOCKED to state.isUnlocked,
+                    ARG_PROGRESS to state.progress,
+                    ARG_MAX_PROGRESS to state.maxProgress
                 )
             }
         }
     }
-
-    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,96 +70,69 @@ class AchievementInfoDialog : BaseDialogFragment() {
         displayAchievementData()
     }
 
-    // ========== Data Loading ==========
-
     private fun loadAchievementData() {
-        achievement = extractAchievementFromArguments()
-        if (achievement == null) {
+        achievementState = extractAchievementFromArguments()
+        if (achievementState == null) {
             Log.e(TAG, "Missing achievement data")
-            //showError(getString(R.string.error_loading_achievement))
             dismiss()
         }
     }
 
-    private fun extractAchievementFromArguments(): Achievement? {
+    private fun extractAchievementFromArguments(): AchievementState? {
         return arguments?.let { args ->
             try {
-                Achievement(
-                    id = args.getString(ARG_ID, ""),
-                    title = args.getString(ARG_TITLE) ?: return null,
-                    description = args.getString(ARG_DESCRIPTION) ?: return null,
-                    howToGet = args.getString(ARG_HOW_TO_GET) ?: return null,
-                    iconRes = args.getInt(ARG_ICON_RES, -1).takeIf { it != -1 } ?: return null,
-                    iconLockedRes = args.getInt(ARG_ICON_LOCKED_RES, -1).takeIf { it != -1 } ?: return null,
-                    isUnlocked = args.getBoolean(ARG_IS_UNLOCKED, false),
+                val achievementId = args.getString(ARG_ACHIEVEMENT_ID) ?: return null
+                val achievement = Achievement.fromId(achievementId) ?: return null
+
+                AchievementState(
+                    achievement = achievement,
                     progress = args.getInt(ARG_PROGRESS, 0),
-                    maxProgress = args.getInt(ARG_MAX_PROGRESS, 1),
+                    isUnlocked = args.getBoolean(ARG_IS_UNLOCKED, false)
                 )
             } catch (e: Exception) {
-                Log.e(TAG, "Error extracting achievement from arguments", e)
+                Log.e(TAG, "Error extracting achievement", e)
                 null
             }
         }
     }
 
-    // ========== Setup ==========
-
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener {
-                Log.d(TAG, "Close button clicked")
-                dismiss()
-            }
-
-            btnOk.setOnClickListener {
-                Log.d(TAG, "OK button clicked")
-                dismiss()
-            }
-
-            btnShare.setOnClickListener {
-                Log.d(TAG, "Share button clicked")
-                shareAchievement()
-            }
+            btnClose.setOnClickListener { dismiss() }
+            btnOk.setOnClickListener { dismiss() }
+            btnShare.setOnClickListener { shareAchievement() }
         }
     }
-
-    // ========== Display Data ==========
 
     private fun displayAchievementData() {
-        val data = achievement ?: return
+        val state = achievementState ?: return
 
         with(binding) {
-            // Title
-            tvDialogTitle.text = data.title
+            tvDialogTitle.text = state.title
+            tvAchievementName.text = state.title
+            tvDescription.text = state.description
+            tvHowToGet.text = state.howToGet
 
-            // Achievement card content
-            tvAchievementName.text = data.title
-            tvDescription.text = data.description
-            tvHowToGet.text = data.howToGet
+            // Set badge icon
+            val iconRes = state.achievement.getIcon(state.isUnlocked)
+            ivBadge.setImageResource(iconRes)
 
-            // Badge icon (show locked or unlocked version)
-            ivBadge.setImageResource(
-                if (data.isUnlocked) data.iconRes else data.iconLockedRes
-            )
+            // Show decoration background if unlocked, locked background if locked
+            ivBadgeDecoration.isVisible = state.isUnlocked
+            ivLockedBackground.isVisible = !state.isUnlocked
 
+            // Configure share button visibility
+            configureShareButton(state.isUnlocked)
 
-            // Configure share button
-            configureShareButton(data.isUnlocked)
-
-            Log.d(TAG, "Displaying: ${data.title}, unlocked: ${data.isUnlocked}, progress: ${data.progress}/${data.maxProgress}")
+            Log.d(TAG, "Displaying: ${state.title}, unlocked: ${state.isUnlocked}, progress: ${state.progress}/${state.maxProgress}")
         }
     }
-
-    // ========== UI Configuration ==========
 
     private fun configureShareButton(isUnlocked: Boolean) {
         binding.btnShare.isVisible = isUnlocked
 
         if (!isUnlocked) {
             expandOkButton()
-            Log.d(TAG, "Achievement locked, hiding share button")
-        } else {
-            Log.d(TAG, "Achievement unlocked, showing share button")
         }
     }
 
@@ -189,18 +149,19 @@ class AchievementInfoDialog : BaseDialogFragment() {
         }
     }
 
-    // ========== Share Functionality ==========
-
     private fun shareAchievement() {
-        val data = achievement ?: return
+        val state = achievementState ?: return
 
-        if (!data.isUnlocked) {
-            Log.w(TAG, "Attempted to share locked achievement")
+        if (!state.isUnlocked) {
             showError(getString(R.string.unlock_achievement_first))
             return
         }
 
-        val shareText = buildShareMessage(data)
+        val shareText = getString(
+            R.string.share_achievement_message,
+            state.title,
+            state.description
+        )
 
         try {
             val shareIntent = Intent().apply {
@@ -210,28 +171,14 @@ class AchievementInfoDialog : BaseDialogFragment() {
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.achievement_unlocked))
             }
 
-            startActivity(Intent.createChooser(
-                shareIntent,
-                getString(R.string.share_achievement)
-            ))
-
-            Log.d(TAG, "Achievement shared: ${data.title}")
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_achievement)))
+            Log.d(TAG, "Achievement shared: ${state.title}")
             dismiss()
         } catch (e: Exception) {
             Log.e(TAG, "Error sharing achievement", e)
             showError(getString(R.string.share_failed))
         }
     }
-
-    private fun buildShareMessage(data: Achievement): String {
-        return getString(
-            R.string.share_achievement_message,
-            data.title,
-            data.description,
-        )
-    }
-
-    // ========== Lifecycle ==========
 
     override fun onDestroyView() {
         super.onDestroyView()
