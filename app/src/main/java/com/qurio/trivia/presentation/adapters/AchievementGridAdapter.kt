@@ -8,12 +8,12 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemAchievementBinding
-import com.qurio.trivia.domain.model.AchievementState
+import com.qurio.trivia.domain.model.UserAchievement
 import com.qurio.trivia.presentation.mapper.getIcon
 
 class AchievementGridAdapter(
-    private val onAchievementClick: (AchievementState) -> Unit
-) : ListAdapter<AchievementState, AchievementGridAdapter.ViewHolder>(DiffCallback()) {
+    private val onAchievementClick: (UserAchievement) -> Unit
+) : ListAdapter<UserAchievement, AchievementGridAdapter.ViewHolder>(DiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemAchievementBinding.inflate(
@@ -30,35 +30,33 @@ class AchievementGridAdapter(
 
     class ViewHolder(
         private val binding: ItemAchievementBinding,
-        private val onAchievementClick: (AchievementState) -> Unit
+        private val onAchievementClick: (UserAchievement) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(state: AchievementState) {
+        fun bind(userAchievement: UserAchievement) {
             binding.apply {
-                // Set icon based on unlock status
-                val iconRes = state.achievement.getIcon(state.isUnlocked)
+                val iconRes = userAchievement.achievement.getIcon(userAchievement.isUnlocked)
                 ivAchievementBadge.setImageResource(iconRes)
-                ivAchievementBadge.alpha = if (state.isUnlocked) 1.0f else 0.3f
+                ivAchievementBadge.alpha = if (userAchievement.isUnlocked) 1.0f else 0.3f
 
-                // Set name and color based on Figma design
-                tvAchievementName.text = state.title
+                tvAchievementName.text = userAchievement.title
                 tvAchievementName.setTextColor(
                     ContextCompat.getColor(
                         root.context,
-                        if (state.isUnlocked) R.color.shade_primary else R.color.shade_tertiary
+                        if (userAchievement.isUnlocked) R.color.shade_primary else R.color.shade_tertiary
                     )
                 )
 
-                root.setOnClickListener { onAchievementClick(state) }
+                root.setOnClickListener { onAchievementClick(userAchievement) }
             }
         }
     }
 
-    private class DiffCallback : DiffUtil.ItemCallback<AchievementState>() {
-        override fun areItemsTheSame(oldItem: AchievementState, newItem: AchievementState) =
+    private class DiffCallback : DiffUtil.ItemCallback<UserAchievement>() {
+        override fun areItemsTheSame(oldItem: UserAchievement, newItem: UserAchievement) =
             oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: AchievementState, newItem: AchievementState) =
+        override fun areContentsTheSame(oldItem: UserAchievement, newItem: UserAchievement) =
             oldItem == newItem
     }
 }

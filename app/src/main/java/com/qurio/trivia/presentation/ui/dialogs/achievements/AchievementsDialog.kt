@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogAchievementsBinding
-import com.qurio.trivia.domain.model.AchievementState
+import com.qurio.trivia.domain.model.UserAchievement
 import com.qurio.trivia.presentation.adapters.AchievementGridAdapter
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import javax.inject.Inject
@@ -74,16 +74,16 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         presenter.loadAchievements()
     }
 
-    override fun displayAchievements(achievements: List<AchievementState>) {
+    override fun displayAchievements(achievements: List<UserAchievement>) {
         Log.d(TAG, "Displaying ${achievements.size} achievements")
         val unlockedCount = achievements.count { it.isUnlocked }
         Log.d(TAG, "Unlocked: $unlockedCount/${achievements.size}")
         achievementAdapter.submitList(achievements)
     }
 
-    private fun onAchievementClick(state: AchievementState) {
-        Log.d(TAG, "Achievement clicked: ${state.title}")
-        AchievementInfoDialog.newInstance(state)
+    private fun onAchievementClick(userAchievement: UserAchievement) {
+        Log.d(TAG, "Achievement clicked: ${userAchievement.title}")
+        AchievementInfoDialog.newInstance(userAchievement)
             .show(childFragmentManager, AchievementInfoDialog.TAG)
     }
 

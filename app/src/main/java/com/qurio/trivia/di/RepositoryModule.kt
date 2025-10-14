@@ -3,6 +3,7 @@ package com.qurio.trivia.di
 import android.content.SharedPreferences
 import com.qurio.trivia.data.database.dao.CharacterDao
 import com.qurio.trivia.data.database.dao.GameResultDao
+import com.qurio.trivia.data.database.dao.UserAchievementDao
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.mapper.GameResultMapper
 import com.qurio.trivia.data.mapper.UserProgressMapper
@@ -68,10 +69,11 @@ class RepositoryModule {
     @Provides
     @Singleton
     fun provideAchievementsRepository(
+        achievementDao: UserAchievementDao,
         gameResultDao: GameResultDao,
         userProgressDao: UserProgressDao
     ): AchievementsRepository {
-        return AchievementsRepositoryImpl(gameResultDao, userProgressDao)
+        return AchievementsRepositoryImpl(achievementDao,gameResultDao, userProgressDao)
     }
 
     @Provides

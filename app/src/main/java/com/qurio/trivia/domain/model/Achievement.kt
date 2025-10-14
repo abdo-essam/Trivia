@@ -81,7 +81,7 @@ enum class Achievement(
 
     COLLECTOR_MASTER(
         id = "collector_master",
-        title = "Collector",
+        title = "Collector Master",
         description = "Earn 5000 coins",
         howToGet = "Play quizzes and accumulate 5000 coins.",
         maxProgress = 5000
@@ -89,7 +89,7 @@ enum class Achievement(
 
     LUCKY_GUESS_MASTER(
         id = "lucky_guess_master",
-        title = "Lucky Guess",
+        title = "Lucky Guess Master",
         description = "Answer 10 questions correctly in a row",
         howToGet = "Keep your winning streak going without mistakes.",
         maxProgress = 10

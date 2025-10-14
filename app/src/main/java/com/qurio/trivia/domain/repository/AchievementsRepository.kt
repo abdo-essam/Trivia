@@ -1,15 +1,12 @@
 package com.qurio.trivia.domain.repository
 
-import com.qurio.trivia.domain.model.AchievementState
+import com.qurio.trivia.domain.model.UserAchievement
 
-/**
- * Repository interface for achievements
- */
 interface AchievementsRepository {
     /**
      * Get all achievements with their current state
      */
-    suspend fun getAchievements(): List<AchievementState>
+    suspend fun getAchievements(): List<UserAchievement>
 
     /**
      * Get unlocked achievements count
@@ -20,4 +17,16 @@ interface AchievementsRepository {
      * Check if specific achievement is unlocked
      */
     suspend fun isAchievementUnlocked(achievementId: String): Boolean
+
+    /**
+     * Check and unlock achievements based on current user progress
+     * Only calculates progress for locked achievements
+     * Returns newly unlocked achievements
+     */
+    suspend fun checkAndUnlockAchievements(): List<UserAchievement>
+
+    /**
+     * Initialize achievements for new user
+     */
+    suspend fun initializeAchievements()
 }

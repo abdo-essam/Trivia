@@ -1,12 +1,14 @@
 package com.qurio.trivia.domain.model
 
 /**
- * Represents the current state of an achievement for a user
+ * Represents a user's achievement with persistent unlock status
+ * Once unlocked, it stays unlocked forever
  */
-data class AchievementState(
+data class UserAchievement(
     val achievement: Achievement,
-    val progress: Int = 0,
-    val isUnlocked: Boolean = false
+    val isUnlocked: Boolean,
+    val unlockedAt: Long? = null,
+    val currentProgress: Int = 0
 ) {
     val id: String get() = achievement.id
     val title: String get() = achievement.title

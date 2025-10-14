@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.qurio.trivia.data.database.AppDatabase
 import com.qurio.trivia.data.database.dao.CharacterDao
 import com.qurio.trivia.data.database.dao.GameResultDao
+import com.qurio.trivia.data.database.dao.UserAchievementDao
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import dagger.Module
 import dagger.Provides
@@ -36,5 +37,10 @@ class DatabaseModule {
     @Provides
     fun provideCharacterDao(database: AppDatabase): CharacterDao {
         return database.characterDao()
+    }
+
+    @Provides
+    fun provideUserAchievementDao(database: AppDatabase) : UserAchievementDao {
+        return database.userAchievementDao()
     }
 }
