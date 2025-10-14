@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background -->
     <item android:id="@android:id/background">
         <vector
             android:width="170dp"
-            android:height="28dp"
+            android:height="36dp"
             android:viewportWidth="170"
             android:viewportHeight="36">
             <path
@@ -22,6 +23,7 @@
         </vector>
     </item>
 
+    <!-- Progress -->
     <item android:id="@android:id/progress">
         <clip>
             <vector
@@ -32,7 +34,7 @@
                 <path
                     android:fillAlpha="0.06"
                     android:fillColor="#49BAF2"
-                    android:pathData="M5,14L5.56,12L133.24,12L134,14L126.79,24H12.21L5,14Z" />
+                    android:pathData="M5,14L5.56,12L157,12L158.7,14L158.7,24H12.21L5,14Z" />
             </vector>
         </clip>
     </item>
