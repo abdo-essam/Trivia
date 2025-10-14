@@ -17,6 +17,7 @@ okhttp = "4.12.0"
 room = "2.6.0"
 glide = "4.16.0"
 fragment = "1.6.2"
+coreSplashscreen = "1.0.1"
 
 [libraries]
 # Core Android
@@ -53,6 +54,9 @@ dagger-compiler = { group = "com.google.dagger", name = "dagger-compiler", versi
 
 # Glide
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+
+# Splash Screen
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

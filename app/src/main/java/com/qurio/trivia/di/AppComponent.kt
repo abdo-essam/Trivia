@@ -16,7 +16,6 @@ import com.qurio.trivia.presentation.ui.home.HomeFragment
 import com.qurio.trivia.presentation.ui.lastgames.LastGamesFragment
 import com.qurio.trivia.presentation.ui.onboarding.OnboardingFragment
 import com.qurio.trivia.presentation.ui.result.GameResultFragment
-import com.qurio.trivia.presentation.ui.splash.SplashActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
@@ -41,8 +40,6 @@ interface AppComponent {
     // App
     fun inject(app: QuriοApp)
 
-    // Activities
-    fun inject(activity: SplashActivity)
 
     // Fragments
     fun inject(fragment: OnboardingFragment)
