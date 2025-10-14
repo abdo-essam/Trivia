@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="36dp">
 
     <!-- Horizontal gradient line -->
     <View
@@ -13,13 +13,13 @@
 
     <!-- Button Container -->
     <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_width="118dp"
+        android:layout_height="36dp"
         android:layout_gravity="center">
 
         <!-- Hexagon Button Background -->
         <ImageView
-            android:layout_width="168dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/bg_hexagon_play_button" />
@@ -39,14 +39,13 @@
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:src="@drawable/ic_star_filled"
-                android:layout_marginEnd="8dp"
-                app:tint="@color/on_primary" />
+                android:layout_marginEnd="6dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/play_now"
-                android:textAppearance="@style/TextAppearance.Label.Medium"
+                android:textAppearance="@style/TextAppearance.Label.Small"
                 android:textColor="@color/on_primary"
                 android:includeFontPadding="false" />
 
@@ -54,8 +53,7 @@
                 android:layout_width="6dp"
                 android:layout_height="6dp"
                 android:src="@drawable/ic_star_filled"
-                android:layout_marginStart="8dp"
-                app:tint="@color/on_primary" />
+                android:layout_marginStart="6dp" />
 
         </LinearLayout>
     </FrameLayout>

@@ -1,6 +1,7 @@
 package com.qurio.trivia.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -34,9 +35,8 @@ class AllGamesAdapter(
                 tvCategoryName.text = category.displayName
                 ivCategoryImage.setImageResource(category.imageRes)
 
-                // Click on "Play Now" button
-                btnPlayNow.setOnClickListener {
-                    onCategoryClick(category)
+                root.findViewById<View>(com.qurio.trivia.R.id.btn_play_now)?.setOnClickListener {
+                        onCategoryClick(category)
                 }
             }
         }
