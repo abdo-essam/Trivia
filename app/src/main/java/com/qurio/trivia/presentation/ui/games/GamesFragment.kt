@@ -73,7 +73,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     }
 
     private fun setupRecyclerView() {
-        binding.rvAllGames.apply {
+        binding.rvGames.apply {
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = allGamesAdapter
             setHasFixedSize(true)
