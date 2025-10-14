@@ -6,13 +6,21 @@ import kotlin.math.abs
 
 /**
  * Page transformer for category carousel effect
- * Handles scaling, elevation, and positioning of cards
+ * Handles scaling, elevation, rotation, and positioning of cards
  */
 class CarouselPageTransformer(
     private val pageMarginPx: Int,
     private val extraLiftPx: Int
 ) : ViewPager2.PageTransformer {
 
+    companion object {
+        private const val MIN_SCALE = 0.9f
+        private const val SCALE_FACTOR = 0.1f
+        private const val CENTER_THRESHOLD = 0.5f
+        private const val ELEVATION_CENTER = 8f
+        private const val ELEVATION_SIDE = 0f
+        private const val MAX_ROTATION = -4f // Maximum rotation angle in degrees
+    }
 
     override fun transformPage(page: View, position: Float) {
         val absPosition = abs(position)
@@ -26,6 +34,15 @@ class CarouselPageTransformer(
             scaleX = scale
             scaleY = scale
 
+            // Rotation animation - smooth gradual rotation
+            // Negative position (left) = negative rotation (tilt left)
+            // Positive position (right) = positive rotation (tilt right)
+            rotation = -position * MAX_ROTATION
+
+            // Set pivot point for natural rotation around center
+            pivotX = width / 2f
+            pivotY = height / 2f
+
             // Vertical elevation - lift center card
             if (absPosition < CENTER_THRESHOLD) {
                 translationY = -extraLiftPx.toFloat()
@@ -35,13 +52,5 @@ class CarouselPageTransformer(
                 translationZ = ELEVATION_SIDE
             }
         }
-    }
-
-    companion object {
-        private const val MIN_SCALE = 0.9f
-        private const val SCALE_FACTOR = 0.1f
-        private const val CENTER_THRESHOLD = 0.5f
-        private const val ELEVATION_CENTER = 8f
-        private const val ELEVATION_SIDE = 0f
     }
 }
