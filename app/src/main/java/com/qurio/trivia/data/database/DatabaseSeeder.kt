@@ -32,8 +32,8 @@ class DatabaseSeeder @Inject constructor(
             userProgressDao.insertOrUpdateUserProgress(
                 UserProgressEntity(
                     id = 1,
-                    lives = 4,
-                    totalCoins = 50000,
+                    lives = 50,
+                    totalCoins = 900,
                     selectedCharacter = Character.default().characterName,
                     soundEnabled = true,
                     musicEnabled = true,
