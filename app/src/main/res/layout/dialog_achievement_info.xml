@@ -135,7 +135,7 @@
         android:layout_marginTop="-20dp"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/achievement_badge"
-        tools:src="@drawable/ic_achievement_lucky_guess_gold"
+        tools:src="@drawable/ic_achievement_untouchable"
         app:layout_constraintBottom_toBottomOf="@+id/item_shape_view"
         app:layout_constraintEnd_toEndOf="@+id/item_shape_view"
         app:layout_constraintTop_toTopOf="@+id/item_shape_view" />
