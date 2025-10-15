@@ -18,7 +18,4 @@ interface GameResultDao {
 
     @Query("SELECT COUNT(*) FROM game_results")
     suspend fun getGameCount(): Int
-
-    @Query("DELETE FROM game_results")
-    suspend fun deleteAllGames()
 }

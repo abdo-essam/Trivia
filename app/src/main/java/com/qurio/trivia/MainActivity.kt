@@ -2,6 +2,7 @@ package com.qurio.trivia
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.qurio.trivia.databinding.ActivityMainBinding
@@ -19,18 +20,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
+        installSplashScreen()
         setupNavigation()
     }
 
     private fun setupNavigation() {
+        val sharedPrefs = getSharedPreferences("qurio_trivia_prefs", MODE_PRIVATE)
+        val isFirstLaunch = sharedPrefs.getBoolean(IS_FIRST_LAUNCH, true)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
-        val isFirstLaunch = intent.getBooleanExtra(
-            IS_FIRST_LAUNCH,
-            true
-        )
 
         val navGraph = navController.navInflater.inflate(R.navigation.nav_graph)
         val startDestination = if (isFirstLaunch) {

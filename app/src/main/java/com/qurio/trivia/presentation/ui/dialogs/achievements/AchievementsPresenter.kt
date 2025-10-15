@@ -5,10 +5,6 @@ import com.qurio.trivia.domain.repository.AchievementsRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
-/**
- * Presenter for AchievementsDialog
- * Handles loading and displaying achievements
- */
 class AchievementsPresenter @Inject constructor(
     private val achievementsRepository: AchievementsRepository
 ) : BasePresenter<AchievementsView>() {
@@ -16,8 +12,6 @@ class AchievementsPresenter @Inject constructor(
     companion object {
         private const val TAG = "AchievementsPresenter"
     }
-
-    // ========== Load Achievements ==========
 
     fun loadAchievements() {
         tryToExecute(

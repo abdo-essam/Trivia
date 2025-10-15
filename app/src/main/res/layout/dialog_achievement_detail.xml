@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp">
 
-    <!-- Background Border Shape -->
+    <!-- Background -->
     <ImageView
         android:id="@+id/corners_cut_shape"
         android:layout_width="0dp"
@@ -44,7 +44,7 @@
         app:layout_constraintStart_toEndOf="@id/heptagon_shape"
         app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
 
-    <!-- Heptagon Title Background -->
+    <!-- Title Background -->
     <ImageView
         android:id="@+id/heptagon_shape"
         android:layout_width="0dp"
@@ -56,14 +56,14 @@
         app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Title Text (Achievement Name) -->
+    <!-- Title -->
     <TextView
         android:id="@+id/tv_dialog_title"
         style="@style/TextAppearance.Title.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/on_primary"
-        tools:text="Collector"
+        tools:text="Explorer"
         app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
         app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
         app:layout_constraintStart_toStartOf="@id/heptagon_shape"
@@ -81,18 +81,18 @@
         app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
         app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
 
-    <!-- Achievement Info Card -->
+    <!-- Achievement Card Background -->
     <View
         android:id="@+id/view_achievement_card"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="64dp"
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="24dp"
+        android:minHeight="100dp"
         android:background="@drawable/bg_character_card"
         app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
         app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/heptagon_shape"
-        app:layout_constraintBottom_toBottomOf="@id/iv_badge" />
+        app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
 
     <!-- Achievement Name -->
     <TextView
@@ -106,26 +106,53 @@
         android:layout_marginBottom="12dp"
         android:textColor="@color/on_primary"
         tools:text="Explorer"
-        app:layout_constraintEnd_toStartOf="@id/iv_badge"
-        app:layout_constraintStart_toStartOf="@id/view_achievement_card"
-        app:layout_constraintTop_toTopOf="@id/view_achievement_card"
         app:layout_constraintBottom_toBottomOf="@id/view_achievement_card"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintEnd_toStartOf="@id/badge_container"
+        app:layout_constraintStart_toStartOf="@id/view_achievement_card"
+        app:layout_constraintTop_toTopOf="@id/view_achievement_card" />
 
-    <!-- Achievement Badge -->
-    <ImageView
-        android:id="@+id/iv_badge"
+    <!-- Badge Container -->
+    <FrameLayout
+        android:id="@+id/badge_container"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginEnd="16dp"
         android:layout_marginVertical="10dp"
-        android:contentDescription="@string/awards"
-        tools:src="@drawable/ic_trophy"
+        app:layout_constraintBottom_toBottomOf="@id/view_achievement_card"
         app:layout_constraintEnd_toEndOf="@id/view_achievement_card"
-        app:layout_constraintTop_toTopOf="@id/view_achievement_card"
-        app:layout_constraintBottom_toBottomOf="@id/view_achievement_card" />
+        app:layout_constraintTop_toTopOf="@id/view_achievement_card">
 
-    <!-- Achievement Description -->
+        <!-- Decoration Background (shown only when unlocked) -->
+        <ImageView
+            android:id="@+id/iv_badge_decoration"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/bg_badge_decoration"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <!-- Locked Background (shown only when locked) -->
+        <ImageView
+            android:id="@+id/iv_locked_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_lock"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
+        <!-- Achievement Badge Icon -->
+        <ImageView
+            android:id="@+id/iv_badge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/awards"
+            android:padding="8dp"
+            tools:src="@drawable/ic_achievement_explorer" />
+    </FrameLayout>
+
+    <!-- Description -->
     <TextView
         android:id="@+id/tv_description"
         style="@style/TextAppearance.Body.Small"
@@ -162,12 +189,12 @@
         android:layout_marginHorizontal="12dp"
         android:layout_marginTop="4dp"
         android:textColor="@color/shade_secondary"
-        tools:text="Play in at least 4 different categories."
+        tools:text="Play in at least 5 different categories."
         app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
         app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
         app:layout_constraintTop_toBottomOf="@id/tv_how_label" />
 
-    <!-- Share Button (only for unlocked achievements) -->
+    <!-- Share Button (only visible when unlocked) -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_share"
         style="@style/TextAppearance.Label.Medium"
