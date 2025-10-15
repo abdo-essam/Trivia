@@ -25,9 +25,6 @@ import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import javax.inject.Inject
 
-/**
- * Home screen displaying user stats, categories carousel, and recent game history
- */
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
 
     @Inject
@@ -118,12 +115,17 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     private fun refreshDynamicData() {
         presenter.loadUserProgress()
         presenter.loadLastGames()
+        presenter.loadUnlockedAchievements() // ✅ Add this
     }
 
     // ========== HomeView Implementation ==========
 
     override fun displayUserProgress(userProgress: UserProgress) {
         uiUpdater.updateUserProgress(userProgress)
+    }
+
+    override fun displayUnlockedAchievements(unlockedCount: Int) {
+        uiUpdater.updateUnlockedAchievements(unlockedCount)
     }
 
     override fun displayCategories(categories: List<Category>) {

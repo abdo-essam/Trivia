@@ -8,7 +8,6 @@ data class UserProgressEntity(
     @PrimaryKey val id: Int = 1,
     val lives: Int = 4,
     val totalCoins: Int = 0,
-    val awards: Int = 0,
     val selectedCharacter: String = "rika",
     val soundEnabled: Boolean = true,
     val musicEnabled: Boolean = true,

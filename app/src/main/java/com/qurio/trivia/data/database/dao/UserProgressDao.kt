@@ -34,9 +34,4 @@ interface UserProgressDao {
 
     @Query("SELECT currentStreak FROM user_progress WHERE id = 1")
     suspend fun getCurrentStreak(): Int?
-
-    @Query("UPDATE user_progress SET awards = :awards WHERE id = 1")
-    suspend fun updateAwards(awards: Int)
-
-
 }

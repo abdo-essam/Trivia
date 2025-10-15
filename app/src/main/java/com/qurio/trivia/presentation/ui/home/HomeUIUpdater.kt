@@ -6,10 +6,6 @@ import com.qurio.trivia.databinding.*
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.presentation.ui.home.updaters.*
 
-/**
- * Coordinator for Home screen UI updates
- * Delegates to specialized updaters for each section
- */
 class HomeUIUpdater(
     private val binding: FragmentHomeBinding,
     private val context: Context
@@ -58,18 +54,17 @@ class HomeUIUpdater(
 
     // ========== Public API ==========
 
-    /**
-     * Update all user progress related UI
-     */
     fun updateUserProgress(userProgress: UserProgress) {
         topBarUpdater.update(userProgress)
         statsUpdater.update(userProgress)
         streakUpdater.update(userProgress)
     }
 
-    /**
-     * Setup section headers with titles and click listeners
-     */
+    // ✅ Add this method
+    fun updateUnlockedAchievements(unlockedCount: Int) {
+        statsUpdater.updateAchievements(unlockedCount)
+    }
+
     fun setupSectionHeaders(
         gamesTitle: String,
         lastGamesTitle: String,
@@ -80,9 +75,6 @@ class HomeUIUpdater(
         lastGamesHeaderUpdater.setup(lastGamesTitle, onAllLastGamesClick)
     }
 
-    /**
-     * Setup click listeners for interactive elements
-     */
     fun setupClickListeners(
         onSettingsClick: () -> Unit,
         onCharacterClick: () -> Unit,

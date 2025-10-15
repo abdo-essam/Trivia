@@ -2,16 +2,14 @@ package com.qurio.trivia.presentation.ui.home
 
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
+import com.qurio.trivia.domain.repository.AchievementsRepository
 import com.qurio.trivia.domain.repository.HomeRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
-/**
- * Presenter for Home screen
- * Handles loading user data, categories, and game management
- */
 class HomePresenter @Inject constructor(
-    private val homeRepository: HomeRepository
+    private val homeRepository: HomeRepository,
+    private val achievementsRepository: AchievementsRepository
 ) : BasePresenter<HomeView>() {
 
     companion object {
@@ -34,6 +32,21 @@ class HomePresenter @Inject constructor(
             },
             onError = { error ->
                 withView { showError("Failed to load user data") }
+            },
+            showLoading = false
+        )
+    }
+
+    fun loadUnlockedAchievements() {
+        tryToExecute(
+            execute = {
+                achievementsRepository.getUnlockedCount()
+            },
+            onSuccess = { count ->
+                withView { displayUnlockedAchievements(count) }
+            },
+            onError = { error ->
+                // Silently fail - not critical
             },
             showLoading = false
         )

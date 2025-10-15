@@ -5,9 +5,6 @@ import com.qurio.trivia.databinding.ItemStatsBinding
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.utils.extensions.formatWithCommas
 
-/**
- * Handles stats section UI updates
- */
 class StatsUpdater(
     private val binding: ItemStatsBinding
 ) {
@@ -19,9 +16,12 @@ class StatsUpdater(
         binding.apply {
             tvLives.text = userProgress.lives.toString()
             tvCoins.text = userProgress.totalCoins.formatWithCommas()
-            tvAwards.text = userProgress.awards.toString()
             ivCrown.isVisible = userProgress.totalCoins >= CROWN_THRESHOLD
         }
+    }
+
+    fun updateAchievements(unlockedCount: Int) {
+        binding.tvAwards.text = unlockedCount.toString()
     }
 
     fun setOnLivesClickListener(onClick: () -> Unit) {

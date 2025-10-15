@@ -10,7 +10,6 @@ class UserProgressMapper @Inject constructor() {
         return UserProgress(
             lives = entity.lives,
             totalCoins = entity.totalCoins,
-            awards = entity.awards,
             selectedCharacter = entity.selectedCharacter,
             soundEnabled = entity.soundEnabled,
             musicEnabled = entity.musicEnabled,
@@ -25,7 +24,6 @@ class UserProgressMapper @Inject constructor() {
             id = 1,
             lives = domain.lives,
             totalCoins = domain.totalCoins,
-            awards = domain.awards,
             selectedCharacter = domain.selectedCharacter,
             soundEnabled = domain.soundEnabled,
             musicEnabled = domain.musicEnabled,
