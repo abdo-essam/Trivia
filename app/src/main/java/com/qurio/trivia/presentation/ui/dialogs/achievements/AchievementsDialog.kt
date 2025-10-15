@@ -1,7 +1,6 @@
 package com.qurio.trivia.presentation.ui.dialogs.achievements
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,15 +22,6 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     private val achievementAdapter by lazy {
         AchievementGridAdapter(::onAchievementClick)
-    }
-
-    companion object {
-        const val TAG = "AchievementsDialog"
-        private const val GRID_SPAN_COUNT = 4
-
-        fun newInstance(): AchievementsDialog {
-            return AchievementsDialog()
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +46,7 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun setupRecyclerView() {
-        binding.rvAchievements.apply {
+        binding.achievementsRecyclerView.apply {
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = achievementAdapter
             setHasFixedSize(true)
@@ -65,9 +55,10 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
             }
         }
     }
+
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener { dismiss() }
+            closeShape.setOnClickListener { dismiss() }
             btnOk.setOnClickListener { dismiss() }
         }
     }
@@ -77,13 +68,12 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     override fun displayAchievements(achievements: List<UserAchievement>) {
-        binding.rvAchievements.post {
+        binding.achievementsRecyclerView.post {
             achievementAdapter.submitList(achievements)
         }
     }
 
     private fun onAchievementClick(userAchievement: UserAchievement) {
-        Log.d(TAG, "Achievement clicked: ${userAchievement.title}")
         AchievementInfoDialog.newInstance(userAchievement)
             .show(childFragmentManager, AchievementInfoDialog.TAG)
     }
@@ -93,4 +83,14 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         presenter.detachView()
         _binding = null
     }
+
+    companion object {
+        const val TAG = "AchievementsDialog"
+        private const val GRID_SPAN_COUNT = 4
+
+        fun newInstance(): AchievementsDialog {
+            return AchievementsDialog()
+        }
+    }
+
 }
