@@ -66,7 +66,7 @@
     <string name="loading_game">Loading Game</string>
     <string name="show_all">Show all</string>
     <!-- Stats -->
-    <string name="lives">Lives</string>
+    <string name="lives">lives</string>
     <string name="coins">Coins</string>
     <string name="awards">Awards</string>
     <string name="crown">Crown</string>
@@ -92,6 +92,13 @@
     <string name="points">Points</string>
     <string name="cancel">Cancel</string>
 
+    <string name="share_achievement">Share Achievement</string>
+    <string name="share_achievement_message">🏆 I just unlocked the "%1$s" achievement! %2$s</string>
+
+
+    <string name="insufficient_coins">Not enough coins!</string>
+    <string name="insufficient_coins_message">You need %1$d more coins to unlock this character</string>
+    <string name="character_purchased">%1$s character unlocked!</string>
 
     <!-- Results - Additional strings -->
     <string name="share_win_with_friends">Share win with friends</string>
@@ -102,6 +109,47 @@
     <string name="question_counter">Q %1$d/%2$d</string>
     <string name="timer_seconds">%d Sec</string>
     <string name="floating_tag">Floating tag indicator</string>
-    <string name="ok">Ok</string>
+    <string name="selected">Selected</string>
+    <string name="buy_character">Buy Character</string>
     <string name="lock_icon">Lock Icon</string>
+    <string name="ok">Ok</string>
+    <string name="difficulty_level">Difficulty Level</string>
+    <string name="buy_life">Buy Life</string>
+    <string name="x">X</string>
+    <string name="equal">=</string>
+    <string name="how_to_get_it">How To Get It</string>
+    <string name="achievement_unlocked">Achievement Unlocked!</string>
+    <string name="unlock_achievement_first">Unlock this achievement first to share it!</string>
+    <string name="share_failed">Failed to share achievement</string>
+    <string name="onboarding_welcome_title">Welcome to Qurio</string>
+    <string name="onboarding_welcome_description">Welcome to the world of Qurio, where questions spark curiosity and prizes await the smartest. Ready to begin the challenge?</string>
+    <string name="onboarding_character_title">Choose your character</string>
+    <string name="onboarding_character_description">Each hero has their own unique style! Choose from unique characters and start your adventure in your own style.</string>
+    <string name="onboarding_challenge_title">Challenge and win</string>
+    <string name="onboarding_challenge_description">Answer quickly, earn points, and share with your friends! Each trivia category is a new experience.</string>
+    <string name="onboarding_collect_title">Collect them all!</string>
+    <string name="onboarding_collect_description">Unlock characters, earn badges, and climb the leaderboards. Qurio is merciless, but you can handle it.</string>
+
+    <!-- Day abbreviations -->
+    <string name="day_sunday_short">S</string>
+    <string name="day_monday_short">M</string>
+    <string name="day_tuesday_short">T</string>
+    <string name="day_wednesday_short">W</string>
+    <string name="day_thursday_short">Th</string>
+    <string name="day_friday_short">F</string>
+    <string name="day_saturday_short">S</string>
+    <string name="achievement_badge">Achievement Badge</string>
+
+    <!-- Day array -->
+    <string-array name="day_labels_short">
+        <item>@string/day_sunday_short</item>
+        <item>@string/day_monday_short</item>
+        <item>@string/day_tuesday_short</item>
+        <item>@string/day_wednesday_short</item>
+        <item>@string/day_thursday_short</item>
+        <item>@string/day_friday_short</item>
+        <item>@string/day_saturday_short</item>
+    </string-array>
+
+
 </resources>

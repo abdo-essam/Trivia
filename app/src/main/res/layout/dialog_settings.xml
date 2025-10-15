@@ -4,140 +4,223 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_dialog"
-    android:padding="24dp">
+    android:padding="16dp">
 
-    <!-- Close Button -->
-    <ImageButton
-        android:id="@+id/btn_close"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:background="@drawable/bg_close_button"
-        android:src="@drawable/ic_close"
-        android:contentDescription="@string/back"
-        app:tint="@color/primary"
+    <!-- Background -->
+    <ImageView
+        android:id="@+id/bg_dialog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="13dp"
+        android:contentDescription="@string/card_background"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left Gradient -->
+    <View
+        android:id="@+id/gradient_left"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:rotation="180"
+        android:translationX="5dp"
+        app:layout_constraintDimensionRatio="56:1"
+        app:layout_constraintEnd_toStartOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog" />
+
+    <!-- Right Gradient -->
+    <View
+        android:id="@+id/gradient_right"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:translationX="-5dp"
+        app:layout_constraintDimensionRatio="56:1"
+        app:layout_constraintStart_toEndOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog" />
+
+    <!-- Title Background -->
+    <ImageView
+        android:id="@+id/title_bg"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:contentDescription="@null"
+        android:src="@drawable/heptagon_shape"
+        app:layout_constraintDimensionRatio="145:40"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Title -->
     <TextView
         android:id="@+id/tv_title"
+        style="@style/TextAppearance.Title.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/settings"
-        android:textAppearance="@style/TextAppearance.Title.Medium"
-        android:textColor="@color/white"
-        android:background="@drawable/bg_dialog_title"
-        android:paddingHorizontal="24dp"
-        android:paddingVertical="8dp"
-        android:layout_marginTop="-40dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toBottomOf="@id/title_bg"
+        app:layout_constraintEnd_toEndOf="@id/title_bg"
+        app:layout_constraintStart_toStartOf="@id/title_bg"
+        app:layout_constraintTop_toTopOf="@id/title_bg" />
+
+    <!-- Close Button -->
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:clickable="true"
+        android:contentDescription="@string/back"
+        android:focusable="true"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintTop_toTopOf="@id/bg_dialog"
+        />
 
     <!-- Sound Section -->
-    <ImageView
-        android:id="@+id/iv_sound"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_sound"
-        android:contentDescription="@string/sound"
-        app:tint="@color/white"
-        android:layout_marginTop="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
-
-    <TextView
-        android:id="@+id/tv_sound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/sound"
-        android:textAppearance="@style/TextAppearance.Body.Large"
-        android:textColor="@color/shade_secondary"
-        android:layout_marginStart="12dp"
-        app:layout_constraintStart_toEndOf="@id/iv_sound"
-        app:layout_constraintTop_toTopOf="@id/iv_sound"
-        app:layout_constraintBottom_toBottomOf="@id/iv_sound" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider_sound"
+    <LinearLayout
+        android:id="@+id/layout_sound"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:valueFrom="0"
-        android:valueTo="100"
-        android:value="80"
-        android:stepSize="1"
-        app:thumbColor="@color/primary"
-        app:trackColorActive="@color/primary"
-        app:trackColorInactive="@color/shade_quad"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_sound" />
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/title_bg">
+
+        <ImageView
+            android:id="@+id/iv_sound"
+            android:layout_width="22dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/sound"
+            android:src="@drawable/ic_sound"
+            app:tint="@color/shade_secondary" />
+
+        <TextView
+            android:id="@+id/tv_sound"
+            style="@style/TextAppearance.Body.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="0.3"
+            android:text="@string/sound"
+            android:textColor="@color/shade_secondary" />
+
+        <SeekBar
+            android:id="@+id/seekbar_sound"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.7"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_thumb" />
+    </LinearLayout>
 
     <!-- Music Section -->
-    <ImageView
-        android:id="@+id/iv_music"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_music"
-        android:contentDescription="@string/music"
-        app:tint="@color/white"
-        android:layout_marginTop="24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider_sound" />
-
-    <TextView
-        android:id="@+id/tv_music"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layout_music"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/music"
-        android:textAppearance="@style/TextAppearance.Body.Large"
-        android:textColor="@color/shade_secondary"
         android:layout_marginStart="12dp"
-        app:layout_constraintStart_toEndOf="@id/iv_music"
-        app:layout_constraintTop_toTopOf="@id/iv_music"
-        app:layout_constraintBottom_toBottomOf="@id/iv_music" />
-
-    <com.google.android.material.slider.Slider
-        android:id="@+id/slider_music"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:valueFrom="0"
-        android:valueTo="100"
-        android:value="60"
-        android:stepSize="1"
-        app:thumbColor="@color/primary"
-        app:trackColorActive="@color/primary"
-        app:trackColorInactive="@color/shade_quad"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_music" />
-
-    <!-- Buttons -->
-    <Button
-        android:id="@+id/btn_save"
-        style="@style/Widget.App.Button.Primary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/save_changes"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@id/btn_discard"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/slider_music" />
+        android:layout_marginEnd="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/layout_sound">
 
-    <Button
-        android:id="@+id/btn_discard"
-        style="@style/Widget.App.Button.Primary"
+        <ImageView
+            android:id="@+id/iv_music"
+            android:layout_width="22dp"
+            android:layout_height="24dp"
+            android:contentDescription="@string/music"
+            android:src="@drawable/ic_music"
+            app:tint="@color/shade_secondary" />
+
+        <TextView
+            android:id="@+id/tv_music"
+            style="@style/TextAppearance.Body.Small"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="0.3"
+            android:text="@string/music"
+            android:textColor="@color/shade_secondary" />
+
+        <SeekBar
+            android:id="@+id/seekbar_music"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="0.7"
+            android:max="100"
+            android:progress="100"
+            android:progressDrawable="@drawable/seekbar_progress"
+            android:splitTrack="false"
+            android:thumb="@drawable/seekbar_thumb"
+            />
+    </LinearLayout>
+
+    <!-- Divider -->
+    <ImageView
+        android:id="@+id/divider"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="3dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="12dp"
+        android:contentDescription="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/divider_line"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/layout_music" />
+
+    <!-- Save Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_save"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/bg_button_primary"
+        android:text="@string/save_changes"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/bg_dialog"
+        app:layout_constraintEnd_toStartOf="@id/btn_discard"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="@id/bg_dialog"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <!-- Discard Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_discard"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/bg_button_secondary"
         android:text="@string/discard"
-        android:backgroundTint="@color/transparent"
+        android:textAllCaps="false"
         android:textColor="@color/primary"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/btn_save"
+        app:layout_constraintEnd_toEndOf="@id/bg_dialog"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toEndOf="@id/btn_save"
         app:layout_constraintTop_toTopOf="@id/btn_save" />
 

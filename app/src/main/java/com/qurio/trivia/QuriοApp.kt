@@ -12,6 +12,8 @@ class QuriοApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
         appComponent.inject(this)
+
     }
 }

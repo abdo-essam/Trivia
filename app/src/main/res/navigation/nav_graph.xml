@@ -3,16 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loadingFragment">
-
-    <fragment
-        android:id="@+id/loadingFragment"
-        android:name="com.qurio.trivia.ui.loading.LoadingFragment"
-        android:label="LoadingFragment" />
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="com.qurio.trivia.ui.onboarding.OnboardingFragment"
+        android:name="com.qurio.trivia.presentation.ui.onboarding.OnboardingFragment"
         android:label="OnboardingFragment">
         <action
             android:id="@+id/action_onboarding_to_home"
@@ -23,38 +18,22 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="com.qurio.trivia.ui.home.HomeFragment"
+        android:name="com.qurio.trivia.presentation.ui.home.HomeFragment"
         android:label="HomeFragment">
-        <action
+     <action
             android:id="@+id/action_home_to_game"
             app:destination="@id/gameFragment" />
-        <action
-            android:id="@+id/action_home_to_games"
-            app:destination="@id/gamesFragment" />
-        <action
-            android:id="@+id/action_home_to_last_games"
-            app:destination="@id/lastGamesFragment" />
+         <action
+          android:id="@+id/action_home_to_games"
+          app:destination="@id/gamesFragment" />
+         <action
+             android:id="@+id/action_home_to_last_games"
+             app:destination="@id/lastGamesFragment" />
     </fragment>
-
-    <fragment
-        android:id="@+id/gamesFragment"
-        android:name="com.qurio.trivia.ui.games.GamesFragment"
-        android:label="@string/games"
-        tools:layout="@layout/fragment_games">
-        <action
-            android:id="@+id/action_games_to_game"
-            app:destination="@id/gameFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/lastGamesFragment"
-        android:name="com.qurio.trivia.ui.lastgames.LastGamesFragment"
-        android:label="@string/last_games"
-        tools:layout="@layout/fragment_last_games" />
 
     <fragment
         android:id="@+id/gameFragment"
-        android:name="com.qurio.trivia.ui.game.GameFragment"
+        android:name="com.qurio.trivia.presentation.ui.game.GameFragment"
         android:label="GameFragment">
         <argument
             android:name="categoryId"
@@ -69,33 +48,50 @@
             android:id="@+id/action_game_to_result"
             app:destination="@id/gameResultFragment"
             app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            app:popUpToInclusive="true" />
     </fragment>
 
-    <fragment
-        android:id="@+id/gameResultFragment"
-        android:name="com.qurio.trivia.ui.result.GameResultFragment"
-        android:label="GameResultFragment">
-        <argument
-            android:name="categoryName"
-            app:argType="string" />
-        <argument
-            android:name="correctAnswers"
-            app:argType="integer" />
-        <argument
-            android:name="incorrectAnswers"
-            app:argType="integer" />
-        <argument
-            android:name="skippedAnswers"
-            app:argType="integer" />
-        <argument
-            android:name="totalTime"
-            app:argType="long" />
+   <fragment
+        android:id="@+id/gamesFragment"
+        android:name="com.qurio.trivia.presentation.ui.games.GamesFragment"
+        android:label="@string/games"
+        tools:layout="@layout/fragment_games">
         <action
-            android:id="@+id/action_result_to_home"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
-            app:popUpToInclusive="false" />
+            android:id="@+id/action_games_to_game"
+            app:destination="@id/gameFragment" />
     </fragment>
+
+
+        <fragment
+            android:id="@+id/lastGamesFragment"
+            android:name="com.qurio.trivia.presentation.ui.lastgames.LastGamesFragment"
+            android:label="@string/last_games"
+            tools:layout="@layout/fragment_last_games" />
+
+          <fragment
+              android:id="@+id/gameResultFragment"
+              android:name="com.qurio.trivia.presentation.ui.result.GameResultFragment"
+              android:label="GameResultFragment">
+              <argument
+                  android:name="categoryName"
+                  app:argType="string" />
+              <argument
+                  android:name="correctAnswers"
+                  app:argType="integer" />
+              <argument
+                  android:name="incorrectAnswers"
+                  app:argType="integer" />
+              <argument
+                  android:name="skippedAnswers"
+                  app:argType="integer" />
+              <argument
+                  android:name="totalTime"
+                  app:argType="long" />
+              <action
+                  android:id="@+id/action_result_to_home"
+                  app:destination="@id/homeFragment"
+                  app:popUpTo="@id/homeFragment"
+                  app:popUpToInclusive="true" />
+          </fragment>
 
 </navigation>
