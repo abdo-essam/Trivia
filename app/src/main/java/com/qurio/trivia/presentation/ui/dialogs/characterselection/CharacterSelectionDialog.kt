@@ -43,6 +43,7 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().application as QuriοApp).appComponent.inject(this)
+        presenter.attachView(this)
     }
 
     override fun onCreateView(
@@ -65,6 +66,9 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = characterAdapter
             setHasFixedSize(true)
+            post {
+                requestLayout()
+            }
         }
     }
 
@@ -77,17 +81,16 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
     }
 
     private fun loadCharacters() {
-        presenter.attachView(this)
         presenter.loadCharacters()
     }
 
     override fun displayCharacters(characters: List<CharacterRepository.CharacterWithStatus>) {
-        Log.d(TAG, "Displaying ${characters.size} characters")
-        characterAdapter.submitList(characters)
-
-        // Auto-select currently selected character
-        val selected = characters.firstOrNull { it.isSelected }?.character
-        selected?.let { selectCharacter(it) }
+        binding.rvCharacters.post {
+            characterAdapter.submitList(characters) {
+                val selected = characters.firstOrNull { it.isSelected }?.character
+                selected?.let { selectCharacter(it) }
+            }
+        }
     }
 
     override fun onCharacterSaved(character: Character) {

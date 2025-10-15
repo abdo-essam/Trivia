@@ -37,6 +37,7 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (requireActivity().application as QuriοApp).appComponent.inject(this)
+        presenter.attachView(this)
     }
 
     override fun onCreateView(
@@ -59,9 +60,11 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = achievementAdapter
             setHasFixedSize(true)
+            post {
+                requestLayout()
+            }
         }
     }
-
     private fun setupClickListeners() {
         binding.apply {
             btnClose.setOnClickListener { dismiss() }
@@ -70,15 +73,13 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     private fun loadAchievements() {
-        presenter.attachView(this)
         presenter.loadAchievements()
     }
 
     override fun displayAchievements(achievements: List<UserAchievement>) {
-        Log.d(TAG, "Displaying ${achievements.size} achievements")
-        val unlockedCount = achievements.count { it.isUnlocked }
-        Log.d(TAG, "Unlocked: $unlockedCount/${achievements.size}")
-        achievementAdapter.submitList(achievements)
+        binding.rvAchievements.post {
+            achievementAdapter.submitList(achievements)
+        }
     }
 
     private fun onAchievementClick(userAchievement: UserAchievement) {
