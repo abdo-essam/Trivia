@@ -89,7 +89,6 @@ class CharacterRepositoryImpl @Inject constructor(
                 CharacterEntity(
                     name = character.characterName,
                     isUnlocked = true,
-                    unlockedAt = System.currentTimeMillis()
                 )
             )
 

@@ -18,9 +18,6 @@ import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
-/**
- * Fragment displaying game results with statistics and actions
- */
 class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultView, GameResultPresenter>(),
     GameResultView {
 
@@ -136,7 +133,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
 
     private fun displayLoseSection() {
         // Lose section is already set up in XML
-        // Could add animations here if needed
     }
 
     private fun displayReward(coins: Int) {
@@ -217,10 +213,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         }
     }
 
-    override fun onGameResultSaved(coins: Int, stars: Int) {
-        Log.d(TAG, "✓ Game result saved: coins=$coins, stars=$stars")
-        // Could show success animation here
-    }
 
     // ========== Share Functionality ==========
 

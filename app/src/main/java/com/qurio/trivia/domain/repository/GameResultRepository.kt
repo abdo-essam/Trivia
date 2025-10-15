@@ -29,11 +29,6 @@ interface GameResultRepository {
     suspend fun updateUserCoins(coinsToAdd: Int)
 
     /**
-     * Update user awards
-     */
-    suspend fun updateUserAwards(starsToAdd: Int)
-
-    /**
      * Get user progress
      */
     suspend fun getUserProgress(): UserProgress?

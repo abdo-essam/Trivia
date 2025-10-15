@@ -78,19 +78,7 @@ class GameResultRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun updateUserAwards(starsToAdd: Int) {
-        try {
-            val userProgressEntity = userProgressDao.getUserProgress()
-            userProgressEntity?.let {
-                val newAwards = it.awards + starsToAdd
-                userProgressDao.updateAwards(newAwards)
-                Log.d(TAG, "✓ User awards updated: ${it.awards} -> $newAwards")
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Error updating user awards", e)
-            throw e
-        }
-    }
+
 
     override suspend fun getUserProgress(): UserProgress? = withContext(Dispatchers.IO) {
         try {
