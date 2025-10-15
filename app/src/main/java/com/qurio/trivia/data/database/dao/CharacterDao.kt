@@ -28,12 +28,9 @@ interface CharacterDao {
     @Update
     suspend fun updateCharacter(character: CharacterEntity)
 
-    @Query("UPDATE characters SET isUnlocked = 1, unlockedAt = :unlockedAt WHERE name = :name")
-    suspend fun unlockCharacter(name: String, unlockedAt: Long = System.currentTimeMillis())
+    @Query("UPDATE characters SET isUnlocked = 1 WHERE name = :name")
+    suspend fun unlockCharacter(name: String)
 
     @Query("SELECT COUNT(*) FROM characters")
     suspend fun getCharacterCount(): Int
-
-    @Query("DELETE FROM characters")
-    suspend fun deleteAllCharacters()
 }

@@ -115,7 +115,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     private fun refreshDynamicData() {
         presenter.loadUserProgress()
         presenter.loadLastGames()
-        presenter.loadUnlockedAchievements() // ✅ Add this
+        presenter.loadUnlockedAchievements()
     }
 
     // ========== HomeView Implementation ==========
