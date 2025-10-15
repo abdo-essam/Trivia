@@ -4,17 +4,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp">
+    android:padding="16dp">
 
     <!-- Background Border Shape -->
-    <ImageView
-        android:id="@+id/corners_cut_shape"
+    <View
+        android:id="@+id/corner_shape"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/bg_dialog"
         android:contentDescription="@string/card_background"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_dialog"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,8 +28,8 @@
         android:rotation="180"
         android:translationX="5dp"
         app:layout_constraintDimensionRatio="56:1"
-        app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintEnd_toStartOf="@id/title_shape"
+        app:layout_constraintTop_toTopOf="@id/corner_shape" />
 
     <!-- Right Gradient -->
     <View
@@ -40,74 +39,77 @@
         android:background="@drawable/bg_gradient_blue_fade"
         android:translationX="-5dp"
         app:layout_constraintDimensionRatio="56:1"
-        app:layout_constraintStart_toEndOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintStart_toEndOf="@id/title_shape"
+        app:layout_constraintTop_toTopOf="@id/corner_shape" />
 
-    <!-- Heptagon Title Background -->
+    <!-- Title Background -->
     <ImageView
-        android:id="@+id/heptagon_shape"
+        android:id="@+id/title_shape"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:contentDescription="@null"
+        android:layout_gravity="center"
+        android:contentDescription="@string/achievements"
         android:src="@drawable/heptagon_shape"
         app:layout_constraintDimensionRatio="145:40"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintEnd_toEndOf="@id/corner_shape"
+        app:layout_constraintStart_toStartOf="@id/corner_shape"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Title Text -->
     <TextView
-        android:id="@+id/tv_dialog_title"
+        android:id="@+id/achievements"
         style="@style/TextAppearance.Title.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/achievements"
         android:textColor="@color/on_primary"
-        app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
-        app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
-        app:layout_constraintStart_toStartOf="@id/heptagon_shape"
-        app:layout_constraintTop_toTopOf="@id/heptagon_shape" />
+        app:layout_constraintBottom_toBottomOf="@+id/title_shape"
+        app:layout_constraintEnd_toEndOf="@id/title_shape"
+        app:layout_constraintStart_toStartOf="@id/title_shape"
+        app:layout_constraintTop_toTopOf="@id/title_shape" />
 
     <!-- Close Button -->
     <ImageView
-        android:id="@+id/btn_close"
-        android:layout_width="22dp"
+        android:id="@+id/close_shape"
+        android:layout_width="0dp"
         android:layout_height="26dp"
         android:clickable="true"
-        android:contentDescription="@string/back"
         android:focusable="true"
+        android:contentDescription="@string/close_icon"
         android:src="@drawable/ic_cancel"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+        app:layout_constraintDimensionRatio="22:26"
+        app:layout_constraintEnd_toEndOf="@+id/corner_shape"
+        app:layout_constraintTop_toTopOf="@+id/corner_shape" />
 
-    <!-- Achievements RecyclerView (Grid) -->
+    <!-- Achievements RecyclerView (Grid with 4 columns) -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_achievements"
+        android:id="@+id/achievements_recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="22dp"
+        android:layout_marginBottom="12dp"
         android:overScrollMode="never"
-        app:layout_constraintBottom_toTopOf="@id/tv_hint"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
-        app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/txt_click_achievement"
+        app:layout_constraintEnd_toEndOf="@+id/corner_shape"
+        app:layout_constraintStart_toStartOf="@+id/corner_shape"
+        app:layout_constraintTop_toBottomOf="@+id/title_shape"
+        app:spanCount="5" />
 
     <!-- Hint Text -->
     <TextView
-        android:id="@+id/tv_hint"
+        android:id="@+id/txt_click_achievement"
         style="@style/TextAppearance.Body.Small"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginBottom="16dp"
-        android:gravity="start"
+        android:layout_marginBottom="24dp"
         android:text="@string/click_achievement_details"
-        android:textColor="@color/shade_tertiary"
-        app:layout_constraintBottom_toTopOf="@id/btn_ok"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape" />
+        android:textColor="@color/shade_secondary"
+        app:layout_constraintBottom_toTopOf="@+id/btn_ok"
+        app:layout_constraintStart_toStartOf="@+id/corner_shape"
+        app:layout_constraintTop_toBottomOf="@+id/achievements_recycler_view" />
 
     <!-- OK Button -->
     <androidx.appcompat.widget.AppCompatButton
@@ -120,9 +122,10 @@
         android:background="@drawable/bg_button_secondary"
         android:text="@string/ok"
         android:textAllCaps="false"
-        android:textColor="@color/primary"
-        app:layout_constraintBottom_toBottomOf="@id/corners_cut_shape"
-        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape" />
+        android:textColor="@drawable/button_secondary_text_color"
+        app:layout_constraintBottom_toBottomOf="@+id/corner_shape"
+        app:layout_constraintEnd_toEndOf="@+id/corner_shape"
+        app:layout_constraintStart_toStartOf="@+id/corner_shape"
+        app:layout_constraintTop_toBottomOf="@+id/txt_click_achievement" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

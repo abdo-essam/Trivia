@@ -51,7 +51,10 @@
     <dimen name="dialog_button_margin">12dp</dimen>
 
     <!-- ViewPager2 Carousel Settings -->
-    <dimen name="page_margin">36dp</dimen>  <!-- Vertical lift for center card -->
-    <dimen name="page_offset">85dp</dimen>  <!-- Horizontal spacing between cards (decrease to bring closer) -->
+    <dimen name="page_margin">36dp</dimen>
+    <dimen name="page_offset">85dp</dimen>
+
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_4">4dp</dimen>
 
 </resources>
