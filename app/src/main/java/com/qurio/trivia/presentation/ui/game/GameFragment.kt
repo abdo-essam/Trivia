@@ -12,16 +12,22 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
-import com.qurio.trivia.presentation.base.BaseFragment
-import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.databinding.FragmentGameBinding
-import com.qurio.trivia.databinding.LayoutAnswerOptionBinding
+import com.qurio.trivia.domain.model.Difficulty
+import com.qurio.trivia.presentation.base.BaseFragment
+import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
+import com.qurio.trivia.presentation.ui.game.adapter.AnswerItemDecoration
+import com.qurio.trivia.presentation.ui.game.adapter.AnswerOption
+import com.qurio.trivia.presentation.ui.game.adapter.AnswerOptionAdapter
+import com.qurio.trivia.presentation.ui.game.adapter.AnswerState
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 import kotlin.random.Random
@@ -34,20 +40,17 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     private val args: GameFragmentArgs by navArgs()
 
-    // ========== UI State ==========
-
+    // ========== State ==========
     private var countDownTimer: CountDownTimer? = null
     private var selectedAnswerIndex = NO_SELECTION
+    private var buyLifeDialog: BuyLifeDialog? = null
+    private var currentAnswers = listOf<String>()
 
-    // ========== Answer Option Bindings ==========
-
-    private lateinit var answerOption1: LayoutAnswerOptionBinding
-    private lateinit var answerOption2: LayoutAnswerOptionBinding
-    private lateinit var answerOption3: LayoutAnswerOptionBinding
-    private lateinit var answerOption4: LayoutAnswerOptionBinding
-
-    private val answerOptions: List<LayoutAnswerOptionBinding> by lazy {
-        listOf(answerOption1, answerOption2, answerOption3, answerOption4)
+    // ========== Adapter ==========
+    private val answerAdapter by lazy {
+        AnswerOptionAdapter { position ->
+            handleAnswerClick(position)
+        }
     }
 
     // ========== BaseFragment Implementation ==========
@@ -67,18 +70,23 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     override fun initPresenter(): GamePresenter = gamePresenter
 
     override fun setupViews() {
-        initializeAnswerOptions()
+        setupRecyclerView()
         setupClickListeners()
         loadQuestions()
     }
 
-    // ========== Initialization ==========
+    // ========== Setup ==========
 
-    private fun initializeAnswerOptions() {
-        answerOption1 = LayoutAnswerOptionBinding.bind(binding.answerOption1.root)
-        answerOption2 = LayoutAnswerOptionBinding.bind(binding.answerOption2.root)
-        answerOption3 = LayoutAnswerOptionBinding.bind(binding.answerOption3.root)
-        answerOption4 = LayoutAnswerOptionBinding.bind(binding.answerOption4.root)
+    private fun setupRecyclerView() {
+        binding.rvAnswerOptions.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = answerAdapter
+            addItemDecoration(
+                AnswerItemDecoration(
+                    resources.getDimensionPixelSize(R.dimen.answer_option_spacing)
+                )
+            )
+        }
     }
 
     private fun setupClickListeners() {
@@ -86,14 +94,10 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
             navigateBack()
         }
 
-        binding.actionButtonsContainer.apply {
+        binding.layoutActionButtons.apply {
             btnCheck.setOnClickListener { handleCheckAnswer() }
             btnSkip.setOnClickListener { handleSkipQuestion() }
             btnNext.setOnClickListener { handleNextQuestion() }
-        }
-
-        answerOptions.forEachIndexed { index, option ->
-            option.btnAnswer.setOnClickListener { selectAnswer(index) }
         }
     }
 
@@ -112,6 +116,14 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         findNavController().navigateUp()
     }
 
+    private fun handleAnswerClick(position: Int) {
+        if (selectedAnswerIndex == position) return
+
+        selectedAnswerIndex = position
+        updateAnswerSelection()
+        binding.layoutActionButtons.btnCheck.isEnabled = true
+    }
+
     private fun handleCheckAnswer() {
         if (selectedAnswerIndex != NO_SELECTION) {
             presenter.submitAnswer(selectedAnswerIndex)
@@ -126,46 +138,58 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         presenter.nextQuestion()
     }
 
-    private fun selectAnswer(index: Int) {
-        if (selectedAnswerIndex == index) return
-
-        selectedAnswerIndex = index
-        updateAnswerSelectionUI()
-        binding.actionButtonsContainer.btnCheck.isEnabled = true
-    }
-
     // ========== GameView Implementation ==========
 
-    override fun displayQuestion(
-        question: TriviaQuestion,
+        override fun displayQuestion(
+            question: TriviaQuestion,
         questionNumber: Int,
         totalQuestions: Int
     ) {
-        updateQuestionHeader(questionNumber, totalQuestions)
-        updateQuestionContent(question)
-        hideQuestionImage()
-        updateAnswerOptions(question.getAllAnswers())
+        // Update question header
+        binding.layoutQuestion.root.findViewById<android.widget.TextView>(R.id.tv_question_counter)?.text =
+            getString(R.string.question_counter, questionNumber, totalQuestions)
+
+        // Update question text with HTML decoding
+        val decodedQuestion = HtmlCompat.fromHtml(
+            question.question,
+            HtmlCompat.FROM_HTML_MODE_LEGACY
+        )
+        binding.layoutQuestion.root.findViewById<android.widget.TextView>(R.id.tv_question)?.text =
+            decodedQuestion
+
+        // Store and display answers
+        currentAnswers = question.getAllAnswers()
+        displayAnswerOptions(currentAnswers)
+
+        // Reset UI
         resetUIForNewQuestion()
         startQuestionTimer()
     }
 
-
     override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
         stopTimer()
-        highlightCorrectAnswer(correctAnswerIndex)
 
-        when {
-            selectedAnswerIndex == NO_SELECTION -> {
-                // User didn't select any answer (time up or skipped)
-                showFloatingTags(isCorrect = false)
+        val updatedOptions = currentAnswers.mapIndexed { index, text ->
+            when {
+                index == correctAnswerIndex -> {
+                    AnswerOption(text, AnswerState.CORRECT, false)
+                }
+                index == selectedAnswerIndex && !isCorrect -> {
+                    AnswerOption(text, AnswerState.INCORRECT, false)
+                }
+                else -> {
+                    AnswerOption(text, AnswerState.DEFAULT, false)
+                }
             }
-            !isCorrect -> {
-                highlightWrongAnswer(selectedAnswerIndex)
-                showFloatingTags(isCorrect = false)
-            }
-            else -> {
-                showFloatingTags(isCorrect = true)
-            }
+        }
+
+        answerAdapter.submitList(updatedOptions)
+
+        // Show floating tags
+        showFloatingTags(isCorrect)
+
+        if (!isCorrect && selectedAnswerIndex != NO_SELECTION) {
+            animateLifeLoss()
         }
 
         disableAllAnswers()
@@ -188,71 +212,56 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         findNavController().navigate(action)
     }
 
-    override fun updateStats(lives: Int, coins: Int) {
+    override fun updateLives(lives: Int) {
         binding.layoutTopBar.tvLives.text = lives.toString()
-       // binding.layoutTopBar.tvCoins.text = coins.toString()
-    }
 
-    // ========== Question UI Updates ==========
-
-    private fun updateQuestionHeader(questionNumber: Int, totalQuestions: Int) {
-        binding.questionCounterContainer.tvQuestionCounter.text =
-            getString(R.string.question_counter, questionNumber, totalQuestions)
-    }
-
-    private fun updateQuestionContent(question: TriviaQuestion) {
-        binding.cardQuestion.tvQuestion.text = question.question
-    }
-
-    private fun hideQuestionImage() {
-        binding.cardQuestion.apply {
-            cardImage.isVisible = false
-            tvImageCaption.isVisible = false
+        val colorRes = when {
+            lives == 0 -> R.color.red
+            lives <= 1 -> R.color.orange
+            else -> R.color.white
         }
+
+        binding.layoutTopBar.tvLives.setTextColor(
+            ContextCompat.getColor(requireContext(), colorRes)
+        )
     }
 
-    private fun updateAnswerOptions(answers: List<String>) {
-        answerOptions.forEachIndexed { index, option ->
-            option.btnAnswer.text = answers.getOrNull(index) ?: ""
+    override fun showOutOfLives() {
+        stopTimer()
+        disableAllAnswers()
+        showBuyLifeDialog()
+    }
+
+    // ========== Answer Options UI ==========
+
+    private fun displayAnswerOptions(answers: List<String>) {
+        val options = answers.map { text ->
+            AnswerOption(text, AnswerState.DEFAULT, true)
         }
+        answerAdapter.submitList(options)
     }
 
-    // ========== Answer UI Updates ==========
-
-    private fun updateAnswerSelectionUI() {
-        answerOptions.forEachIndexed { index, option ->
-            val backgroundRes = if (index == selectedAnswerIndex) {
-                R.drawable.bg_answer_option_selected
+    private fun updateAnswerSelection() {
+        val updatedOptions = currentAnswers.mapIndexed { index, text ->
+            val state = if (index == selectedAnswerIndex) {
+                AnswerState.SELECTED
             } else {
-                R.drawable.bg_answer_option
+                AnswerState.DEFAULT
             }
-            option.answerContainer.setBackgroundResource(backgroundRes)
+            AnswerOption(text, state, true)
         }
-    }
-
-    private fun highlightCorrectAnswer(index: Int) {
-        answerOptions.getOrNull(index)?.answerContainer?.setBackgroundResource(
-            R.drawable.bg_answer_option_correct
-        )
-    }
-
-    private fun highlightWrongAnswer(index: Int) {
-        answerOptions.getOrNull(index)?.answerContainer?.setBackgroundResource(
-            R.drawable.bg_answer_option_wrong
-        )
+        answerAdapter.submitList(updatedOptions)
     }
 
     private fun disableAllAnswers() {
-        answerOptions.forEach { it.btnAnswer.isEnabled = false }
-
-        binding.actionButtonsContainer.apply {
+        binding.layoutActionButtons.apply {
             btnCheck.isEnabled = false
             btnSkip.isEnabled = false
         }
     }
 
     private fun showNextButton() {
-        binding.actionButtonsContainer.apply {
+        binding.layoutActionButtons.apply {
             btnCheck.isVisible = false
             btnSkip.isVisible = false
             btnNext.isVisible = true
@@ -263,20 +272,12 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     private fun resetUIForNewQuestion() {
         selectedAnswerIndex = NO_SELECTION
-        resetAnswerButtons()
         resetActionButtons()
         clearFloatingTags()
     }
 
-    private fun resetAnswerButtons() {
-        answerOptions.forEach { option ->
-            option.btnAnswer.isEnabled = true
-            option.answerContainer.setBackgroundResource(R.drawable.bg_answer_option)
-        }
-    }
-
     private fun resetActionButtons() {
-        binding.actionButtonsContainer.apply {
+        binding.layoutActionButtons.apply {
             btnNext.isVisible = false
             btnCheck.isVisible = true
             btnSkip.isVisible = true
@@ -290,7 +291,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     private fun startQuestionTimer() {
         val timeLimit = Constants.QUESTION_TIME_LIMIT
 
-        binding.timerContainer.progressTimer.apply {
+        binding.layoutTimer.progressTimer.apply {
             max = timeLimit.toInt()
             progress = timeLimit.toInt()
         }
@@ -310,9 +311,9 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     private fun updateTimerUI(millisUntilFinished: Long) {
         val seconds = millisUntilFinished / 1000
 
-        binding.timerContainer.apply {
+        binding.layoutTimer.apply {
             progressTimer.progress = millisUntilFinished.toInt()
-            tvTimer.text = getString(R.string.timer_seconds, seconds)
+            tvTimerText.text = getString(R.string.timer_seconds_format, seconds)
         }
 
         val colorRes = if (seconds <= TIMER_WARNING_THRESHOLD) {
@@ -321,13 +322,13 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
             R.color.orange
         }
 
-        binding.timerContainer.progressTimer.progressTintList =
+        binding.layoutTimer.progressTimer.progressTintList =
             ContextCompat.getColorStateList(requireContext(), colorRes)
     }
 
     private fun handleTimerFinish() {
-        binding.timerContainer.apply {
-            tvTimer.text = getString(R.string.timer_seconds, 0)
+        binding.layoutTimer.apply {
+            tvTimerText.text = getString(R.string.timer_seconds_format, 0)
             progressTimer.progress = 0
         }
         presenter.timeUp()
@@ -336,6 +337,29 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     private fun stopTimer() {
         countDownTimer?.cancel()
         countDownTimer = null
+    }
+
+    // ========== Life Loss Animation ==========
+
+    private fun animateLifeLoss() {
+        val livesView = binding.layoutTopBar.tvLives
+
+        val shake = ObjectAnimator.ofFloat(
+            livesView,
+            View.TRANSLATION_X,
+            0f, -25f, 25f, -25f, 25f, -15f, 15f, -5f, 5f, 0f
+        ).apply {
+            duration = 500
+        }
+
+        val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 1.3f, 1f)
+        val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 1.3f, 1f)
+        val scale = ObjectAnimator.ofPropertyValuesHolder(livesView, scaleX, scaleY).apply {
+            duration = 300
+        }
+
+        shake.start()
+        scale.start()
     }
 
     // ========== Floating Tags Animation ==========
@@ -362,7 +386,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
         positionTagRandomly(imageView)
         binding.floatingTagsContainer.addView(imageView)
-        animateTag(imageView)
+        animateFloatingTag(imageView)
     }
 
     private fun positionTagRandomly(view: View) {
@@ -386,7 +410,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         view.layoutParams = params
     }
 
-    private fun animateTag(view: View) {
+    private fun animateFloatingTag(view: View) {
         val startDelay = Random.nextLong(0, TAG_ANIMATION_DELAY_MAX)
 
         val alpha = PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f)
@@ -425,11 +449,37 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         binding.floatingTagsContainer.removeAllViews()
     }
 
+    // ========== Buy Life Dialog ==========
+
+    private fun showBuyLifeDialog() {
+        if (buyLifeDialog?.isAdded == true) return
+
+        buyLifeDialog = BuyLifeDialog.newInstance()
+        buyLifeDialog?.setOnLifePurchasedListener { _, _ ->
+            presenter.refreshLives()
+            enableAnswersAfterLifePurchase()
+        }
+
+        buyLifeDialog?.show(childFragmentManager, BuyLifeDialog.TAG)
+    }
+
+    private fun enableAnswersAfterLifePurchase() {
+        displayAnswerOptions(currentAnswers)
+
+        binding.layoutActionButtons.apply {
+            btnCheck.isEnabled = selectedAnswerIndex != NO_SELECTION
+            btnSkip.isEnabled = true
+        }
+
+        startQuestionTimer()
+    }
+
     // ========== Lifecycle ==========
 
     override fun onDestroyView() {
         stopTimer()
         clearFloatingTags()
+        buyLifeDialog = null
         super.onDestroyView()
     }
 
@@ -437,8 +487,6 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     companion object {
         private const val NO_SELECTION = -1
-
-        // Timer
         private const val TIMER_TICK_INTERVAL = 100L
         private const val TIMER_WARNING_THRESHOLD = 10L
 

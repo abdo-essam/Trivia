@@ -106,8 +106,8 @@
     <string name="share_win_message">I just played %1$s trivia and got %2$d/%3$d correct! 🎉 Can you beat my score?</string>
     <string name="share_lose_message">I just played %1$s trivia. Not my best game, but I\'ll try again! 💪</string>
 
+    <string name="timer_seconds_format">%d Sec</string>
     <string name="question_counter">Q %1$d/%2$d</string>
-    <string name="timer_seconds">%d Sec</string>
     <string name="floating_tag">Floating tag indicator</string>
     <string name="selected">Selected</string>
     <string name="buy_character">Buy Character</string>
@@ -142,6 +142,10 @@
     <string name="close_icon">Close Icon</string>
     <string name="title">Title</string>
     <string name="celebration">Celebration</string>
+    <string name="background_question_card">background_question_card</string>
+    <string name="header_question">header_question</string>
+    <string name="timer_decoration">timer_decoration</string>
+    <string name="timer_edge_decoration">timer_edge_decoration</string>
 
     <!-- Day array -->
     <string-array name="day_labels_short">

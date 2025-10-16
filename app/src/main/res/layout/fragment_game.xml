@@ -4,40 +4,40 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/surface">
+    android:background="@color/surface"
+    android:padding="16dp">
 
-    <!-- Top Bar -->
+    <!-- Top Bar Section -->
     <include
         android:id="@+id/layout_top_bar"
         layout="@layout/layout_game_top_bar"
         android:layout_width="0dp"
-        android:layout_height="64dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Timer Progress Bar -->
+    <!-- Timer Section -->
     <include
-        android:id="@+id/timer_container"
-        layout="@layout/layout_timer_progress"
+        android:id="@+id/layout_timer"
+        layout="@layout/layout_game_timer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_top_bar" />
 
-    <!-- Content Container (for Floating Tags positioning) -->
+    <!-- Content Container with Floating Tags -->
     <FrameLayout
         android:id="@+id/content_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="24dp"
+        app:layout_constraintBottom_toTopOf="@id/layout_action_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/timer_container">
+        app:layout_constraintTop_toBottomOf="@id/layout_timer">
 
         <!-- Scrollable Content -->
         <androidx.core.widget.NestedScrollView
@@ -46,28 +46,16 @@
             android:layout_height="match_parent"
             android:clipToPadding="false"
             android:fillViewport="true"
-            android:paddingBottom="16dp">
+            android:overScrollMode="never">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="16dp">
+                android:layout_height="wrap_content">
 
-                <!-- Question Card -->
+                <!-- Question Section -->
                 <include
-                    android:id="@+id/card_question"
+                    android:id="@+id/layout_question"
                     layout="@layout/layout_question_card"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Question Counter Badge with Lines (Above Card) -->
-                <include
-                    android:id="@+id/question_counter_container"
-                    layout="@layout/layout_question_counter"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -75,61 +63,26 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Answer Options -->
-                <LinearLayout
-                    android:id="@+id/layout_answers"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_answer_options"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:orientation="vertical"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/card_question">
-
-                    <include
-                        android:id="@+id/answer_option_1"
-                        layout="@layout/layout_answer_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp" />
-
-                    <include
-                        android:id="@+id/answer_option_2"
-                        layout="@layout/layout_answer_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp" />
-
-                    <include
-                        android:id="@+id/answer_option_3"
-                        layout="@layout/layout_answer_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="12dp" />
-
-                    <include
-                        android:id="@+id/answer_option_4"
-                        layout="@layout/layout_answer_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                </LinearLayout>
-
-                <!-- Action Buttons -->
-                <include
-                    android:id="@+id/action_buttons_container"
-                    layout="@layout/layout_action_buttons"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/layout_answers" />
+                    app:layout_constraintTop_toBottomOf="@id/layout_question"
+                    tools:itemCount="4"
+                    tools:listitem="@layout/item_answer_option" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>
 
-        <!-- Floating Tags Container (Above scroll content only) -->
+        <!-- Floating Tags Container (Above content) -->
         <FrameLayout
             android:id="@+id/floating_tags_container"
             android:layout_width="match_parent"
@@ -139,5 +92,15 @@
             android:focusable="false" />
 
     </FrameLayout>
+
+    <!-- Action Buttons Section -->
+    <include
+        android:id="@+id/layout_action_buttons"
+        layout="@layout/layout_game_action_buttons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

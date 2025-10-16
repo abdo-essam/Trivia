@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Main Timer Progress Bar -->
+    <ProgressBar
+        android:id="@+id/progress_timer"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:background="@drawable/bg_timer_track"
+        android:backgroundTint="@android:color/transparent"
+        android:indeterminate="false"
+        android:max="100"
+        android:paddingHorizontal="10dp"
+        android:progress="100"
+        android:progressDrawable="@drawable/layer_timer_progress"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Timer Text Display -->
+    <TextView
+        android:id="@+id/tv_timer_text"
+        style="@style/TextAppearance.Label.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="2dp"
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toBottomOf="@id/progress_timer"
+        app:layout_constraintEnd_toEndOf="@id/progress_timer"
+        app:layout_constraintStart_toStartOf="@id/progress_timer"
+        app:layout_constraintTop_toTopOf="@id/progress_timer"
+        tools:text="30 Sec" />
+
+    <!-- Left Edge Decoration Group -->
+    <ImageView
+        android:id="@+id/iv_left_edge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/timer_edge_decoration"
+        android:src="@drawable/vec_timer_edge_start"
+        app:layout_constraintBottom_toBottomOf="@id/progress_timer"
+        app:layout_constraintStart_toStartOf="@id/progress_timer"
+        app:layout_constraintTop_toTopOf="@id/progress_timer" />
+
+    <ImageView
+        android:id="@+id/iv_left_accent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/timer_edge_decoration"
+        android:src="@drawable/vec_timer_accent_start"
+        app:layout_constraintBottom_toBottomOf="@id/iv_left_edge"
+        app:layout_constraintStart_toStartOf="@id/progress_timer" />
+
+    <!-- Right Edge Decoration Group -->
+    <ImageView
+        android:id="@+id/iv_right_edge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/timer_edge_decoration"
+        android:src="@drawable/vec_timer_edge_end"
+        app:layout_constraintBottom_toBottomOf="@id/progress_timer"
+        app:layout_constraintEnd_toEndOf="@id/progress_timer"
+        app:layout_constraintTop_toTopOf="@id/progress_timer" />
+
+    <ImageView
+        android:id="@+id/iv_right_accent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/timer_edge_decoration"
+        android:src="@drawable/vec_timer_accent_end"
+        app:layout_constraintBottom_toBottomOf="@id/iv_right_edge"
+        app:layout_constraintEnd_toEndOf="@id/progress_timer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

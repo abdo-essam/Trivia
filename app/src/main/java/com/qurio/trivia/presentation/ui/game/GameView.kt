@@ -7,5 +7,6 @@ interface GameView : BaseView {
     fun displayQuestion(question: TriviaQuestion, questionNumber: Int, totalQuestions: Int)
     fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean)
     fun navigateToResults(correctAnswers: Int, incorrectAnswers: Int, skippedAnswers: Int, totalTime: Long)
-    fun updateStats(lives: Int, coins: Int)
+    fun updateLives(lives: Int)
+    fun showOutOfLives()
 }
