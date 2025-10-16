@@ -1,7 +1,6 @@
 package com.qurio.trivia.presentation.ui.dialogs.difficulty
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +14,21 @@ class DifficultyDialogFragment : BaseDialogFragment() {
     private var _binding: DialogDifficultyBinding? = null
     private val binding get() = _binding!!
 
-
-    private var selectedDifficulty: Difficulty = Difficulty.HARD
+    private var selectedDifficulty: Difficulty? = null
     private var onDifficultySelectedListener: ((Difficulty) -> Unit)? = null
+
+    private val difficultyButtons by lazy {
+        listOf(
+            binding.btnDifficultyEasy to Difficulty.EASY,
+            binding.btnDifficultyMedium to Difficulty.MEDIUM,
+            binding.btnDifficultyHard to Difficulty.HARD
+        )
+    }
 
     companion object {
         const val TAG = "DifficultyDialogFragment"
 
-        fun newInstance(): DifficultyDialogFragment {
-            return DifficultyDialogFragment()
-        }
+        fun newInstance() = DifficultyDialogFragment()
     }
 
     // ========== Lifecycle ==========
@@ -46,53 +50,23 @@ class DifficultyDialogFragment : BaseDialogFragment() {
     override fun setupViews() {
         setupDifficultyButtons()
         setupActionButtons()
-
-        // Set default selection to HARD
-        updateButtonStyles()
     }
 
-    // ========== Setup Methods ==========
+    // ========== Setup ==========
 
     private fun setupDifficultyButtons() {
-        binding.apply {
-            btnEasy.setOnClickListener {
-
-                Log.d(TAG, "Easy difficulty selected")
-                selectDifficulty(Difficulty.EASY)
-            }
-            btnMedium.setOnClickListener {
-                Log.d(TAG, "Medium difficulty selected")
-                selectDifficulty(Difficulty.MEDIUM)
-            }
-
-            btnHard.setOnClickListener {
-
-                Log.d(TAG, "Hard difficulty selected")
-                selectDifficulty(Difficulty.HARD)
+        difficultyButtons.forEach { (button, difficulty) ->
+            button.setOnClickListener {
+                selectDifficulty(difficulty)
             }
         }
     }
 
     private fun setupActionButtons() {
-
         binding.apply {
-            btnClose.setOnClickListener {
-
-                Log.d(TAG, "Close button clicked")
-                dismiss()
-            }
-
-            btnCancel.setOnClickListener {
-
-                Log.d(TAG, "Cancel button clicked")
-                dismiss()
-            }
-
-            btnConfirm.setOnClickListener {
-
-                Log.d(TAG, "Confirm clicked with difficulty: ${selectedDifficulty.displayName}")
-                handleConfirm()
-            }
+            btnClose.setOnClickListener { dismiss() }
+            btnCancel.setOnClickListener { dismiss() }
+            btnConfirm.setOnClickListener { confirmSelection() }
         }
     }
 
@@ -100,30 +74,25 @@ class DifficultyDialogFragment : BaseDialogFragment() {
 
     private fun selectDifficulty(difficulty: Difficulty) {
         selectedDifficulty = difficulty
-        updateButtonStyles()
+        updateDifficultyButtonsState()
+        updateConfirmButtonState()
     }
 
-    private fun updateButtonStyles() {
-        binding.apply {
-            // Reset all buttons to unselected state
-            btnEasy.isSelected = false
-            btnMedium.isSelected = false
-            btnHard.isSelected = false
-
-            // Highlight selected button
-            when (selectedDifficulty) {
-                Difficulty.EASY -> btnEasy.isSelected = true
-                Difficulty.MEDIUM -> btnMedium.isSelected = true
-                Difficulty.HARD -> btnHard.isSelected = true
-            }
+    private fun updateDifficultyButtonsState() {
+        difficultyButtons.forEach { (button, difficulty) ->
+            button.isSelected = (selectedDifficulty == difficulty)
         }
     }
 
-    // ========== Actions ==========
+    private fun updateConfirmButtonState() {
+        binding.btnConfirm.isEnabled = (selectedDifficulty != null)
+    }
 
-    private fun handleConfirm() {
-        onDifficultySelectedListener?.invoke(selectedDifficulty)
-        dismiss()
+    private fun confirmSelection() {
+        selectedDifficulty?.let { difficulty ->
+            onDifficultySelectedListener?.invoke(difficulty)
+            dismiss()
+        }
     }
 
     // ========== Public API ==========
