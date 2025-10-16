@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="227dp"
         android:layout_marginHorizontal="8dp"
-        android:layout_marginTop="133dp"
+        android:layout_marginTop="170dp"
         android:background="@drawable/bg_result_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,26 +29,26 @@
     <include
         android:id="@+id/victory_section"
         layout="@layout/result_victory"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:layout_marginBottom="-45dp"
         app:layout_constraintBottom_toTopOf="@id/result_card"
-        app:layout_constraintEnd_toEndOf="@id/result_card"
-        app:layout_constraintStart_toStartOf="@id/result_card"
-        app:layout_constraintTop_toTopOf="@id/result_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:visibility="visible" />
 
     <!-- Lose Section -->
     <include
         android:id="@+id/lose_section"
         layout="@layout/result_lose"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
+        android:layout_marginBottom="-45dp"
         app:layout_constraintBottom_toTopOf="@id/result_card"
-        app:layout_constraintEnd_toEndOf="@id/result_card"
-        app:layout_constraintStart_toStartOf="@id/result_card"
-        app:layout_constraintTop_toTopOf="@id/result_card" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <!-- Share Button -->
     <androidx.appcompat.widget.AppCompatButton
