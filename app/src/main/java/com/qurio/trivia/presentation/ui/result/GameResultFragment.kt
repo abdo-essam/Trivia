@@ -2,7 +2,6 @@ package com.qurio.trivia.presentation.ui.result
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,10 +24,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     lateinit var gameResultPresenter: GameResultPresenter
 
     private val args: GameResultFragmentArgs by navArgs()
-
-    companion object {
-        private const val TAG = "GameResultFragment"
-    }
 
     // ========== BaseFragment Implementation ==========
 
@@ -56,19 +51,16 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     // ========== Setup ==========
 
     private fun setupClickListeners() {
-        binding.layoutActionButtons.apply {
+        binding.apply {
             btnPlayAgain.setOnClickListener {
-                Log.d(TAG, "Play Again clicked")
                 presenter.playAgain()
             }
 
             btnBackToHome.setOnClickListener {
-                Log.d(TAG, "Back to Home clicked")
                 presenter.backToHome()
             }
 
             btnShare.setOnClickListener {
-                Log.d(TAG, "Share clicked")
                 shareResults()
             }
         }
@@ -103,8 +95,6 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     // ========== Display Results ==========
 
     private fun displayResults(stats: GameStats) {
-        Log.d(TAG, "Displaying results: $stats")
-
         toggleResultSections(stats.isWon)
 
         if (stats.isWon) {
@@ -136,16 +126,7 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     }
 
     private fun displayReward(coins: Int) {
-        val sign = if (coins >= 0) "+" else ""
-        val text = "$sign$coins"
-
-        binding.layoutResultContent.tvCoinsEarned.apply {
-            this.text = text
-            setTextColor(ContextCompat.getColor(
-                requireContext(),
-                if (coins >= 0) R.color.green else R.color.red
-            ))
-        }
+        binding.layoutResultContent.tvCoinsEarned.text = coins.toString()
     }
 
     private fun displayStatistics(stats: GameStats) {
@@ -154,35 +135,31 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
                 card = cardCorrect,
                 label = getString(R.string.correct),
                 value = stats.correct.toString(),
-                colorRes = R.color.green
             )
 
             setupStatCard(
                 card = cardIncorrect,
                 label = getString(R.string.incorrect),
                 value = stats.incorrect.toString(),
-                colorRes = R.color.red
             )
 
             setupStatCard(
                 card = cardSkipped,
                 label = getString(R.string.skipped),
                 value = stats.skipped.toString(),
-                colorRes = R.color.orange
             )
         }
     }
 
-    private fun setupStatCard(card: View, label: String, value: String, colorRes: Int) {
+    private fun setupStatCard(card: View, label: String, value: String) {
         card.findViewById<TextView>(R.id.tv_stat_label)?.text = label
         card.findViewById<TextView>(R.id.tv_stat_value)?.apply {
             text = value
-            setTextColor(ContextCompat.getColor(requireContext(), colorRes))
         }
     }
 
     private fun updateShareButton(isWon: Boolean) {
-        binding.layoutActionButtons.btnShare.text = getString(
+        binding.btnShare.text = getString(
             if (isWon) R.string.share_win_with_friends else R.string.share_disappointment
         )
     }
@@ -213,29 +190,23 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         }
     }
 
-
     // ========== Share Functionality ==========
 
     private fun shareResults() {
         val stats = calculateGameStats()
         val shareText = buildShareMessage(stats)
 
-        try {
-            val shareIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, shareText)
-                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
-            }
-
-            startActivity(Intent.createChooser(
-                shareIntent,
-                getString(R.string.share_with_friends)
-            ))
-        } catch (e: Exception) {
-            Log.e(TAG, "Error sharing results", e)
-            showError(getString(R.string.share_failed))
+        val shareIntent = Intent().apply {
+            action = Intent.ACTION_SEND
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, shareText)
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.app_name))
         }
+
+        startActivity(Intent.createChooser(
+            shareIntent,
+            getString(R.string.share_with_friends)
+        ))
     }
 
     private fun buildShareMessage(stats: GameStats): String {
@@ -249,7 +220,7 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
         } else {
             getString(
                 R.string.share_lose_message,
-                args.categoryName,
+                args.categoryName
             )
         }
     }

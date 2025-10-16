@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,17 +8,13 @@
     android:padding="16dp">
 
     <!-- Main Result Card -->
-    <com.google.android.material.card.MaterialCardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/result_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="28dp"
-        android:layout_marginTop="160dp"
-        app:cardBackgroundColor="@color/surface_high"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/shade_quad"
-        app:strokeWidth="1dp"
+        android:layout_width="match_parent"
+        android:layout_height="227dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="133dp"
+        android:background="@drawable/bg_result_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -28,7 +23,7 @@
             android:id="@+id/layout_result_content"
             layout="@layout/result_content" />
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- Victory Section -->
     <include
@@ -55,15 +50,56 @@
         app:layout_constraintStart_toStartOf="@id/result_card"
         app:layout_constraintTop_toTopOf="@id/result_card" />
 
-    <!-- Action Buttons -->
-    <include
-        android:id="@+id/layout_action_buttons"
-        layout="@layout/result_actions"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        app:layout_constraintEnd_toEndOf="@id/result_card"
-        app:layout_constraintStart_toStartOf="@id/result_card"
+    <!-- Share Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_share"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_button_primary"
+        android:drawableEnd="@drawable/ic_share"
+        android:drawablePadding="8dp"
+        android:paddingHorizontal="16dp"
+        android:text="@string/share_win_with_friends"
+        android:textAllCaps="false"
+        android:textColor="@color/on_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/result_card" />
+
+    <!-- Play Again Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_play_again"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/bg_button_primary"
+        android:text="@string/play_again"
+        android:textAllCaps="false"
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toTopOf="@id/btn_back_to_home"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_share"
+        app:layout_constraintVertical_bias="1" />
+
+    <!-- Back to Home Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_back_to_home"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/bg_button_secondary"
+        android:text="@string/back_to_home"
+        android:textAllCaps="false"
+        android:textColor="@color/shade_primary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
