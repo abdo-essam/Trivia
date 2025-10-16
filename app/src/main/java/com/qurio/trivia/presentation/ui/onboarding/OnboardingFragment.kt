@@ -20,7 +20,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.databinding.FragmentOnboardingBinding
-import com.qurio.trivia.presentation.adapters.OnboardingAdapter
+import com.qurio.trivia.presentation.ui.onboarding.adapter.OnboardingAdapter
 import javax.inject.Inject
 import kotlin.math.abs
 

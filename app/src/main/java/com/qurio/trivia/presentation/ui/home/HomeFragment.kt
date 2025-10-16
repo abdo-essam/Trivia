@@ -14,7 +14,7 @@ import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
-import com.qurio.trivia.presentation.adapters.CategoryAdapter
+import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog

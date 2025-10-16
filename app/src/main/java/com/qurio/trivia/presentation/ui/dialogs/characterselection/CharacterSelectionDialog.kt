@@ -10,7 +10,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogCharacterSelectionBinding
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.repository.CharacterRepository
-import com.qurio.trivia.presentation.adapters.CharacterGridAdapter
+import com.qurio.trivia.presentation.ui.dialogs.characterselection.adapter.CharacterGridAdapter
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import javax.inject.Inject
