@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp">
+
+    <TextView
+        android:id="@+id/tv_answer_text"
+        style="@style/TextAppearance.Body.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_answer_option_default"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:padding="12dp"
+        android:textColor="@color/shade_primary"
+        tools:text="Countries with mountainous terrain are more likely to become major global trade hubs" />
+
+</FrameLayout>

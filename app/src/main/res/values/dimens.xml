@@ -57,4 +57,8 @@
     <dimen name="spacing_12">12dp</dimen>
     <dimen name="spacing_4">4dp</dimen>
 
+    <!-- Answer Options -->
+    <dimen name="answer_option_spacing">12dp</dimen>
+
+
 </resources>
