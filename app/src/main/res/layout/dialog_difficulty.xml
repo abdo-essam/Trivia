@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp">
+    android:padding="16dp">
 
     <!-- Background Border Shape -->
     <ImageView
@@ -71,11 +70,13 @@
     <!-- Close Button -->
     <ImageView
         android:id="@+id/btn_close"
-        android:layout_width="22dp"
-        android:layout_height="26dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
-        android:contentDescription="@string/back"
+        android:contentDescription="@string/cancel"
         android:focusable="true"
+        android:padding="2dp"
         android:src="@drawable/ic_cancel"
         app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
         app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
@@ -86,50 +87,40 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="12dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginTop="32dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
         android:weightSum="3"
-        app:layout_constraintBottom_toTopOf="@id/btn_confirm"
         app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
         app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
         app:layout_constraintTop_toBottomOf="@id/heptagon_shape">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_easy"
-            style="@style/TextAppearance.Label.Medium"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_difficulty_easy"
+            style="@style/Widget.App.Button.Difficulty"
             android:layout_width="0dp"
-            android:layout_height="44dp"
-            android:layout_weight="1"
+            android:layout_height="48dp"
             android:layout_marginEnd="4dp"
-            android:background="@drawable/bg_button_difficulty"
-            android:textColor="@color/difficulty_button_text_color"
-            android:text="@string/easy"
-            android:textAllCaps="false" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_medium"
-            style="@style/TextAppearance.Label.Medium"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
             android:layout_weight="1"
+            android:text="@string/easy" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_difficulty_medium"
+            style="@style/Widget.App.Button.Difficulty"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginHorizontal="4dp"
-            android:background="@drawable/bg_button_difficulty"
-            android:textColor="@color/difficulty_button_text_color"
-            android:text="@string/medium"
-            android:textAllCaps="false" />
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_hard"
-            style="@style/TextAppearance.Label.Medium"
-            android:layout_width="0dp"
-            android:layout_height="44dp"
             android:layout_weight="1"
+            android:text="@string/medium" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_difficulty_hard"
+            style="@style/Widget.App.Button.Difficulty"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
             android:layout_marginStart="4dp"
-            android:background="@drawable/bg_button_difficulty"
-            android:textColor="@color/difficulty_button_text_color"
-            android:text="@string/hard"
-            android:textAllCaps="false" />
+            android:layout_weight="1"
+            android:text="@string/hard" />
 
     </LinearLayout>
 
@@ -138,25 +129,28 @@
         android:id="@+id/btn_confirm"
         style="@style/TextAppearance.Label.Medium"
         android:layout_width="0dp"
-        android:layout_height="44dp"
+        android:layout_height="48dp"
         android:layout_marginStart="12dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="2dp"
-        android:layout_marginBottom="36dp"
+        android:layout_marginBottom="32dp"
         android:background="@drawable/bg_button_primary"
+        android:enabled="false"
         android:text="@string/confirm"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@id/corners_cut_shape"
         app:layout_constraintEnd_toStartOf="@id/btn_cancel"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="@id/corners_cut_shape" />
+        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintTop_toBottomOf="@id/layout_difficulty" />
 
     <!-- Cancel Button -->
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_cancel"
         style="@style/TextAppearance.Label.Medium"
         android:layout_width="0dp"
-        android:layout_height="44dp"
+        android:layout_height="48dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="12dp"
         android:background="@drawable/bg_button_secondary"
