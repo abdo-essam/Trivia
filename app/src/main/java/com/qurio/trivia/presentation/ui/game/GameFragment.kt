@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
@@ -22,6 +23,7 @@ import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.databinding.FragmentGameBinding
 import com.qurio.trivia.databinding.LayoutAnswerOptionBinding
+import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 import kotlin.random.Random
@@ -38,6 +40,12 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     private var countDownTimer: CountDownTimer? = null
     private var selectedAnswerIndex = NO_SELECTION
+    private var buyLifeDialog: BuyLifeDialog? = null
+
+    // ========== View References ==========
+
+    private lateinit var tvQuestionCounter: TextView
+    private lateinit var tvQuestion: TextView
 
     // ========== Answer Option Bindings ==========
 
@@ -67,14 +75,19 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     override fun initPresenter(): GamePresenter = gamePresenter
 
     override fun setupViews() {
-        initializeAnswerOptions()
+        initializeViews()
         setupClickListeners()
         loadQuestions()
     }
 
     // ========== Initialization ==========
 
-    private fun initializeAnswerOptions() {
+    private fun initializeViews() {
+        // Initialize question card views
+        tvQuestionCounter = binding.cardQuestion.root.findViewById(R.id.tv_question_counter)
+        tvQuestion = binding.cardQuestion.root.findViewById(R.id.tv_question)
+
+        // Initialize answer options
         answerOption1 = LayoutAnswerOptionBinding.bind(binding.answerOption1.root)
         answerOption2 = LayoutAnswerOptionBinding.bind(binding.answerOption2.root)
         answerOption3 = LayoutAnswerOptionBinding.bind(binding.answerOption3.root)
@@ -143,12 +156,10 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     ) {
         updateQuestionHeader(questionNumber, totalQuestions)
         updateQuestionContent(question)
-        hideQuestionImage()
         updateAnswerOptions(question.getAllAnswers())
         resetUIForNewQuestion()
         startQuestionTimer()
     }
-
 
     override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
         stopTimer()
@@ -156,12 +167,12 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
         when {
             selectedAnswerIndex == NO_SELECTION -> {
-                // User didn't select any answer (time up or skipped)
                 showFloatingTags(isCorrect = false)
             }
             !isCorrect -> {
                 highlightWrongAnswer(selectedAnswerIndex)
                 showFloatingTags(isCorrect = false)
+                animateLifeLoss()
             }
             else -> {
                 showFloatingTags(isCorrect = true)
@@ -188,27 +199,34 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         findNavController().navigate(action)
     }
 
-    override fun updateStats(lives: Int, coins: Int) {
+    override fun updateLives(lives: Int) {
         binding.layoutTopBar.tvLives.text = lives.toString()
-       // binding.layoutTopBar.tvCoins.text = coins.toString()
+
+        val colorRes = when {
+            lives == 0 -> R.color.red
+            lives <= 1 -> R.color.orange
+            else -> R.color.white
+        }
+
+        binding.layoutTopBar.tvLives.setTextColor(
+            ContextCompat.getColor(requireContext(), colorRes)
+        )
+    }
+
+    override fun showOutOfLives() {
+        stopTimer()
+        disableAllAnswers()
+        showBuyLifeDialog()
     }
 
     // ========== Question UI Updates ==========
 
     private fun updateQuestionHeader(questionNumber: Int, totalQuestions: Int) {
-        binding.questionCounterContainer.tvQuestionCounter.text =
-            getString(R.string.question_counter, questionNumber, totalQuestions)
+        tvQuestionCounter.text = getString(R.string.question_counter, questionNumber, totalQuestions)
     }
 
     private fun updateQuestionContent(question: TriviaQuestion) {
-        binding.cardQuestion.tvQuestion.text = question.question
-    }
-
-    private fun hideQuestionImage() {
-        binding.cardQuestion.apply {
-            cardImage.isVisible = false
-            tvImageCaption.isVisible = false
-        }
+        tvQuestion.text = question.question
     }
 
     private fun updateAnswerOptions(answers: List<String>) {
@@ -338,6 +356,66 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         countDownTimer = null
     }
 
+    // ========== Life Loss Animation ==========
+
+    private fun animateLifeLoss() {
+        val livesTextView = binding.layoutTopBar.tvLives
+
+        // Shake animation
+        val shake = ObjectAnimator.ofFloat(
+            livesTextView,
+            View.TRANSLATION_X,
+            0f, -25f, 25f, -25f, 25f, -15f, 15f, -5f, 5f, 0f
+        ).apply {
+            duration = 500
+        }
+
+        // Scale animation
+        val scaleX = PropertyValuesHolder.ofFloat(View.SCALE_X, 1f, 1.3f, 1f)
+        val scaleY = PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f, 1.3f, 1f)
+        val scale = ObjectAnimator.ofPropertyValuesHolder(livesTextView, scaleX, scaleY).apply {
+            duration = 300
+        }
+
+        shake.start()
+        scale.start()
+    }
+
+    // ========== Buy Life Dialog ==========
+
+    private fun showBuyLifeDialog() {
+        if (buyLifeDialog?.isAdded == true) {
+            return
+        }
+
+        buyLifeDialog = BuyLifeDialog.newInstance()
+        buyLifeDialog?.setOnLifePurchasedListener { remainingCoins, remainingLives ->
+            // Lives updated, refresh and continue game
+            presenter.refreshLives()
+
+            // Re-enable UI elements
+            enableAnswersAfterLifePurchase()
+        }
+
+        buyLifeDialog?.show(childFragmentManager, BuyLifeDialog.TAG)
+    }
+
+    private fun enableAnswersAfterLifePurchase() {
+        // Re-enable answer options
+        answerOptions.forEach { option ->
+            option.btnAnswer.isEnabled = true
+        }
+
+        // Re-enable action buttons
+        binding.actionButtonsContainer.apply {
+            btnCheck.isEnabled = selectedAnswerIndex != NO_SELECTION
+            btnSkip.isEnabled = true
+        }
+
+        // Restart the timer
+        startQuestionTimer()
+    }
+
     // ========== Floating Tags Animation ==========
 
     private fun showFloatingTags(isCorrect: Boolean) {
@@ -430,6 +508,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     override fun onDestroyView() {
         stopTimer()
         clearFloatingTags()
+        buyLifeDialog = null
         super.onDestroyView()
     }
 

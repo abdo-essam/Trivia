@@ -22,6 +22,7 @@ class GamePresenter @Inject constructor(
     private var incorrectAnswers = 0
     private var skippedAnswers = 0
     private var gameStartTime = 0L
+    private var currentLives = 0
 
     // ========== Load Questions ==========
 
@@ -57,7 +58,7 @@ class GamePresenter @Inject constructor(
 
         if (questions.isNotEmpty()) {
             showCurrentQuestion()
-            updateUserStats()
+            loadUserLives()
         } else {
             withView { showError("No questions available for this category") }
         }
@@ -75,7 +76,13 @@ class GamePresenter @Inject constructor(
 
         val isCorrect = selectedAnswer == currentQuestion.correctAnswer
 
-        updateAnswerStats(isCorrect)
+        if (isCorrect) {
+            correctAnswers++
+        } else {
+            incorrectAnswers++
+            decreaseLives()
+        }
+
         withView { showCorrectAnswer(correctAnswerIndex, isCorrect) }
     }
 
@@ -92,20 +99,53 @@ class GamePresenter @Inject constructor(
     }
 
     fun timeUp() {
-        skipQuestion()
+        // Time up counts as incorrect answer, so decrease lives
+        incorrectAnswers++
+        decreaseLives()
+
+        if (!isValidQuestionIndex()) return
+        val currentQuestion = getCurrentQuestion() ?: return
+        val allAnswers = currentQuestion.getAllAnswers()
+        val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
+
+        withView { showCorrectAnswer(correctAnswerIndex, isCorrect = false) }
     }
 
-    private fun updateAnswerStats(isCorrect: Boolean) {
-        if (isCorrect) {
-            correctAnswers++
-        } else {
-            incorrectAnswers++
+    private fun decreaseLives() {
+        if (currentLives > 0) {
+            currentLives--
+            updateLivesInDatabase(currentLives)
+            withView { updateLives(currentLives) }
+
+            if (currentLives == 0) {
+                withView { showOutOfLives() }
+            }
         }
+    }
+
+    private fun updateLivesInDatabase(lives: Int) {
+        tryToExecute(
+            execute = {
+                userProgressDao.updateLives(lives)
+            },
+            onSuccess = {
+                Log.d(TAG, "Lives updated to $lives")
+            },
+            onError = { error ->
+                Log.e(TAG, "Failed to update lives", error)
+            },
+            showLoading = false
+        )
     }
 
     // ========== Question Navigation ==========
 
     fun nextQuestion() {
+        if (currentLives == 0) {
+            // Don't proceed if out of lives
+            return
+        }
+
         currentQuestionIndex++
 
         if (currentQuestionIndex < questions.size) {
@@ -187,23 +227,28 @@ class GamePresenter @Inject constructor(
         return GameStats(stars, coinsEarned, correctPercentage.toInt())
     }
 
-    // ========== User Stats ==========
+    // ========== User Lives ==========
 
-    private fun updateUserStats() {
+    private fun loadUserLives() {
         tryToExecute(
             execute = {
                 userProgressDao.getUserProgress()
             },
             onSuccess = { userProgress ->
                 userProgress?.let {
-                    withView { updateStats(it.lives, it.totalCoins) }
+                    currentLives = it.lives
+                    withView { updateLives(it.lives) }
                 }
             },
             onError = { error ->
-                Log.e(TAG, "Failed to update user stats", error)
+                Log.e(TAG, "Failed to load user lives", error)
             },
             showLoading = false
         )
+    }
+
+    fun refreshLives() {
+        loadUserLives()
     }
 
     // ========== Helper Methods ==========

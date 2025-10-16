@@ -53,23 +53,13 @@
                 android:layout_height="wrap_content"
                 android:paddingHorizontal="16dp">
 
-                <!-- Question Card -->
+                <!-- Question Card with Integrated Counter -->
                 <include
                     android:id="@+id/card_question"
                     layout="@layout/layout_question_card"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <!-- Question Counter Badge with Lines (Above Card) -->
-                <include
-                    android:id="@+id/question_counter_container"
-                    layout="@layout/layout_question_counter"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -129,7 +119,7 @@
 
         </androidx.core.widget.NestedScrollView>
 
-        <!-- Floating Tags Container (Above scroll content only) -->
+        <!-- Floating Tags Container (Above scroll content) -->
         <FrameLayout
             android:id="@+id/floating_tags_container"
             android:layout_width="match_parent"

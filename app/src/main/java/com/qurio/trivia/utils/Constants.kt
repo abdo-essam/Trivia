@@ -1,7 +1,6 @@
 package com.qurio.trivia.utils
 
 object Constants {
-    const val MAX_LIVES = 4
     const val QUESTION_TIME_LIMIT = 60000L // 60 seconds
     const val QUESTIONS_PER_GAME = 12
 

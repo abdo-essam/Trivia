@@ -142,6 +142,8 @@
     <string name="close_icon">Close Icon</string>
     <string name="title">Title</string>
     <string name="celebration">Celebration</string>
+    <string name="background_question_card">background_question_card</string>
+    <string name="header_question">header_question</string>
 
     <!-- Day array -->
     <string-array name="day_labels_short">
