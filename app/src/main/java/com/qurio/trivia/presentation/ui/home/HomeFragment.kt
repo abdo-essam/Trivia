@@ -14,7 +14,6 @@ import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
-import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
@@ -22,7 +21,9 @@ import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
+import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
@@ -32,11 +33,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private val categoryAdapter by lazy { CategoryAdapter(::onCategoryClick) }
     private val lastGamesAdapter by lazy { LastGamesAdapter() }
-    private lateinit var uiUpdater: HomeUIUpdater
+    private lateinit var uiManager: HomeUIManager
     private lateinit var carouselConfigurator: CarouselConfigurator
     private var selectedCategory: Category? = null
-
-    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
@@ -53,7 +52,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     override fun initPresenter(): HomePresenter = homePresenter
 
     override fun setupViews() {
-        uiUpdater = HomeUIUpdater(binding, requireContext())
+        initializeManagers()
         setupClickListeners()
         setupCategoryCarousel()
         setupRecyclerViews()
@@ -66,10 +65,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         refreshDynamicData()
     }
 
-    // ========== Setup ==========
+    private fun initializeManagers() {
+        uiManager = HomeUIManager(binding, requireContext())
+    }
 
     private fun setupClickListeners() {
-        uiUpdater.setupClickListeners(
+        uiManager.setupClickListeners(
             onSettingsClick = ::showSettingsDialog,
             onCharacterClick = ::showCharacterSelectionDialog,
             onLivesClick = ::showBuyLifeDialog,
@@ -98,7 +99,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun setupSectionHeaders() {
-        uiUpdater.setupSectionHeaders(
+        uiManager.setupSectionHeaders(
             gamesTitle = getString(R.string.games),
             lastGamesTitle = getString(R.string.last_games),
             onAllGamesClick = ::navigateToAllCategories,
@@ -118,14 +119,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         presenter.loadUnlockedAchievements()
     }
 
-    // ========== HomeView Implementation ==========
-
     override fun displayUserProgress(userProgress: UserProgress) {
-        uiUpdater.updateUserProgress(userProgress)
+        uiManager.updateUserProgress(userProgress)
     }
 
     override fun displayUnlockedAchievements(unlockedCount: Int) {
-        uiUpdater.updateUnlockedAchievements(unlockedCount)
+        uiManager.updateUnlockedAchievements(unlockedCount)
     }
 
     override fun displayCategories(categories: List<Category>) {
@@ -160,14 +159,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         showBuyLifeDialog()
     }
 
-    // ========== User Interactions ==========
-
     private fun onCategoryClick(category: Category) {
         selectedCategory = category
         showDifficultyDialog()
     }
-
-    // ========== Dialogs ==========
 
     private fun showCharacterSelectionDialog() {
         CharacterSelectionDialog.newInstance().apply {
@@ -198,8 +193,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         SettingsDialogFragment.newInstance()
             .show(childFragmentManager, SettingsDialogFragment.TAG)
     }
-
-    // ========== Navigation ==========
 
     private fun navigateToAllCategories() {
         findNavController().navigate(R.id.action_home_to_games)

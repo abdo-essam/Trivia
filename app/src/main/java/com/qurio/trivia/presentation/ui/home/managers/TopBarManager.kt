@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.home.updaters
+package com.qurio.trivia.presentation.ui.home.managers
 
 import android.content.Context
 import com.qurio.trivia.R
@@ -6,10 +6,7 @@ import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.model.UserProgress
 
-/**
- * Handles top bar UI updates
- */
-class TopBarUpdater(
+class TopBarManager(
     private val binding: TopBarHomeBinding,
     private val context: Context
 ) {

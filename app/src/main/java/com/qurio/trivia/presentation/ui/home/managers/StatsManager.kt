@@ -1,11 +1,11 @@
-package com.qurio.trivia.presentation.ui.home.updaters
+package com.qurio.trivia.presentation.ui.home.managers
 
 import androidx.core.view.isVisible
 import com.qurio.trivia.databinding.ItemStatsBinding
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.utils.extensions.formatWithCommas
 
-class StatsUpdater(
+class StatsManager(
     private val binding: ItemStatsBinding
 ) {
     fun update(userProgress: UserProgress) {
@@ -31,5 +31,4 @@ class StatsUpdater(
     companion object {
         private const val CROWN_THRESHOLD = 10_000
     }
-
 }
