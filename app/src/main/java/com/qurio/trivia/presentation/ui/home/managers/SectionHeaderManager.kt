@@ -1,9 +1,8 @@
-package com.qurio.trivia.presentation.ui.home.updaters
+package com.qurio.trivia.presentation.ui.home.managers
 
 import com.qurio.trivia.databinding.SectionHeaderBinding
 
-
-class SectionHeaderUpdater(
+class SectionHeaderManager(
     private val binding: SectionHeaderBinding
 ) {
     fun setup(title: String, onAllClickListener: () -> Unit) {

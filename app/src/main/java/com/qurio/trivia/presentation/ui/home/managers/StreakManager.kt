@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.home.updaters
+package com.qurio.trivia.presentation.ui.home.managers
 
 import android.content.Context
 import android.view.View
@@ -9,10 +9,7 @@ import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemStreakBinding
 import com.qurio.trivia.domain.model.UserProgress
 
-/**
- * Handles streak section UI updates
- */
-class StreakUpdater(
+class StreakManager(
     private val binding: ItemStreakBinding,
     private val context: Context
 ) {
