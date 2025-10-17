@@ -8,9 +8,10 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogSettingsBinding
 import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.settings.manager.SettingsUIManager
 import javax.inject.Inject
 
-class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
+class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     private var _binding: DialogSettingsBinding? = null
     private val binding get() = _binding!!
@@ -18,11 +19,12 @@ class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
     @Inject
     lateinit var presenter: SettingsPresenter
 
+    private lateinit var uiManager: SettingsUIManager
     private var onSettingsSavedListener: ((Settings) -> Unit)? = null
 
     companion object {
-        const val TAG = "SettingsDialogFragment"
-        fun newInstance() = SettingsDialogFragment()
+        const val TAG = "SettingsDialog"
+        fun newInstance() = SettingsDialog()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,45 +42,35 @@ class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
     }
 
     override fun setupViews() {
-        setupListeners()
+        initializeManagers()
+        setupClickListeners()
         presenter.attachView(this)
         presenter.loadSettings()
     }
 
-    private fun setupListeners() {
+    private fun initializeManagers() {
+        uiManager = SettingsUIManager(binding)
+    }
+
+    private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener {
-                presenter.discardChanges()
-            }
-
-            btnSave.setOnClickListener {
-                saveSettings()
-            }
-
-            btnDiscard.setOnClickListener {
-                presenter.discardChanges()
-            }
+            btnClose.setOnClickListener { presenter.discardChanges() }
+            btnSave.setOnClickListener { saveSettings() }
+            btnDiscard.setOnClickListener { presenter.discardChanges() }
         }
     }
 
     private fun saveSettings() {
-        val soundVolume = binding.seekbarSound.progress.toFloat()
-        val musicVolume = binding.seekbarMusic.progress.toFloat()
-        presenter.saveSettings(soundVolume, musicVolume)
+        val settings = uiManager.getCurrentSettings()
+        presenter.saveSettings(settings.soundVolume, settings.musicVolume)
     }
 
     override fun displaySettings(settings: Settings) {
-        binding.apply {
-            seekbarSound.progress = settings.soundVolume.toInt()
-            seekbarMusic.progress = settings.musicVolume.toInt()
-        }
+        uiManager.displaySettings(settings)
     }
 
     override fun onSettingsSaved() {
-        val settings = Settings(
-            soundVolume = binding.seekbarSound.progress.toFloat(),
-            musicVolume = binding.seekbarMusic.progress.toFloat()
-        )
+        val settings = uiManager.getCurrentSettings()
         onSettingsSavedListener?.invoke(settings)
         dismiss()
     }
@@ -88,20 +80,11 @@ class SettingsDialogFragment : BaseDialogFragment(), SettingsView {
     }
 
     override fun showLoading() {
-        setControlsEnabled(false)
+        uiManager.setControlsEnabled(false)
     }
 
     override fun hideLoading() {
-        setControlsEnabled(true)
-    }
-
-    private fun setControlsEnabled(enabled: Boolean) {
-        binding.apply {
-            btnSave.isEnabled = enabled
-            btnDiscard.isEnabled = enabled
-            seekbarSound.isEnabled = enabled
-            seekbarMusic.isEnabled = enabled
-        }
+        uiManager.setControlsEnabled(true)
     }
 
     fun setOnSettingsSavedListener(listener: (Settings) -> Unit) {

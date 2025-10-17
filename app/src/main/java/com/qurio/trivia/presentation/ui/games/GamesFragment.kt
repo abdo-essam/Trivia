@@ -12,7 +12,7 @@ import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
-import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialog
 import com.qurio.trivia.presentation.ui.games.adapter.AllGamesAdapter
 import com.qurio.trivia.presentation.ui.games.managers.GamesUIManager
 import javax.inject.Inject
@@ -104,11 +104,11 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     }
 
     private fun showDifficultyDialog() {
-        DifficultyDialogFragment.newInstance().apply {
+        DifficultyDialog.newInstance().apply {
             setOnDifficultySelectedListener { difficulty ->
                 presenter.checkLivesAndStartGame(selectedCategory, difficulty)
             }
-        }.show(childFragmentManager, DifficultyDialogFragment.TAG)
+        }.show(childFragmentManager, DifficultyDialog.TAG)
     }
 
     private fun showBuyLifeDialog() {

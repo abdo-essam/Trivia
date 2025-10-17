@@ -8,8 +8,8 @@ import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterinfo.CharacterInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
-import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
-import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialog
+import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialog
 import com.qurio.trivia.presentation.ui.game.GameFragment
 import com.qurio.trivia.presentation.ui.games.GamesFragment
 import com.qurio.trivia.presentation.ui.home.HomeFragment
@@ -40,10 +40,6 @@ interface AppComponent {
     // App
     fun inject(app: QuriοApp)
 
-    // Activities
-    // fun inject(activity: MainActivity) // If you have a MainActivity to inject
-
-
     // Fragments
     fun inject(fragment: OnboardingFragment)
     fun inject(fragment: HomeFragment)
@@ -55,10 +51,10 @@ interface AppComponent {
     // Dialogs
     fun inject(dialog: AchievementsDialog)
     fun inject(dialog: AchievementInfoDialog)
-    fun inject(dialog: SettingsDialogFragment)
+    fun inject(dialog: SettingsDialog)
     fun inject(dialog: CharacterSelectionDialog)
     fun inject(dialog: CharacterInfoDialog)
-    fun inject(dialog: DifficultyDialogFragment)
+    fun inject(dialog: DifficultyDialog)
     fun inject(dialog: BuyLifeDialog)
     fun inject(dialog: BuyCharacterDialog)
 }

@@ -8,30 +8,21 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogDifficultyBinding
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.manager.DifficultyUIManager
 
-class DifficultyDialogFragment : BaseDialogFragment() {
+class DifficultyDialog : BaseDialogFragment() {
 
     private var _binding: DialogDifficultyBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var uiManager: DifficultyUIManager
     private var selectedDifficulty: Difficulty? = null
     private var onDifficultySelectedListener: ((Difficulty) -> Unit)? = null
 
-    private val difficultyButtons by lazy {
-        listOf(
-            binding.btnDifficultyEasy to Difficulty.EASY,
-            binding.btnDifficultyMedium to Difficulty.MEDIUM,
-            binding.btnDifficultyHard to Difficulty.HARD
-        )
-    }
-
     companion object {
-        const val TAG = "DifficultyDialogFragment"
-
-        fun newInstance() = DifficultyDialogFragment()
+        const val TAG = "DifficultyDialog"
+        fun newInstance() = DifficultyDialog()
     }
-
-    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,21 +39,16 @@ class DifficultyDialogFragment : BaseDialogFragment() {
     }
 
     override fun setupViews() {
-        setupDifficultyButtons()
-        setupActionButtons()
+        initializeManagers()
+        setupClickListeners()
     }
 
-    // ========== Setup ==========
-
-    private fun setupDifficultyButtons() {
-        difficultyButtons.forEach { (button, difficulty) ->
-            button.setOnClickListener {
-                selectDifficulty(difficulty)
-            }
-        }
+    private fun initializeManagers() {
+        uiManager = DifficultyUIManager(binding)
+        uiManager.setupDifficultyButtons(::selectDifficulty)
     }
 
-    private fun setupActionButtons() {
+    private fun setupClickListeners() {
         binding.apply {
             btnClose.setOnClickListener { dismiss() }
             btnCancel.setOnClickListener { dismiss() }
@@ -70,22 +56,10 @@ class DifficultyDialogFragment : BaseDialogFragment() {
         }
     }
 
-    // ========== Difficulty Selection ==========
-
     private fun selectDifficulty(difficulty: Difficulty) {
         selectedDifficulty = difficulty
-        updateDifficultyButtonsState()
-        updateConfirmButtonState()
-    }
-
-    private fun updateDifficultyButtonsState() {
-        difficultyButtons.forEach { (button, difficulty) ->
-            button.isSelected = (selectedDifficulty == difficulty)
-        }
-    }
-
-    private fun updateConfirmButtonState() {
-        binding.btnConfirm.isEnabled = (selectedDifficulty != null)
+        uiManager.updateDifficultySelection(difficulty)
+        uiManager.updateConfirmButtonState(true)
     }
 
     private fun confirmSelection() {
@@ -95,13 +69,9 @@ class DifficultyDialogFragment : BaseDialogFragment() {
         }
     }
 
-    // ========== Public API ==========
-
     fun setOnDifficultySelectedListener(listener: (Difficulty) -> Unit) {
         onDifficultySelectedListener = listener
     }
-
-    // ========== Lifecycle ==========
 
     override fun onDestroyView() {
         super.onDestroyView()

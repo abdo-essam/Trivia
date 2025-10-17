@@ -19,8 +19,8 @@ import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
-import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
-import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialog
+import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialog
 import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
@@ -171,11 +171,11 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun showDifficultyDialog() {
-        DifficultyDialogFragment.newInstance().apply {
+        DifficultyDialog.newInstance().apply {
             setOnDifficultySelectedListener { difficulty ->
                 presenter.checkLivesAndStartGame(selectedCategory, difficulty)
             }
-        }.show(childFragmentManager, DifficultyDialogFragment.TAG)
+        }.show(childFragmentManager, DifficultyDialog.TAG)
     }
 
     private fun showBuyLifeDialog() {
@@ -190,8 +190,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun showSettingsDialog() {
-        SettingsDialogFragment.newInstance()
-            .show(childFragmentManager, SettingsDialogFragment.TAG)
+        SettingsDialog.newInstance()
+            .show(childFragmentManager, SettingsDialog.TAG)
     }
 
     private fun navigateToAllCategories() {
