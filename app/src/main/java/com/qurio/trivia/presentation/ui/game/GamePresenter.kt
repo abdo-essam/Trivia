@@ -1,34 +1,24 @@
 package com.qurio.trivia.presentation.ui.game
 
-import android.util.Log
-import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.data.database.dao.UserProgressDao
-import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.data.model.TriviaQuestion
+import com.qurio.trivia.domain.model.Difficulty
+import com.qurio.trivia.domain.repository.GameRepository
 import com.qurio.trivia.domain.repository.TriviaRepository
+import com.qurio.trivia.presentation.base.BasePresenter
+import com.qurio.trivia.presentation.ui.game.managers.GameStateManager
 import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
 class GamePresenter @Inject constructor(
     private val triviaRepository: TriviaRepository,
-    private val userProgressDao: UserProgressDao
+    private val gameRepository: GameRepository
 ) : BasePresenter<GameView>() {
 
-    // ========== Game State ==========
-
-    private var questions: List<TriviaQuestion> = emptyList()
-    private var currentQuestionIndex = 0
-    private var correctAnswers = 0
-    private var incorrectAnswers = 0
-    private var skippedAnswers = 0
-    private var gameStartTime = 0L
-    private var currentLives = 0
-
-    // ========== Load Questions ==========
+    private val gameState = GameStateManager()
 
     fun loadQuestions(categoryId: Int, difficulty: Difficulty) {
-        gameStartTime = System.currentTimeMillis()
-        resetGameState()
+        gameState.startGame()
+
         tryToExecute(
             execute = {
                 triviaRepository.getQuestions(
@@ -40,13 +30,11 @@ class GamePresenter @Inject constructor(
             onSuccess = { result ->
                 result.onSuccess { triviaResponse ->
                     handleQuestionsLoaded(triviaResponse.results)
-                }.onFailure { exception ->
-                    Log.e(TAG, "Failed to load questions", exception)
+                }.onFailure {
                     withView { showNoConnection() }
                 }
             },
-            onError = { error ->
-                Log.e(TAG, "Error loading questions", error)
+            onError = {
                 withView { showNoConnection() }
             },
             showLoading = true
@@ -54,22 +42,18 @@ class GamePresenter @Inject constructor(
     }
 
     private fun handleQuestionsLoaded(loadedQuestions: List<TriviaQuestion>) {
-        questions = loadedQuestions
-
-        if (questions.isNotEmpty()) {
-            showCurrentQuestion()
-            loadUserLives()
-        } else {
+        if (loadedQuestions.isEmpty()) {
             withView { showError("No questions available for this category") }
+            return
         }
+
+        gameState.setQuestions(loadedQuestions)
+        showCurrentQuestion()
+        loadUserLives()
     }
 
-    // ========== Answer Handling ==========
-
     fun submitAnswer(selectedAnswerIndex: Int) {
-        if (!isValidQuestionIndex()) return
-
-        val currentQuestion = getCurrentQuestion() ?: return
+        val currentQuestion = gameState.getCurrentQuestion() ?: return
         val allAnswers = currentQuestion.getAllAnswers()
         val selectedAnswer = allAnswers.getOrNull(selectedAnswerIndex) ?: return
         val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
@@ -77,21 +61,19 @@ class GamePresenter @Inject constructor(
         val isCorrect = selectedAnswer == currentQuestion.correctAnswer
 
         if (isCorrect) {
-            correctAnswers++
+            gameState.incrementCorrect()
         } else {
-            incorrectAnswers++
-            decreaseLives()
+            gameState.incrementIncorrect()
+            handleLifeDecrease()
         }
 
         withView { showCorrectAnswer(correctAnswerIndex, isCorrect) }
     }
 
     fun skipQuestion() {
-        if (!isValidQuestionIndex()) return
+        gameState.incrementSkipped()
 
-        skippedAnswers++
-
-        val currentQuestion = getCurrentQuestion() ?: return
+        val currentQuestion = gameState.getCurrentQuestion() ?: return
         val allAnswers = currentQuestion.getAllAnswers()
         val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
 
@@ -99,56 +81,30 @@ class GamePresenter @Inject constructor(
     }
 
     fun timeUp() {
-        // Time up counts as incorrect answer, so decrease lives
-        incorrectAnswers++
-        decreaseLives()
+        gameState.incrementIncorrect()
+        handleLifeDecrease()
 
-        if (!isValidQuestionIndex()) return
-        val currentQuestion = getCurrentQuestion() ?: return
+        val currentQuestion = gameState.getCurrentQuestion() ?: return
         val allAnswers = currentQuestion.getAllAnswers()
         val correctAnswerIndex = allAnswers.indexOf(currentQuestion.correctAnswer)
 
         withView { showCorrectAnswer(correctAnswerIndex, isCorrect = false) }
     }
 
-    private fun decreaseLives() {
-        if (currentLives > 0) {
-            currentLives--
-            updateLivesInDatabase(currentLives)
-            withView { updateLives(currentLives) }
+    private fun handleLifeDecrease() {
+        val newLives = gameState.decreaseLives()
+        updateLivesInDatabase(newLives)
+        withView { updateLives(newLives) }
 
-            if (currentLives == 0) {
-                withView { showOutOfLives() }
-            }
+        if (!gameState.hasLives()) {
+            withView { showOutOfLives() }
         }
     }
-
-    private fun updateLivesInDatabase(lives: Int) {
-        tryToExecute(
-            execute = {
-                userProgressDao.updateLives(lives)
-            },
-            onSuccess = {
-                Log.d(TAG, "Lives updated to $lives")
-            },
-            onError = { error ->
-                Log.e(TAG, "Failed to update lives", error)
-            },
-            showLoading = false
-        )
-    }
-
-    // ========== Question Navigation ==========
 
     fun nextQuestion() {
-        if (currentLives == 0) {
-            // Don't proceed if out of lives
-            return
-        }
+        if (!gameState.hasLives()) return
 
-        currentQuestionIndex++
-
-        if (currentQuestionIndex < questions.size) {
+        if (gameState.moveToNextQuestion()) {
             showCurrentQuestion()
         } else {
             endGame()
@@ -156,93 +112,97 @@ class GamePresenter @Inject constructor(
     }
 
     private fun showCurrentQuestion() {
-        val question = getCurrentQuestion() ?: return
+        val question = gameState.getCurrentQuestion() ?: return
         withView {
             displayQuestion(
                 question = question,
-                questionNumber = currentQuestionIndex + 1,
-                totalQuestions = questions.size
+                questionNumber = gameState.getCurrentQuestionNumber(),
+                totalQuestions = gameState.getTotalQuestions()
             )
         }
     }
 
-    // ========== Game End ==========
-
     private fun endGame() {
-        val totalTime = System.currentTimeMillis() - gameStartTime
+        val totalTime = gameState.getElapsedTime()
 
         withView {
             navigateToResults(
-                correctAnswers = correctAnswers,
-                incorrectAnswers = incorrectAnswers,
-                skippedAnswers = skippedAnswers,
+                correctAnswers = gameState.correctAnswers,
+                incorrectAnswers = gameState.incorrectAnswers,
+                skippedAnswers = gameState.skippedAnswers,
                 totalTime = totalTime
             )
         }
 
-        saveGameResult(totalTime)
+        saveGameResult()
     }
 
-    private fun saveGameResult(totalTime: Long) {
+    private fun saveGameResult() {
         tryToExecute(
             execute = {
-                val gameStats = calculateGameStats()
-                val userProgress = userProgressDao.getUserProgress()
+                val gameScore = calculateGameScore(
+                    correct = gameState.correctAnswers,
+                    skipped = gameState.skippedAnswers
+                )
 
-                userProgress?.let {
-                    val newTotalCoins = it.totalCoins + gameStats.coinsEarned
-                    userProgressDao.updateCoins(newTotalCoins)
-                }
+                val currentCoins = gameRepository.getUserCoins() ?: 0
+                val newTotalCoins = currentCoins + gameScore.coinsEarned
+                gameRepository.updateCoins(newTotalCoins)
 
-                gameStats
+                gameScore
             },
-            onSuccess = { stats ->
-                Log.d(TAG, "Game saved: ${stats.stars} stars, ${stats.coinsEarned} coins earned")
-            },
-            onError = { error ->
-                Log.e(TAG, "Failed to save game result", error)
-            },
+            onSuccess = {},
+            onError = {},
             showLoading = false
         )
     }
 
-    private fun calculateGameStats(): GameStats {
+    private fun calculateGameScore(correct: Int, skipped: Int): GameScore {
         val totalQuestions = Constants.QUESTIONS_PER_GAME
-        val correctPercentage = (correctAnswers.toFloat() / totalQuestions) * 100
+        val correctPercentage = (correct.toFloat() / totalQuestions) * 100
 
-        val stars = when {
-            correctAnswers == totalQuestions && skippedAnswers == 0 -> Constants.Stars.THREE_STARS
-            correctPercentage >= PERCENTAGE_TWO_STARS && skippedAnswers <= MAX_SKIPS_TWO_STARS -> Constants.Stars.TWO_STARS
+        val stars = calculateStars(correct, skipped, correctPercentage, totalQuestions)
+        val coinsEarned = calculateCoins(stars)
+
+        return GameScore(stars, coinsEarned, correctPercentage.toInt())
+    }
+
+    private fun calculateStars(
+        correct: Int,
+        skipped: Int,
+        correctPercentage: Float,
+        totalQuestions: Int
+    ): Int {
+        return when {
+            correct == totalQuestions && skipped == 0 -> Constants.Stars.THREE_STARS
+            correctPercentage >= PERCENTAGE_TWO_STARS && skipped <= MAX_SKIPS_TWO_STARS ->
+                Constants.Stars.TWO_STARS
             correctPercentage >= PERCENTAGE_ONE_STAR -> Constants.Stars.ONE_STAR
             else -> 0
         }
+    }
 
-        val coinsEarned = when (stars) {
+    private fun calculateCoins(stars: Int): Int {
+        return when (stars) {
             3 -> Constants.Rewards.THREE_STAR_COINS
             2 -> Constants.Rewards.TWO_STAR_COINS
             1 -> Constants.Rewards.ONE_STAR_COINS
             else -> Constants.Rewards.LOSE_COINS
         }
-
-        return GameStats(stars, coinsEarned, correctPercentage.toInt())
     }
-
-    // ========== User Lives ==========
 
     private fun loadUserLives() {
         tryToExecute(
             execute = {
-                userProgressDao.getUserProgress()
+                gameRepository.getUserLives()
             },
-            onSuccess = { userProgress ->
-                userProgress?.let {
-                    currentLives = it.lives
-                    withView { updateLives(it.lives) }
+            onSuccess = { lives ->
+                lives?.let {
+                    gameState.setLives(it)
+                    withView { updateLives(it) }
                 }
             },
-            onError = { error ->
-                Log.e(TAG, "Failed to load user lives", error)
-            },
+            onError = {},
             showLoading = false
         )
     }
@@ -251,35 +211,24 @@ class GamePresenter @Inject constructor(
         loadUserLives()
     }
 
-    // ========== Helper Methods ==========
-
-    private fun isValidQuestionIndex(): Boolean {
-        return currentQuestionIndex in questions.indices
+    private fun updateLivesInDatabase(lives: Int) {
+        tryToExecute(
+            execute = {
+                gameRepository.updateLives(lives)
+            },
+            onSuccess = {},
+            onError = {},
+            showLoading = false
+        )
     }
 
-    private fun getCurrentQuestion(): TriviaQuestion? {
-        return questions.getOrNull(currentQuestionIndex)
-    }
-
-    private fun resetGameState() {
-        currentQuestionIndex = 0
-        correctAnswers = 0
-        incorrectAnswers = 0
-        skippedAnswers = 0
-    }
-
-    // ========== Data Classes ==========
-
-    private data class GameStats(
+    private data class GameScore(
         val stars: Int,
         val coinsEarned: Int,
         val percentage: Int
     )
 
-    // ========== Constants ==========
-
     companion object {
-        private const val TAG = "GamePresenter"
         private const val PERCENTAGE_TWO_STARS = 80f
         private const val PERCENTAGE_ONE_STAR = 50f
         private const val MAX_SKIPS_TWO_STARS = 2

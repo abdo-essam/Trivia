@@ -60,7 +60,6 @@ class HomeUIUpdater(
         streakUpdater.update(userProgress)
     }
 
-    // ✅ Add this method
     fun updateUnlockedAchievements(unlockedCount: Int) {
         statsUpdater.updateAchievements(unlockedCount)
     }

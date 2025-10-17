@@ -16,7 +16,6 @@ class AnswerItemDecoration(
     ) {
         val position = parent.getChildAdapterPosition(view)
 
-        // Add spacing to all items except the last one
         if (position != state.itemCount - 1) {
             outRect.bottom = spacing
         }

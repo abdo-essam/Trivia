@@ -8,10 +8,6 @@ import com.qurio.trivia.utils.extensions.formatWithCommas
 class StatsUpdater(
     private val binding: ItemStatsBinding
 ) {
-    companion object {
-        private const val CROWN_THRESHOLD = 10_000
-    }
-
     fun update(userProgress: UserProgress) {
         binding.apply {
             tvLives.text = userProgress.lives.toString()
@@ -31,4 +27,9 @@ class StatsUpdater(
     fun setOnAwardsClickListener(onClick: () -> Unit) {
         binding.statsAwardsContainer.setOnClickListener { onClick() }
     }
+
+    companion object {
+        private const val CROWN_THRESHOLD = 10_000
+    }
+
 }

@@ -120,4 +120,12 @@ class RepositoryModule {
     ): StreakRepository {
         return StreakRepositoryImpl(userProgressDao)
     }
+
+    @Provides
+    @Singleton
+    fun provideGameRepository(
+        userProgressDao: UserProgressDao
+    ): GameRepository {
+        return GameRepositoryImpl(userProgressDao)
+    }
 }
