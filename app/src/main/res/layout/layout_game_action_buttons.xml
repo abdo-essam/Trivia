@@ -43,6 +43,7 @@
         android:id="@+id/btn_next"
         style="@style/TextAppearance.Label.Medium"
         android:background="@drawable/bg_button_primary"
+        android:textColor="@color/text_button_primary"
         android:layout_width="0dp"
         android:layout_height="56dp"
         android:text="@string/next"
