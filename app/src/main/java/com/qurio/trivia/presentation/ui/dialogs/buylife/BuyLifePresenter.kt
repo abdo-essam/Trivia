@@ -1,18 +1,18 @@
 package com.qurio.trivia.presentation.ui.dialogs.buylife
 
 import com.qurio.trivia.domain.model.PurchaseResult
-import com.qurio.trivia.domain.repository.LifeRepository
+import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class BuyLifePresenter @Inject constructor(
-    private val lifeRepository: LifeRepository
+    private val userRepository: UserRepository
 ) : BasePresenter<BuyLifeView>() {
 
     fun loadUserCoins() {
         tryToExecute(
             execute = {
-                lifeRepository.getUserCoins()
+                userRepository.getUserCoins()
             },
             onSuccess = { coins ->
                 withView { updateUserCoins(coins) }
@@ -29,13 +29,13 @@ class BuyLifePresenter @Inject constructor(
     fun purchaseLife(cost: Int) {
         tryToExecute(
             execute = {
-                lifeRepository.purchaseLife(cost)
+                userRepository.purchaseLife(cost)
             },
             onSuccess = { result ->
                 handlePurchaseResult(result)
             },
             onError = { error ->
-                withView { showError("Purchase failed: ${error.message}") }
+                withView { showError("Purchase Failed") }
             },
             showLoading = true
         )

@@ -16,15 +16,6 @@ import javax.inject.Singleton
 
 @Module
 class RepositoryModule {
-
-    @Provides
-    @Singleton
-    fun provideLifeRepository(
-        userProgressDao: UserProgressDao
-    ): LifeRepository {
-        return LifeRepositoryImpl(userProgressDao)
-    }
-
     @Provides
     @Singleton
     fun provideSettingsRepository(
