@@ -2,6 +2,7 @@ package com.qurio.trivia.presentation.ui.dialogs.characterinfo.manager
 
 import com.qurio.trivia.databinding.DialogCharacterInfoBinding
 import com.qurio.trivia.domain.model.Character
+import com.qurio.trivia.presentation.mapper.infoImageRes
 
 class CharacterInfoUIManager(
     private val binding: DialogCharacterInfoBinding
@@ -12,7 +13,7 @@ class CharacterInfoUIManager(
             tvCharacterName.text = character.displayName
             tvCharacterAge.text = character.age
             tvCharacterDescription.text = character.description
-            ivCharacter.setImageResource(character.infoImageRes)
+            ivCharacter.setImageResource(character.infoImageRes())
         }
     }
 }

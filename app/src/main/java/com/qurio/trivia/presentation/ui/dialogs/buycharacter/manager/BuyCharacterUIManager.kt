@@ -2,6 +2,7 @@ package com.qurio.trivia.presentation.ui.dialogs.buycharacter.manager
 
 import com.qurio.trivia.databinding.DialogBuyCharacterBinding
 import com.qurio.trivia.domain.model.Character
+import com.qurio.trivia.presentation.mapper.lockedImageRes
 
 class BuyCharacterUIManager(
     private val binding: DialogBuyCharacterBinding
@@ -10,7 +11,7 @@ class BuyCharacterUIManager(
     fun displayCharacterData(character: Character) {
         binding.apply {
             tvCost.text = character.unlockCost.toString()
-            ivCharacter.setImageResource(character.lockedImageRes)
+            ivCharacter.setImageResource(character.lockedImageRes())
         }
     }
 

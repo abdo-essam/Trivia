@@ -5,6 +5,7 @@ import com.qurio.trivia.R
 import com.qurio.trivia.databinding.TopBarHomeBinding
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.model.UserProgress
+import com.qurio.trivia.presentation.mapper.imageRes
 
 class TopBarManager(
     private val binding: TopBarHomeBinding,
@@ -17,7 +18,7 @@ class TopBarManager(
         binding.apply {
             tvWelcome.text = context.getString(R.string.welcome_qurio_explorer)
             tvCharacterName.text = character.displayName
-            ivCharacter.setImageResource(character.imageRes)
+            ivCharacter.setImageResource(character.imageRes())
         }
     }
 
