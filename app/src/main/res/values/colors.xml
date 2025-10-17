@@ -5,7 +5,7 @@
     <color name="blue_secondary">#357ABD</color>
     <color name="primary">#30ABE8</color>
     <color name="primary_variant">#0F49BAF2</color>
-    <color name="secondary">#393397</color>
+    <color name="secondary">#993397</color>
 
     <!-- Background -->
     <color name="background_dark">#1A1A1A</color>
@@ -25,10 +25,10 @@
     <color name="on_image_surface">#14FFFFFF</color>
 
     <!-- Status Colors -->
-    <color name="green">#4CAF50</color>
-    <color name="red">#F44336</color>
-    <color name="orange">#FF9800</color>
-    <color name="yellow">#FFC107</color>
+    <color name="green">#739E61</color>
+    <color name="red">#E12F32</color>
+    <color name="orange">#DC6A43</color>
+    <color name="yellow">#F4C343</color>
 
     <!-- Additional Colors from Guide -->
     <color name="disable">#2A2A2A</color>
