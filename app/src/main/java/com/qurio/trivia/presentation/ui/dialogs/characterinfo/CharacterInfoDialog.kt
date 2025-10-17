@@ -69,7 +69,7 @@ class CharacterInfoDialog : BaseDialogFragment() {
             tvCharacterName.text = character.displayName
             tvCharacterAge.text = character.age
             tvCharacterDescription.text = character.description
-            ivCharacter.setImageResource(character.imageRes)
+            ivCharacter.setImageResource(character.infoImageRes)
         }
 
         Log.d(TAG, "Displaying character: ${character.displayName}")
