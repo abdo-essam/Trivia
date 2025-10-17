@@ -16,6 +16,7 @@ class CharacterInfoDialog : BaseDialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var character: Character
+    private var onConfirmListener: (() -> Unit)? = null
 
     companion object {
         const val TAG = "CharacterInfoDialog"
@@ -28,14 +29,10 @@ class CharacterInfoDialog : BaseDialogFragment() {
         }
     }
 
-    // ========== Lifecycle ==========
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Get character from enum
         val characterName = arguments?.getString(ARG_CHARACTER_NAME)
-        character = Character.Companion.fromName(characterName ?: "") ?: Character.Companion.default()
+        character = Character.fromName(characterName ?: "") ?: Character.default()
     }
 
     override fun onCreateView(
@@ -52,8 +49,6 @@ class CharacterInfoDialog : BaseDialogFragment() {
         displayCharacterData()
     }
 
-    // ========== Setup Methods ==========
-
     private fun setupClickListeners() {
         binding.apply {
             btnClose.setOnClickListener {
@@ -62,26 +57,27 @@ class CharacterInfoDialog : BaseDialogFragment() {
             }
 
             btnOk.setOnClickListener {
-                Log.d(TAG, "OK button clicked")
+                Log.d(TAG, "OK button clicked - Character confirmed")
+                onConfirmListener?.invoke()
                 dismiss()
             }
         }
     }
-
-    // ========== Display Data ==========
 
     private fun displayCharacterData() {
         binding.apply {
             tvCharacterName.text = character.displayName
             tvCharacterAge.text = character.age
             tvCharacterDescription.text = character.description
-            ivCharacter.setImageResource(character.imageRes)
+            ivCharacter.setImageResource(character.infoImageRes)
         }
 
         Log.d(TAG, "Displaying character: ${character.displayName}")
     }
 
-    // ========== Lifecycle ==========
+    fun setOnConfirmListener(listener: () -> Unit) {
+        onConfirmListener = listener
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
