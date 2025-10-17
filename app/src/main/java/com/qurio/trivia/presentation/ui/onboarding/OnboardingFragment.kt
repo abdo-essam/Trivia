@@ -10,8 +10,8 @@ import com.qurio.trivia.databinding.LayoutSwipeUpBinding
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.onboarding.adapter.OnboardingAdapter
 import com.qurio.trivia.presentation.ui.onboarding.data.OnboardingDataProvider
-import com.qurio.trivia.presentation.ui.onboarding.handlers.OnboardingNavigationHandler
-import com.qurio.trivia.presentation.ui.onboarding.handlers.SwipeUpGestureHandler
+import com.qurio.trivia.presentation.ui.onboarding.managers.OnboardingNavigationManager
+import com.qurio.trivia.presentation.ui.onboarding.managers.SwipeUpManager
 import javax.inject.Inject
 
 class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingView, OnboardingPresenter>(),
@@ -24,11 +24,9 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
     lateinit var dataProvider: OnboardingDataProvider
 
     private lateinit var onboardingAdapter: OnboardingAdapter
-    private lateinit var navigationHandler: OnboardingNavigationHandler
-    private lateinit var swipeHandler: SwipeUpGestureHandler
+    private lateinit var navigationManager: OnboardingNavigationManager
+    private lateinit var swipeUpManager: SwipeUpManager
     private lateinit var swipeUpBinding: LayoutSwipeUpBinding
-
-    // ========== BaseFragment Implementation ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,11 +45,8 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
     override fun setupViews() {
         setupSwipeUpBinding()
         setupViewPager()
-        setupNavigationHandler()
-        setupSwipeGestureHandler()
+        initializeManagers()
     }
-
-    // ========== Setup Methods ==========
 
     private fun setupSwipeUpBinding() {
         swipeUpBinding = LayoutSwipeUpBinding.bind(binding.swipeUpLayout.root)
@@ -67,16 +62,14 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
         }
     }
 
-    private fun setupNavigationHandler() {
-        navigationHandler = OnboardingNavigationHandler(
+    private fun initializeManagers() {
+        navigationManager = OnboardingNavigationManager(
             binding = binding,
             viewPager = binding.onboardingViewPager,
             totalPages = OnboardingDataProvider.TOTAL_PAGES
         )
-    }
 
-    private fun setupSwipeGestureHandler() {
-        swipeHandler = SwipeUpGestureHandler(
+        swipeUpManager = SwipeUpManager(
             fragment = this,
             binding = swipeUpBinding,
             onSwipeComplete = {
@@ -85,8 +78,6 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
         )
     }
 
-    // ========== OnboardingView Implementation ==========
-
     override fun navigateToHome() {
         if (isAdded) {
             val action = OnboardingFragmentDirections.actionOnboardingToHome()
@@ -94,11 +85,9 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
         }
     }
 
-    // ========== Lifecycle ==========
-
     override fun onDestroyView() {
-        navigationHandler.cleanup()
-        swipeHandler.cleanup()
+        navigationManager.cleanup()
+        swipeUpManager.cleanup()
         super.onDestroyView()
     }
 }

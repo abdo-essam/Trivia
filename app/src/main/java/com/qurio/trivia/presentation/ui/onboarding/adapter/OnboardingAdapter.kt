@@ -30,7 +30,7 @@ class OnboardingAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: OnboardingItem) {
-            with(binding) {
+            binding.apply {
                 tvTitle.text = item.title
                 tvTitleBackground.text = item.title
                 tvDescription.text = item.description

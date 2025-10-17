@@ -24,10 +24,8 @@ class OnboardingPresenter @Inject constructor(
             onSuccess = {
                 withView { navigateToHome() }
             },
-            onError = { error ->
-                withView {
-                    showError("Failed to complete onboarding")
-                }
+            onError = {
+                withView { showError("Failed to complete onboarding") }
             },
             showLoading = true
         )
