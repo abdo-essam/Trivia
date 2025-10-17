@@ -23,12 +23,6 @@ interface UserProgressDao {
     @Query("UPDATE user_progress SET selectedCharacter = :character WHERE id = 1")
     suspend fun updateSelectedCharacter(character: String)
 
-    @Query("UPDATE user_progress SET soundEnabled = :enabled WHERE id = 1")
-    suspend fun updateSoundEnabled(enabled: Boolean)
-
-    @Query("UPDATE user_progress SET musicEnabled = :enabled WHERE id = 1")
-    suspend fun updateMusicEnabled(enabled: Boolean)
-
     @Query("UPDATE user_progress SET currentStreak = :streak, lastPlayedDate = :date, streakDays = :days WHERE id = 1")
     suspend fun updateStreak(streak: Int, date: String, days: String)
 

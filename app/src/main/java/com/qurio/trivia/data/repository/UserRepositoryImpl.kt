@@ -44,13 +44,6 @@ class UserRepositoryImpl @Inject constructor(
         userProgressDao.updateSelectedCharacter(character)
     }
 
-    override suspend fun updateSoundEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
-        userProgressDao.updateSoundEnabled(enabled)
-    }
-
-    override suspend fun updateMusicEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
-        userProgressDao.updateMusicEnabled(enabled)
-    }
 
     override suspend fun updateStreak(streak: Int, date: String, days: String) = withContext(Dispatchers.IO) {
         userProgressDao.updateStreak(streak, date, days)

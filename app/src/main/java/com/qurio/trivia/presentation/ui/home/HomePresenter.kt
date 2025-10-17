@@ -47,7 +47,6 @@ class HomePresenter @Inject constructor(
             onSuccess = { count ->
                 withView { displayUnlockedAchievements(count) }
             },
-            onError = {},
             showLoading = false
         )
     }
