@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemCategoryBinding
 import com.qurio.trivia.domain.model.Category
+import com.qurio.trivia.presentation.mapper.imageRes
 
 /**
  * Adapter for displaying trivia categories in ViewPager2
@@ -61,7 +62,7 @@ class CategoryAdapter(
             currentCategory = category
             binding.apply {
                 tvCategoryName.text = category.displayName
-                ivCategoryImage.setImageResource(category.imageRes)
+                ivCategoryImage.setImageResource(category.imageRes())
             }
         }
     }

@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemGameCardBinding
 import com.qurio.trivia.domain.model.Category
+import com.qurio.trivia.presentation.mapper.imageRes
 
 class AllGamesAdapter(
     private val onCategoryClick: (Category) -> Unit
@@ -34,7 +35,7 @@ class AllGamesAdapter(
         fun bind(category: Category) {
             binding.apply {
                 tvCategoryName.text = category.displayName
-                ivCategoryImage.setImageResource(category.imageRes)
+                ivCategoryImage.setImageResource(category.imageRes())
 
                 root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
                     onCategoryClick(category)
