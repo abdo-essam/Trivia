@@ -33,7 +33,7 @@ class HomePresenter @Inject constructor(
             onError = { error ->
                 withView { showError("Failed to load user data") }
             },
-            showLoading = false
+            showLoading = true
         )
     }
 
@@ -67,7 +67,7 @@ class HomePresenter @Inject constructor(
                 error.printStackTrace()
                 withView { showError("Failed to load categories") }
             },
-            showLoading = false
+            showLoading = true
         )
     }
 
