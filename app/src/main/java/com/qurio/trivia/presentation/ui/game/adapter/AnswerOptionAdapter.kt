@@ -31,25 +31,16 @@ class AnswerOptionAdapter(
 
         fun bind(answerOption: AnswerOption, position: Int) {
             binding.tvAnswerText.text = answerOption.text
+            binding.tvAnswerText.setBackgroundResource(answerOption.state.backgroundRes)
 
-            // Set background based on state
-            val backgroundRes = when (answerOption.state) {
-                AnswerState.DEFAULT -> R.drawable.bg_answer_option_default
-                AnswerState.SELECTED -> R.drawable.bg_answer_option_selected
-                AnswerState.CORRECT -> R.drawable.bg_answer_option_correct
-                AnswerState.INCORRECT -> R.drawable.bg_answer_option_wrong
-            }
-            binding.tvAnswerText.setBackgroundResource(backgroundRes)
-
-            // Set click listener
-            binding.root.setOnClickListener {
-                if (answerOption.isClickable) {
-                    onAnswerClick(position)
+            binding.root.apply {
+                isEnabled = answerOption.isClickable
+                setOnClickListener {
+                    if (answerOption.isClickable) {
+                        onAnswerClick(position)
+                    }
                 }
             }
-
-            // Disable/enable clicks
-            binding.root.isEnabled = answerOption.isClickable
         }
     }
 
@@ -70,9 +61,9 @@ data class AnswerOption(
     val isClickable: Boolean = true
 )
 
-enum class AnswerState {
-    DEFAULT,
-    SELECTED,
-    CORRECT,
-    INCORRECT
+enum class AnswerState(val backgroundRes: Int) {
+    DEFAULT(R.drawable.bg_answer_option_default),
+    SELECTED(R.drawable.bg_answer_option_selected),
+    CORRECT(R.drawable.bg_answer_option_correct),
+    INCORRECT(R.drawable.bg_answer_option_wrong)
 }

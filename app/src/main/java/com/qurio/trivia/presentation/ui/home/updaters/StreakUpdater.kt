@@ -42,10 +42,7 @@ class StreakUpdater(
         val dayViews = getDayViews()
 
         dayViews.forEachIndexed { index, (fireIcon, labelView) ->
-            // Day labels are ALWAYS visible
             labelView.text = dayLabels[index]
-
-            // Fire icons only show for active days when there's a streak
             fireIcon.isVisible = currentStreak > 0 && index in activeDays
         }
     }

@@ -2,9 +2,7 @@ package com.qurio.trivia.presentation.ui.home.updaters
 
 import com.qurio.trivia.databinding.SectionHeaderBinding
 
-/**
- * Handles section header UI updates
- */
+
 class SectionHeaderUpdater(
     private val binding: SectionHeaderBinding
 ) {

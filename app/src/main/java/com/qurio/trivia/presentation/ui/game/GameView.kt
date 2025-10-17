@@ -1,7 +1,7 @@
 package com.qurio.trivia.presentation.ui.game
 
-import com.qurio.trivia.presentation.base.BaseView
 import com.qurio.trivia.data.model.TriviaQuestion
+import com.qurio.trivia.presentation.base.BaseView
 
 interface GameView : BaseView {
     fun displayQuestion(question: TriviaQuestion, questionNumber: Int, totalQuestions: Int)
