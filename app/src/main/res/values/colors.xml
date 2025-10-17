@@ -47,4 +47,7 @@
     <color name="orange_dark">#DC6A43</color>
     <color name="timer_fill_color">#FF6E40</color>
     <color name="timer_edge_color">#DC6A43</color>
+
+    <color name="coins_positive">#DEFFFFFF</color>
+    <color name="coins_negative">#E12F32</color>
 </resources>

@@ -3,18 +3,20 @@ package com.qurio.trivia.presentation.ui.games
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.model.UserProgress
-import com.qurio.trivia.domain.repository.GamesRepository
+import com.qurio.trivia.domain.repository.CategoryRepository
+import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class GamesPresenter @Inject constructor(
-    private val gamesRepository: GamesRepository
+    private val categoryRepository: CategoryRepository,
+    private val userRepository: UserRepository
 ) : BasePresenter<GamesView>() {
 
     fun loadAllCategories() {
         tryToExecute(
             execute = {
-                gamesRepository.getAllCategories()
+                categoryRepository.getAllCategories()
             },
             onSuccess = { categories ->
                 withView { displayCategories(categories) }
@@ -34,7 +36,7 @@ class GamesPresenter @Inject constructor(
 
         tryToExecute(
             execute = {
-                gamesRepository.getUserProgress()
+                userRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
                 handleGameStart(userProgress, category, difficulty)
@@ -70,7 +72,7 @@ class GamesPresenter @Inject constructor(
     ) {
         tryToExecute(
             execute = {
-                gamesRepository.deductLife()
+                userRepository.deductLife()
                 Triple(category.id, category.displayName, difficulty)
             },
             onSuccess = { (categoryId, categoryName, diff) ->
