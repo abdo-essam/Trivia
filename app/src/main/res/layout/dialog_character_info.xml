@@ -125,10 +125,10 @@
     <ImageView
         android:id="@+id/iv_character"
         android:layout_width="47dp"
-        android:layout_height="64dp"
+        android:layout_height="80dp"
         android:layout_marginEnd="16dp"
         android:contentDescription="@string/character_image"
-        tools:src="@drawable/rika_info"
+        tools:src="@drawable/kaiyo_info"
         app:layout_constraintBottom_toBottomOf="@id/view_character_card"
         app:layout_constraintEnd_toEndOf="@id/view_character_card" />
 
