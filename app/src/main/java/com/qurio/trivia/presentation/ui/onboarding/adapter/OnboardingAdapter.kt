@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.databinding.ItemOnboardingBinding
-import com.qurio.trivia.presentation.ui.onboarding.OnboardingItem
+import com.qurio.trivia.presentation.ui.onboarding.model.OnboardingItem
 
 class OnboardingAdapter(
     private val items: List<OnboardingItem>
@@ -23,18 +23,16 @@ class OnboardingAdapter(
         holder.bind(items[position])
     }
 
-    override fun getItemCount() = items.size
+    override fun getItemCount(): Int = items.size
 
     inner class OnboardingViewHolder(
         private val binding: ItemOnboardingBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: OnboardingItem) {
-            binding.apply {
-                // Set both titles with the same text
+            with(binding) {
                 tvTitle.text = item.title
                 tvTitleBackground.text = item.title
-
                 tvDescription.text = item.description
                 ivImage.setImageResource(item.imageRes)
             }

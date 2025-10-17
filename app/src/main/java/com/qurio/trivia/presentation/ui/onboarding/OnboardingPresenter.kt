@@ -12,14 +12,11 @@ class OnboardingPresenter @Inject constructor(
     private val databaseSeeder: DatabaseSeeder
 ) : BasePresenter<OnboardingView>() {
 
-
     fun completeOnboarding() {
         tryToExecute(
             execute = {
-                // Step 1: Initialize database
                 databaseSeeder.seedDatabase()
 
-                // Step 2: Mark onboarding as completed
                 sharedPreferences.edit {
                     putBoolean(PreferenceKeys.IS_FIRST_LAUNCH, false)
                 }
