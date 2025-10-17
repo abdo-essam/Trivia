@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.adapters
+package com.qurio.trivia.presentation.ui.dialogs.characterselection.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

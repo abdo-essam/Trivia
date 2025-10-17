@@ -11,7 +11,7 @@
     <color name="background_dark">#1A1A1A</color>
     <color name="background_card">#2A2A2A</color>
     <color name="surface">#050C10</color>
-    <color name="surface_high">#090F1A</color>
+    <color name="surface_high">#0B0F14</color>
 
     <!-- Text Colors -->
     <color name="white">#FFFFFF</color>

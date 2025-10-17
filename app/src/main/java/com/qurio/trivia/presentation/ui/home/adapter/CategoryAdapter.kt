@@ -1,11 +1,11 @@
-package com.qurio.trivia.presentation.adapters
+package com.qurio.trivia.presentation.ui.home.adapter
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
 import androidx.recyclerview.widget.RecyclerView
+import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemCategoryBinding
 import com.qurio.trivia.domain.model.Category
 
@@ -50,7 +50,7 @@ class CategoryAdapter(
 
         init {
             // Access the button through the root view
-            binding.root.findViewById<View>(com.qurio.trivia.R.id.btn_play_now)?.setOnClickListener {
+            binding.root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
                 currentCategory?.let { category ->
                     onCategoryClick(category)
                 }

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Category Image (with border already included) -->
+    <!-- Category Image -->
     <ImageView
         android:id="@+id/iv_category_image"
         android:layout_width="328dp"
@@ -15,7 +15,7 @@
         android:scaleType="fitXY"
         tools:src="@drawable/category_geography" />
 
-    <!-- Category Name (overlaid on image) -->
+    <!-- Category Name  -->
     <TextView
         android:id="@+id/tv_category_name"
         android:layout_width="328dp"
@@ -31,7 +31,7 @@
         android:shadowRadius="8"
         tools:text="General Knowledge" />
 
-    <!-- Play Now Button Section (overlapping the bottom of the card image) -->
+    <!-- Play Now Button-->
     <include
         layout="@layout/button_play_now"
         android:layout_width="168dp"

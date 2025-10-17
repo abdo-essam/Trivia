@@ -1,6 +1,5 @@
 package com.qurio.trivia.presentation.ui.result
 
-import android.util.Log
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.repository.AchievementsRepository
 import com.qurio.trivia.domain.repository.GameResultRepository
@@ -17,9 +16,7 @@ class GameResultPresenter @Inject constructor(
 ) : BasePresenter<GameResultView>() {
 
     companion object {
-        private const val TAG = "GameResultPresenter"
         private const val DATE_FORMAT = "MMM dd, yyyy"
-        private const val THREE_STARS_PERCENTAGE = 100f
         private const val TWO_STARS_PERCENTAGE = 80f
         private const val ONE_STAR_PERCENTAGE = 50f
         private const val MAX_SKIPS_FOR_TWO_STARS = 2
@@ -38,11 +35,8 @@ class GameResultPresenter @Inject constructor(
         val stars = calculateStars(correctAnswers, skippedAnswers, totalQuestions)
         val coins = calculateCoins(stars)
 
-        Log.d(TAG, "Saving game result: $category, correct=$correctAnswers, stars=$stars, coins=$coins")
-
         tryToExecute(
             execute = {
-                // 1. Create game result
                 val gameResult = createGameResult(
                     category = category,
                     totalQuestions = totalQuestions,
@@ -54,25 +48,14 @@ class GameResultPresenter @Inject constructor(
                     timeTaken = timeTaken
                 )
 
-                // 2. Save game result
                 gameResultRepository.saveGameResult(gameResult)
-
-                // 3. Update user coins
                 gameResultRepository.updateUserCoins(coins)
-
-
-                // ✅ 5. Check and unlock achievements
-                val newlyUnlocked = achievementsRepository.checkAndUnlockAchievements()
-
-                Log.d(TAG, "Checked achievements: ${newlyUnlocked.size} newly unlocked")
+                achievementsRepository.checkAndUnlockAchievements()
 
                 SaveResult(coins, stars)
             },
-            onSuccess = { result ->
-                Log.d(TAG, "✓ Game saved: coins=${result.coins}, stars=${result.stars}")
-            },
+            onSuccess = { },
             onError = { error ->
-                Log.e(TAG, "✗ Error saving game result", error)
                 withView { showError("Failed to save game result") }
             },
             showLoading = false
@@ -82,12 +65,10 @@ class GameResultPresenter @Inject constructor(
     // ========== Navigation ==========
 
     fun playAgain() {
-        Log.d(TAG, "Play again requested")
         withView { navigateToPlayAgain() }
     }
 
     fun backToHome() {
-        Log.d(TAG, "Back to home requested")
         withView { navigateToHome() }
     }
 

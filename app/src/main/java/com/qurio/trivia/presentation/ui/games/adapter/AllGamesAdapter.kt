@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.adapters
+package com.qurio.trivia.presentation.ui.games.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemGameCardBinding
 import com.qurio.trivia.domain.model.Category
 
@@ -35,7 +36,7 @@ class AllGamesAdapter(
                 tvCategoryName.text = category.displayName
                 ivCategoryImage.setImageResource(category.imageRes)
 
-                root.findViewById<View>(com.qurio.trivia.R.id.btn_play_now)?.setOnClickListener {
+                root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
                         onCategoryClick(category)
                 }
             }

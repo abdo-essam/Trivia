@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogAchievementsBinding
 import com.qurio.trivia.domain.model.UserAchievement
-import com.qurio.trivia.presentation.adapters.AchievementGridAdapter
+import com.qurio.trivia.presentation.ui.dialogs.achievements.adapter.AchievementGridAdapter
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import javax.inject.Inject
 
