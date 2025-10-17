@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.onboarding.handlers
+package com.qurio.trivia.presentation.ui.onboarding.managers
 
 import android.annotation.SuppressLint
 import android.view.HapticFeedbackConstants
@@ -11,7 +11,7 @@ import com.qurio.trivia.R
 import com.qurio.trivia.databinding.LayoutSwipeUpBinding
 import kotlin.math.abs
 
-class SwipeUpGestureHandler(
+class SwipeUpManager(
     private val fragment: Fragment,
     private val binding: LayoutSwipeUpBinding,
     private val onSwipeComplete: () -> Unit
@@ -48,14 +48,12 @@ class SwipeUpGestureHandler(
 
         binding.avatarContainer.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
 
-        // Scale up avatar
         binding.avatarContainer.animate()
             .scaleX(AVATAR_SCALE_UP)
             .scaleY(AVATAR_SCALE_UP)
             .setDuration(AVATAR_SCALE_DURATION)
             .start()
 
-        // Pause arrow animations
         pauseArrowAnimations()
 
         return true
@@ -66,16 +64,13 @@ class SwipeUpGestureHandler(
 
         val deltaY = event.rawY - initialY
 
-        // Only allow upward movement
         if (deltaY < 0) {
             val translation = deltaY * DRAG_RESISTANCE
             binding.avatarContainer.translationY = initialAvatarY + translation
 
-            // Rotate avatar as it moves
             val rotation = (translation / DRAG_THRESHOLD) * -15f
             binding.avatarContainer.rotation = rotation
 
-            // Update alpha based on drag distance
             val progress = abs(translation) / DRAG_THRESHOLD
             binding.avatarContainer.alpha = 1f - (progress * 0.2f)
             binding.tvSwipeText.alpha = 1f - progress
@@ -101,7 +96,6 @@ class SwipeUpGestureHandler(
     }
 
     private fun animateAvatarAndComplete() {
-        // Animate avatar flying up
         binding.avatarContainer.animate()
             .translationY(-binding.root.height.toFloat())
             .alpha(0f)
@@ -115,7 +109,6 @@ class SwipeUpGestureHandler(
             }
             .start()
 
-        // Fade out other elements
         fadeOutElements()
     }
 

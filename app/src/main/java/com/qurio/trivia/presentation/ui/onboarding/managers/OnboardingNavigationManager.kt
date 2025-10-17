@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.onboarding.handlers
+package com.qurio.trivia.presentation.ui.onboarding.managers
 
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
@@ -6,7 +6,7 @@ import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.qurio.trivia.databinding.FragmentOnboardingBinding
 
-class OnboardingNavigationHandler(
+class OnboardingNavigationManager(
     private val binding: FragmentOnboardingBinding,
     private val viewPager: ViewPager2,
     private val totalPages: Int
@@ -86,9 +86,7 @@ class OnboardingNavigationHandler(
         button.postDelayed(onComplete, ANIMATION_DURATION * 2)
     }
 
-    fun cleanup() {
-        // Remove any callbacks if needed
-    }
+    fun cleanup() {}
 
     companion object {
         private const val ALPHA_ENABLED = 1f
