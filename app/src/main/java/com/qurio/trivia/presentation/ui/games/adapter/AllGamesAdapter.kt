@@ -37,7 +37,7 @@ class AllGamesAdapter(
                 ivCategoryImage.setImageResource(category.imageRes)
 
                 root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
-                        onCategoryClick(category)
+                    onCategoryClick(category)
                 }
             }
         }
