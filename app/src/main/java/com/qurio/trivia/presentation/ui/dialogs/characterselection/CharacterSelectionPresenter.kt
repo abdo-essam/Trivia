@@ -20,11 +20,11 @@ class CharacterSelectionPresenter @Inject constructor(
                 characterRepository.getAllCharactersWithUnlockStatus()
             },
             onSuccess = { charactersWithStatus ->
-                Log.d(TAG, "✓ Loaded ${charactersWithStatus.size} characters")
+                Log.d(TAG, "Loaded ${charactersWithStatus.size} characters")
                 withView { displayCharacters(charactersWithStatus) }
             },
             onError = { error ->
-                Log.e(TAG, "✗ Failed to load characters", error)
+                Log.e(TAG, "Failed to load characters", error)
                 withView { showError("Failed to load characters") }
             },
             showLoading = true
@@ -40,11 +40,11 @@ class CharacterSelectionPresenter @Inject constructor(
                 character
             },
             onSuccess = { selectedCharacter ->
-                Log.d(TAG, "✓ Character saved: ${selectedCharacter.displayName}")
+                Log.d(TAG, "Character saved: ${selectedCharacter.displayName}")
                 withView { onCharacterSaved(selectedCharacter) }
             },
             onError = { error ->
-                Log.e(TAG, "✗ Failed to save character", error)
+                Log.e(TAG, "Failed to save character", error)
                 withView { showError("Failed to save character") }
             },
             showLoading = true

@@ -13,6 +13,7 @@ import com.qurio.trivia.domain.repository.CharacterRepository
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.adapter.CharacterGridAdapter
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
+import com.qurio.trivia.presentation.ui.dialogs.characterinfo.CharacterInfoDialog
 import javax.inject.Inject
 
 class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
@@ -58,7 +59,7 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
     override fun setupViews() {
         setupRecyclerView()
         setupClickListeners()
-        loadCharacters()
+        presenter.loadCharacters()
     }
 
     private fun setupRecyclerView() {
@@ -66,9 +67,7 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
             layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
             adapter = characterAdapter
             setHasFixedSize(true)
-            post {
-                requestLayout()
-            }
+            post { requestLayout() }
         }
     }
 
@@ -80,15 +79,12 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
         }
     }
 
-    private fun loadCharacters() {
-        presenter.loadCharacters()
-    }
-
     override fun displayCharacters(characters: List<CharacterRepository.CharacterWithStatus>) {
         binding.rvCharacters.post {
             characterAdapter.submitList(characters) {
-                val selected = characters.firstOrNull { it.isSelected }?.character
-                selected?.let { selectCharacter(it) }
+                characters.firstOrNull { it.isSelected }?.character?.let {
+                    selectCharacter(it)
+                }
             }
         }
     }
@@ -106,7 +102,7 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
 
     private fun onCharacterSelected(characterWithStatus: CharacterRepository.CharacterWithStatus) {
         if (characterWithStatus.isUnlocked) {
-            selectCharacter(characterWithStatus.character)
+            showCharacterInfo(characterWithStatus.character)
         } else {
             onLockedCharacterClick(characterWithStatus.character)
         }
@@ -118,9 +114,25 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
         characterAdapter.setSelectedCharacter(character.characterName)
     }
 
+    private fun showCharacterInfo(character: Character) {
+        CharacterInfoDialog.newInstance(character).apply {
+            setOnConfirmListener {
+                selectCharacter(character)
+            }
+        }.show(childFragmentManager, CharacterInfoDialog.TAG)
+    }
+
     private fun onLockedCharacterClick(character: Character) {
         Log.d(TAG, "Locked character clicked: ${character.displayName}")
         showBuyCharacterDialog(character)
+    }
+
+    private fun showBuyCharacterDialog(character: Character) {
+        BuyCharacterDialog.newInstance(character).apply {
+            setOnCharacterPurchasedListener { purchasedCharacter ->
+                onCharacterPurchased(purchasedCharacter)
+            }
+        }.show(childFragmentManager, BuyCharacterDialog.TAG)
     }
 
     private fun confirmSelection() {
@@ -153,14 +165,6 @@ class CharacterSelectionDialog : BaseDialogFragment(), CharacterSelectionView {
     override fun hideLoading() {
         binding.btnCancel.isEnabled = true
         updateConfirmButtonState(selectedCharacter != null)
-    }
-
-    private fun showBuyCharacterDialog(character: Character) {
-        BuyCharacterDialog.newInstance(character).apply {
-            setOnCharacterPurchasedListener { purchasedCharacter ->
-                onCharacterPurchased(purchasedCharacter)
-            }
-        }.show(childFragmentManager, BuyCharacterDialog.TAG)
     }
 
     fun setOnCharacterSelectedListener(listener: (Character) -> Unit) {
