@@ -146,6 +146,13 @@
     <string name="header_question">header_question</string>
     <string name="timer_decoration">timer_decoration</string>
     <string name="timer_edge_decoration">timer_edge_decoration</string>
+    <string name="swipe_indicator">swipe_indicator</string>
+    <string name="character_avatar">character_avatar</string>
+    <string name="swipe_up_to_play">Swipe Up To Play</string>
+    <string name="previous">previous</string>
+    <string name="left_arrow">left_arrow</string>
+    <string name="righ_arrow">righ_arrow</string>
+    <string name="onboarding_illustration">onboarding_illustration</string>
 
     <!-- Day array -->
     <string-array name="day_labels_short">
