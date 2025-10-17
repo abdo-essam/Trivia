@@ -8,40 +8,30 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.FragmentGamesBinding
-import com.qurio.trivia.databinding.TopBarBinding
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
-import com.qurio.trivia.presentation.ui.games.adapter.AllGamesAdapter
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialogFragment
+import com.qurio.trivia.presentation.ui.games.adapter.AllGamesAdapter
+import com.qurio.trivia.presentation.ui.games.managers.GamesUIManager
 import javax.inject.Inject
 
-/**
- * Fragment displaying all available game categories
- * Users can select a category and difficulty to start a game
- */
 class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresenter>(), GamesView {
 
     @Inject
     lateinit var gamesPresenter: GamesPresenter
 
-    private val topBarBinding: TopBarBinding by lazy {
-        TopBarBinding.bind(binding.root.findViewById(R.id.top_bar))
-    }
+    private lateinit var uiManager: GamesUIManager
+    private var selectedCategory: Category? = null
 
     private val allGamesAdapter by lazy {
         AllGamesAdapter(::onCategoryClick)
     }
 
-    // Selected category state
-    private var selectedCategory: Category? = null
-
     companion object {
         private const val GRID_SPAN_COUNT = 2
     }
-
-    // ========== Lifecycle ==========
 
     override fun onCreate(savedInstanceState: Bundle?) {
         (requireActivity().application as QuriοApp).appComponent.inject(this)
@@ -58,18 +48,21 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     override fun initPresenter(): GamesPresenter = gamesPresenter
 
     override fun setupViews() {
+        initializeManagers()
         setupTopBar()
         setupRecyclerView()
         loadData()
     }
 
-    // ========== Setup ==========
+    private fun initializeManagers() {
+        uiManager = GamesUIManager(binding, allGamesAdapter)
+    }
 
     private fun setupTopBar() {
-        topBarBinding.apply {
-            tvTitle.text = getString(R.string.games)
-            btnBack.setOnClickListener { navigateBack() }
-        }
+        uiManager.setupTopBar(
+            title = getString(R.string.games),
+            onBackClick = ::navigateBack
+        )
     }
 
     private fun setupRecyclerView() {
@@ -84,10 +77,8 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
         presenter.loadAllCategories()
     }
 
-    // ========== GamesView Implementation ==========
-
     override fun displayCategories(categories: List<Category>) {
-        allGamesAdapter.submitList(categories)
+        uiManager.displayCategories(categories)
     }
 
     override fun navigateToGame(categoryId: Int, categoryName: String, difficulty: Difficulty) {
@@ -103,20 +94,14 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
         showBuyLifeDialog()
     }
 
-    // ========== User Interactions ==========
-
     private fun onCategoryClick(category: Category) {
         selectedCategory = category
         showDifficultyDialog()
     }
 
-    // ========== Navigation ==========
-
     private fun navigateBack() {
         findNavController().navigateUp()
     }
-
-    // ========== Dialogs ==========
 
     private fun showDifficultyDialog() {
         DifficultyDialogFragment.newInstance().apply {

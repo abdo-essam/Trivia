@@ -3,12 +3,16 @@ package com.qurio.trivia.presentation.ui.home
 import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.repository.AchievementsRepository
-import com.qurio.trivia.domain.repository.HomeRepository
+import com.qurio.trivia.domain.repository.CategoryRepository
+import com.qurio.trivia.domain.repository.GameResultRepository
+import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class HomePresenter @Inject constructor(
-    private val homeRepository: HomeRepository,
+    private val userRepository: UserRepository,
+    private val categoryRepository: CategoryRepository,
+    private val gameResultRepository: GameResultRepository,
     private val achievementsRepository: AchievementsRepository
 ) : BasePresenter<HomeView>() {
 
@@ -16,12 +20,10 @@ class HomePresenter @Inject constructor(
         private const val DEFAULT_GAMES_LIMIT = 3
     }
 
-    // ========== Load Data ==========
-
     fun loadUserProgress() {
         tryToExecute(
             execute = {
-                homeRepository.getUserProgress()
+                userRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
                 if (userProgress != null) {
@@ -30,10 +32,10 @@ class HomePresenter @Inject constructor(
                     withView { showError("User data not found") }
                 }
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Failed to load user data") }
             },
-            showLoading = true
+            showLoading = false
         )
     }
 
@@ -45,9 +47,7 @@ class HomePresenter @Inject constructor(
             onSuccess = { count ->
                 withView { displayUnlockedAchievements(count) }
             },
-            onError = { error ->
-                // Silently fail - not critical
-            },
+            onError = {},
             showLoading = false
         )
     }
@@ -55,31 +55,27 @@ class HomePresenter @Inject constructor(
     fun loadCategories() {
         tryToExecute(
             execute = {
-                val categories = homeRepository.getCategories()
-                categories
+                categoryRepository.getAllCategories()
             },
             onSuccess = { categories ->
-                withView {
-                    displayCategories(categories)
-                }
+                withView { displayCategories(categories) }
             },
-            onError = { error ->
-                error.printStackTrace()
+            onError = {
                 withView { showError("Failed to load categories") }
             },
-            showLoading = true
+            showLoading = false
         )
     }
 
     fun loadLastGames(limit: Int = DEFAULT_GAMES_LIMIT) {
         tryToExecute(
             execute = {
-                homeRepository.getLastGames(limit)
+                gameResultRepository.getLastGames(limit)
             },
             onSuccess = { games ->
                 withView { displayLastGames(games) }
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Failed to load game history") }
             },
             showLoading = false
@@ -89,19 +85,13 @@ class HomePresenter @Inject constructor(
     fun checkAndUpdateStreak() {
         tryToExecute(
             execute = {
-                homeRepository.checkAndUpdateStreak()
+                userRepository.checkAndUpdateStreak()
             },
-            onSuccess = { userProgress ->
-                userProgress?.let {
-                }
-            },
-            onError = { error ->
-            },
+            onSuccess = {},
+            onError = {},
             showLoading = false
         )
     }
-
-    // ========== Game Start Logic ==========
 
     fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
         if (category == null) {
@@ -111,12 +101,12 @@ class HomePresenter @Inject constructor(
 
         tryToExecute(
             execute = {
-                homeRepository.getUserProgress()
+                userRepository.getUserProgress()
             },
             onSuccess = { userProgress ->
                 handleGameStart(userProgress, category, difficulty)
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Failed to start game") }
             },
             showLoading = true
@@ -133,7 +123,7 @@ class HomePresenter @Inject constructor(
                 withView { showError("User data not found") }
             }
             userProgress.hasEnoughLives() -> {
-                deductLifeAndStartGame(userProgress.lives, category, difficulty)
+                deductLifeAndStartGame(category, difficulty)
             }
             else -> {
                 withView { showNotEnoughLives() }
@@ -142,14 +132,12 @@ class HomePresenter @Inject constructor(
     }
 
     private fun deductLifeAndStartGame(
-        currentLives: Int,
         category: Category,
         difficulty: Difficulty
     ) {
         tryToExecute(
             execute = {
-                val newLives = currentLives - 1
-                homeRepository.updateLives(newLives)
+                userRepository.deductLife()
                 Triple(category.id, category.displayName, difficulty)
             },
             onSuccess = { (categoryId, categoryName, diff) ->
@@ -157,7 +145,7 @@ class HomePresenter @Inject constructor(
                     navigateToGame(categoryId, categoryName, diff)
                 }
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Failed to start game") }
             },
             showLoading = false

@@ -2,8 +2,8 @@ package com.qurio.trivia.presentation.ui.game
 
 import com.qurio.trivia.data.model.TriviaQuestion
 import com.qurio.trivia.domain.model.Difficulty
-import com.qurio.trivia.domain.repository.GameRepository
 import com.qurio.trivia.domain.repository.TriviaRepository
+import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import com.qurio.trivia.presentation.ui.game.managers.GameStateManager
 import com.qurio.trivia.utils.Constants
@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class GamePresenter @Inject constructor(
     private val triviaRepository: TriviaRepository,
-    private val gameRepository: GameRepository
+    private val userRepository: UserRepository
 ) : BasePresenter<GameView>() {
 
     private val gameState = GameStateManager()
@@ -145,9 +145,11 @@ class GamePresenter @Inject constructor(
                     skipped = gameState.skippedAnswers
                 )
 
-                val currentCoins = gameRepository.getUserCoins() ?: 0
-                val newTotalCoins = currentCoins + gameScore.coinsEarned
-                gameRepository.updateCoins(newTotalCoins)
+                val userProgress = userRepository.getUserProgress()
+                userProgress?.let {
+                    val newTotalCoins = it.totalCoins + gameScore.coinsEarned
+                    userRepository.updateCoins(newTotalCoins)
+                }
 
                 gameScore
             },
@@ -194,12 +196,12 @@ class GamePresenter @Inject constructor(
     private fun loadUserLives() {
         tryToExecute(
             execute = {
-                gameRepository.getUserLives()
+                userRepository.getUserProgress()
             },
-            onSuccess = { lives ->
-                lives?.let {
-                    gameState.setLives(it)
-                    withView { updateLives(it) }
+            onSuccess = { userProgress ->
+                userProgress?.let {
+                    gameState.setLives(it.lives)
+                    withView { updateLives(it.lives) }
                 }
             },
             onError = {},
@@ -214,7 +216,7 @@ class GamePresenter @Inject constructor(
     private fun updateLivesInDatabase(lives: Int) {
         tryToExecute(
             execute = {
-                gameRepository.updateLives(lives)
+                userRepository.updateLives(lives)
             },
             onSuccess = {},
             onError = {},

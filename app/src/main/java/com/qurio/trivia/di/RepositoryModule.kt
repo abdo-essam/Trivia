@@ -19,65 +19,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideHomeRepository(
-        userProgressDao: UserProgressDao,
-        gameResultDao: GameResultDao,
-        userProgressMapper: UserProgressMapper,
-        gameResultMapper: GameResultMapper
-    ): HomeRepository {
-        return HomeRepositoryImpl(
-            userProgressDao,
-            gameResultDao,
-            userProgressMapper,
-            gameResultMapper
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideGamesRepository(
-        userProgressDao: UserProgressDao,
-        userProgressMapper: UserProgressMapper
-    ): GamesRepository {
-        return GamesRepositoryImpl(userProgressDao, userProgressMapper)
-    }
-
-    @Provides
-    @Singleton
-    fun provideGameResultRepository(
-        gameResultDao: GameResultDao,
-        userProgressDao: UserProgressDao,
-        gameResultMapper: GameResultMapper,
-        userProgressMapper: UserProgressMapper
-    ): GameResultRepository {
-        return GameResultRepositoryImpl(
-            gameResultDao,
-            userProgressDao,
-            gameResultMapper,
-            userProgressMapper
-        )
-    }
-
-    @Provides
-    @Singleton
-    fun provideTriviaRepository(
-        apiService: TriviaApiService
-    ): TriviaRepository {
-        return TriviaRepositoryImpl(apiService)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAchievementsRepository(
-        achievementDao: UserAchievementDao,
-        gameResultDao: GameResultDao,
-        userProgressDao: UserProgressDao
-    ): AchievementsRepository {
-        return AchievementsRepositoryImpl(achievementDao,gameResultDao, userProgressDao)
-    }
-
-    @Provides
-    @Singleton
     fun provideLifeRepository(
         userProgressDao: UserProgressDao
     ): LifeRepository {
@@ -120,12 +61,45 @@ class RepositoryModule {
     ): StreakRepository {
         return StreakRepositoryImpl(userProgressDao)
     }
+    @Provides
+    @Singleton
+    fun provideUserRepository(
+        userProgressDao: UserProgressDao,
+        userProgressMapper: UserProgressMapper
+    ): UserRepository {
+        return UserRepositoryImpl(userProgressDao, userProgressMapper)
+    }
 
     @Provides
     @Singleton
-    fun provideGameRepository(
+    fun provideCategoryRepository(): CategoryRepository {
+        return CategoryRepositoryImpl()
+    }
+
+    @Provides
+    @Singleton
+    fun provideGameResultRepository(
+        gameResultDao: GameResultDao,
+        gameResultMapper: GameResultMapper
+    ): GameResultRepository {
+        return GameResultRepositoryImpl(gameResultDao, gameResultMapper)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAchievementsRepository(
+        achievementDao: UserAchievementDao,
+        gameResultDao: GameResultDao,
         userProgressDao: UserProgressDao
-    ): GameRepository {
-        return GameRepositoryImpl(userProgressDao)
+    ): AchievementsRepository {
+        return AchievementsRepositoryImpl(achievementDao, gameResultDao, userProgressDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTriviaRepository(
+        apiService: TriviaApiService
+    ): TriviaRepository {
+        return TriviaRepositoryImpl(apiService)
     }
 }

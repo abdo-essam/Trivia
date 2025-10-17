@@ -1,18 +1,17 @@
 package com.qurio.trivia.presentation.adapters
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemLastGameBinding
 import com.qurio.trivia.domain.model.GameResult
-import java.text.SimpleDateFormat
-import java.util.Locale
-import java.util.concurrent.TimeUnit
+import com.qurio.trivia.utils.FormatUtils
 
-class LastGamesAdapter() : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHolder>(LastGameDiffCallback()) {
+class LastGamesAdapter : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHolder>(LastGameDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LastGameViewHolder {
         val binding = ItemLastGameBinding.inflate(
@@ -33,54 +32,20 @@ class LastGamesAdapter() : ListAdapter<GameResult, LastGamesAdapter.LastGameView
 
         fun bind(gameResult: GameResult) {
             binding.apply {
-                // Format date
-                tvDate.text = formatDate(gameResult.date)
-
-                // Set category
+                tvDate.text = FormatUtils.formatDate(gameResult.date)
                 tvCategory.text = gameResult.category
 
-                // Set coins with color based on value
                 val coinsValue = gameResult.coins
-                tvCoins.text = if (coinsValue >= 0) {
-                    coinsValue.toString()
-                } else {
-                    coinsValue.toString() // Will include the minus sign
-                }
+                tvCoins.text = FormatUtils.formatCoins(coinsValue)
                 tvCoins.setTextColor(
-                    if (coinsValue >= 0) {
-                        Color.parseColor("#DEFFFFFF") // shade_primary
-                    } else {
-                        Color.parseColor("#E12F32") // red_accent
-                    }
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        if (coinsValue >= 0) R.color.coins_positive else R.color.coins_negative
+                    )
                 )
 
-                // Set stars
                 tvStars.text = gameResult.stars.toString()
-
-                // Format time
-                tvTime.text = formatTime(gameResult.timeTaken)
-            }
-        }
-
-        private fun formatDate(dateString: String): String {
-            return try {
-                val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-                val outputFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-                val date = inputFormat.parse(dateString)
-                date?.let { outputFormat.format(it) } ?: dateString
-            } catch (e: Exception) {
-                dateString
-            }
-        }
-
-        private fun formatTime(timeInMillis: Long): String {
-            val minutes = TimeUnit.MILLISECONDS.toMinutes(timeInMillis)
-            val seconds = TimeUnit.MILLISECONDS.toSeconds(timeInMillis) % 60
-
-            return if (minutes > 0) {
-                "${minutes}m ${seconds}sec"
-            } else {
-                "${seconds}sec"
+                tvTime.text = FormatUtils.formatTime(gameResult.timeTaken)
             }
         }
     }
