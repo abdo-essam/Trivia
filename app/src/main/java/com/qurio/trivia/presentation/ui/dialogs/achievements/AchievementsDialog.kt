@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.databinding.DialogAchievementsBinding
 import com.qurio.trivia.domain.model.UserAchievement
-import com.qurio.trivia.presentation.ui.dialogs.achievements.adapter.AchievementGridAdapter
 import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.achievements.adapter.AchievementGridAdapter
+import com.qurio.trivia.presentation.ui.dialogs.achievements.manager.AchievementsUIManager
 import javax.inject.Inject
 
 class AchievementsDialog : BaseDialogFragment(), AchievementsView {
@@ -19,6 +19,8 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     @Inject
     lateinit var presenter: AchievementsPresenter
+
+    private lateinit var uiManager: AchievementsUIManager
 
     private val achievementAdapter by lazy {
         AchievementGridAdapter(::onAchievementClick)
@@ -40,20 +42,14 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
     }
 
     override fun setupViews() {
-        setupRecyclerView()
+        initializeManagers()
         setupClickListeners()
-        loadAchievements()
+        presenter.loadAchievements()
     }
 
-    private fun setupRecyclerView() {
-        binding.achievementsRecyclerView.apply {
-            layoutManager = GridLayoutManager(requireContext(), GRID_SPAN_COUNT)
-            adapter = achievementAdapter
-            setHasFixedSize(true)
-            post {
-                requestLayout()
-            }
-        }
+    private fun initializeManagers() {
+        uiManager = AchievementsUIManager(binding, achievementAdapter)
+        uiManager.setupRecyclerView()
     }
 
     private fun setupClickListeners() {
@@ -63,14 +59,8 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
         }
     }
 
-    private fun loadAchievements() {
-        presenter.loadAchievements()
-    }
-
     override fun displayAchievements(achievements: List<UserAchievement>) {
-        binding.achievementsRecyclerView.post {
-            achievementAdapter.submitList(achievements)
-        }
+        uiManager.displayAchievements(achievements)
     }
 
     private fun onAchievementClick(userAchievement: UserAchievement) {
@@ -86,11 +76,6 @@ class AchievementsDialog : BaseDialogFragment(), AchievementsView {
 
     companion object {
         const val TAG = "AchievementsDialog"
-        private const val GRID_SPAN_COUNT = 4
-
-        fun newInstance(): AchievementsDialog {
-            return AchievementsDialog()
-        }
+        fun newInstance() = AchievementsDialog()
     }
-
 }

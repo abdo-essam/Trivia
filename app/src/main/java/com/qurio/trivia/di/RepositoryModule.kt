@@ -47,15 +47,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideGameHistoryRepository(
-        gameResultDao: GameResultDao,
-        gameResultMapper: GameResultMapper
-    ): GameHistoryRepository {
-        return GameHistoryRepositoryImpl(gameResultDao, gameResultMapper)
-    }
-
-    @Provides
-    @Singleton
     fun provideStreakRepository(
         userProgressDao: UserProgressDao
     ): StreakRepository {

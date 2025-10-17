@@ -92,13 +92,10 @@
     <string name="points">Points</string>
     <string name="cancel">Cancel</string>
 
-    <string name="share_achievement">Share Achievement</string>
     <string name="share_achievement_message">🏆 I just unlocked the "%1$s" achievement! %2$s</string>
 
 
     <string name="insufficient_coins">Not enough coins!</string>
-    <string name="insufficient_coins_message">You need %1$d more coins to unlock this character</string>
-    <string name="character_purchased">%1$s character unlocked!</string>
 
     <!-- Results - Additional strings -->
     <string name="share_win_with_friends">Share win with friends</string>
@@ -117,7 +114,6 @@
     <string name="buy_life">Buy Life</string>
     <string name="x">X</string>
     <string name="equal">=</string>
-    <string name="how_to_get_it">How To Get It</string>
     <string name="achievement_unlocked">Achievement Unlocked!</string>
     <string name="unlock_achievement_first">Unlock this achievement first to share it!</string>
     <string name="share_failed">Failed to share achievement</string>
@@ -164,6 +160,19 @@
         <item>@string/day_friday_short</item>
         <item>@string/day_saturday_short</item>
     </string-array>
+
+
+    <!-- Achievement Strings -->
+    <string name="share_achievement">Share Achievement</string>
+    <string name="achievement_unlocked_message">I just unlocked the \'%1$s\' achievement in Qurio Trivia!</string>
+    <string name="can_you_unlock_it">Can you unlock it too?</string>
+
+    <!-- Character Strings -->
+    <string name="character_purchased">%1$s purchased successfully!</string>
+    <string name="insufficient_coins_message">You need %1$d more coins</string>
+
+    <!-- Generic Strings -->
+    <string name="how_to_get_it">How to get it:</string>
 
 
 </resources>

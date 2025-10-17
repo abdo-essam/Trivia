@@ -1,7 +1,6 @@
 package com.qurio.trivia.presentation.ui.dialogs.characterinfo
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +8,14 @@ import androidx.core.os.bundleOf
 import com.qurio.trivia.databinding.DialogCharacterInfoBinding
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.presentation.base.BaseDialogFragment
+import com.qurio.trivia.presentation.ui.dialogs.characterinfo.manager.CharacterInfoUIManager
 
 class CharacterInfoDialog : BaseDialogFragment() {
 
     private var _binding: DialogCharacterInfoBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var uiManager: CharacterInfoUIManager
     private lateinit var character: Character
     private var onConfirmListener: (() -> Unit)? = null
 
@@ -45,34 +46,23 @@ class CharacterInfoDialog : BaseDialogFragment() {
     }
 
     override fun setupViews() {
+        initializeManagers()
         setupClickListeners()
-        displayCharacterData()
+    }
+
+    private fun initializeManagers() {
+        uiManager = CharacterInfoUIManager(binding)
+        uiManager.displayCharacterInfo(character)
     }
 
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener {
-                Log.d(TAG, "Close button clicked")
-                dismiss()
-            }
-
+            btnClose.setOnClickListener { dismiss() }
             btnOk.setOnClickListener {
-                Log.d(TAG, "OK button clicked - Character confirmed")
                 onConfirmListener?.invoke()
                 dismiss()
             }
         }
-    }
-
-    private fun displayCharacterData() {
-        binding.apply {
-            tvCharacterName.text = character.displayName
-            tvCharacterAge.text = character.age
-            tvCharacterDescription.text = character.description
-            ivCharacter.setImageResource(character.infoImageRes)
-        }
-
-        Log.d(TAG, "Displaying character: ${character.displayName}")
     }
 
     fun setOnConfirmListener(listener: () -> Unit) {

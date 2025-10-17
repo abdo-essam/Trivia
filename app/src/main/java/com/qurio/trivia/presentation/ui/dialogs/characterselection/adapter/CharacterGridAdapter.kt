@@ -11,6 +11,8 @@ import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemCharacterGridBinding
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.repository.CharacterRepository
+import com.qurio.trivia.presentation.mapper.imageRes
+import com.qurio.trivia.presentation.mapper.lockedImageRes
 
 /**
  * Adapter for displaying characters in a grid with lock status
@@ -70,8 +72,8 @@ class CharacterGridAdapter(
             binding.apply {
                 // Character image
                 ivCharacter.setImageResource(
-                    if (item.isUnlocked) character.imageRes
-                    else character.lockedImageRes
+                    if (item.isUnlocked) character.imageRes()
+                    else character.lockedImageRes()
                 )
 
                 // Selection indicator

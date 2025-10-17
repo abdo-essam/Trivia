@@ -1,85 +1,68 @@
 package com.qurio.trivia.domain.model
 
-import com.qurio.trivia.R
-
-/**
- * All available trivia categories
- * IDs match Open Trivia Database API
- */
 enum class Category(
     val id: Int,
     val categoryName: String,
-    val displayName: String,
-    val imageRes: Int
+    val displayName: String
 ) {
     GENERAL_KNOWLEDGE(
         id = 9,
         categoryName = "general",
-        displayName = "General Knowledge",
-        imageRes = R.drawable.category_general
+        displayName = "General Knowledge"
     ),
 
     FILM_TV(
         id = 11,
         categoryName = "film",
-        displayName = "Film & TV",
-        imageRes = R.drawable.category_film
+        displayName = "Film & TV"
     ),
 
     MUSIC(
         id = 12,
         categoryName = "music",
-        displayName = "Music",
-        imageRes = R.drawable.category_music
+        displayName = "Music"
     ),
 
     SCIENCE_NATURE(
         id = 17,
         categoryName = "science",
-        displayName = "Science & Nature",
-        imageRes = R.drawable.category_science
+        displayName = "Science & Nature"
     ),
 
     FOOD_DRINK(
         id = 20,
         categoryName = "food",
-        displayName = "Food & Drink",
-        imageRes = R.drawable.category_food
+        displayName = "Food & Drink"
     ),
 
     SPORTS(
         id = 21,
         categoryName = "sports",
-        displayName = "Sport & Leisure",
-        imageRes = R.drawable.category_sports
+        displayName = "Sport & Leisure"
     ),
 
     GEOGRAPHY(
         id = 22,
         categoryName = "geography",
-        displayName = "Geography",
-        imageRes = R.drawable.category_geography
+        displayName = "Geography"
     ),
 
     HISTORY(
         id = 23,
         categoryName = "history",
-        displayName = "History",
-        imageRes = R.drawable.category_history
+        displayName = "History"
     ),
 
     ART_LITERATURE(
         id = 25,
         categoryName = "art",
-        displayName = "Arts & Literature",
-        imageRes = R.drawable.category_art
+        displayName = "Arts & Literature"
     ),
 
     SOCIETY_CULTURE(
         id = 27,
         categoryName = "culture",
-        displayName = "Society & Culture",
-        imageRes = R.drawable.category_culture
+        displayName = "Society & Culture"
     );
 
     companion object {
@@ -87,22 +70,23 @@ enum class Category(
          * Find category by API ID
          */
         fun fromId(id: Int): Category? {
-            return Category.entries.find { it.id == id }
+            return entries.find { it.id == id }
         }
 
         /**
          * Find category by name (case-insensitive)
          */
         fun fromName(name: String): Category? {
-            return Category.entries.find {
-                it.categoryName.equals(name, ignoreCase = true)
+            return entries.find {
+                it.categoryName.equals(name, ignoreCase = true) ||
+                        it.displayName.equals(name, ignoreCase = true)
             }
         }
 
         /**
          * Get all categories as list
          */
-        fun all(): List<Category> = Category.entries
+        fun all(): List<Category> = entries
 
         /**
          * Get default category
