@@ -28,8 +28,8 @@ fun Fragment.playWrongSound() {
     playSound(Constants.Sound.SOUND_WRONG)
 }
 
-fun Fragment.playCoinsSound() {
-    playSound(Constants.Sound.SOUND_COINS)
+fun Fragment.playCloudSpreadSound() {
+    playSound(Constants.Sound.SOUND_CLOUD_SPREAD)
 }
 
 fun Fragment.startClockTicking() {

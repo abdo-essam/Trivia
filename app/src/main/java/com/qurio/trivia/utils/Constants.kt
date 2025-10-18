@@ -25,10 +25,10 @@ object Constants {
     object Sound {
         const val SOUND_CORRECT = 1
         const val SOUND_WRONG = 2
-        const val SOUND_COINS = 3
-        const val SOUND_DIALOG_OPEN = 4
-        const val SOUND_DIALOG_CLOSE = 5
-        const val SOUND_CLOCK_TICKING = 6
+        const val SOUND_DIALOG_OPEN = 3
+        const val SOUND_DIALOG_CLOSE = 4
+        const val SOUND_CLOCK_TICKING = 5
+        const val SOUND_CLOUD_SPREAD = 6
     }
 
     object Settings {

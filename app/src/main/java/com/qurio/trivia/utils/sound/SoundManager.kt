@@ -39,10 +39,10 @@ class SoundManager @Inject constructor(
     private fun loadSounds() {
         soundIds[Constants.Sound.SOUND_CORRECT] = loadSound(R.raw.correct)
         soundIds[Constants.Sound.SOUND_WRONG] = loadSound(R.raw.wrong)
-        soundIds[Constants.Sound.SOUND_COINS] = loadSound(R.raw.coins_sound)
         soundIds[Constants.Sound.SOUND_DIALOG_OPEN] = loadSound(R.raw.board_pop_up)
         soundIds[Constants.Sound.SOUND_DIALOG_CLOSE] = loadSound(R.raw.pop_sound)
         soundIds[Constants.Sound.SOUND_CLOCK_TICKING] = loadSound(R.raw.clock_ticking)
+        soundIds[Constants.Sound.SOUND_CLOUD_SPREAD] = loadSound(R.raw.cloud_spread)
     }
 
     private fun loadSound(@RawRes resId: Int): Int {

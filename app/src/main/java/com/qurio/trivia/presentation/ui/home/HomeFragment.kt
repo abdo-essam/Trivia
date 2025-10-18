@@ -24,6 +24,7 @@ import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
 import com.qurio.trivia.utils.Constants
+import com.qurio.trivia.utils.sound.playCloudSpreadSound
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
@@ -84,6 +85,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
         carouselConfigurator = CarouselConfigurator(
             viewPager = binding.vpCategories,
+            onPageChanged = { playCloudSpreadSound() }
         )
     }
 
@@ -105,7 +107,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     private fun loadInitialData() {
-        // Check and update streak first when app opens
         presenter.checkAndUpdateStreak()
         presenter.loadCategories()
         refreshDynamicData()
