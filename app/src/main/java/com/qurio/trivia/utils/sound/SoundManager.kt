@@ -6,6 +6,7 @@ import android.media.SoundPool
 import androidx.annotation.RawRes
 import com.qurio.trivia.R
 import com.qurio.trivia.utils.Constants
+import com.qurio.trivia.utils.Constants.Settings.DEFAULT_SOUND_VOLUME
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,7 +16,7 @@ class SoundManager @Inject constructor(
 ) {
     private var soundPool: SoundPool? = null
     private val soundIds = mutableMapOf<Int, Int>()
-    private var soundVolume: Float = Constants.Settings.DEFAULT_VOLUME / 100f
+    private var soundVolume: Float = DEFAULT_SOUND_VOLUME / 100f
 
     private var tickingStreamId: Int = 0
 

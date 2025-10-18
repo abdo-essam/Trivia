@@ -33,7 +33,8 @@ object Constants {
 
     object Settings {
         const val TAG = "SettingsDialog"
-        const val DEFAULT_VOLUME = 80f
+        const val DEFAULT_SOUND_VOLUME = 80f
+        const val DEFAULT_MUSIC_VOLUME = 60f
         const val MIN_VOLUME = 0f
         const val MAX_VOLUME = 100f
     }

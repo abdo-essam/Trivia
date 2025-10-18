@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.DialogSettingsBinding
+import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.manager.SettingsUIManager
 import javax.inject.Inject
@@ -19,9 +20,9 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     lateinit var presenter: SettingsPresenter
 
     private lateinit var uiManager: SettingsUIManager
-    private var onSettingsSavedListener: ((Float) -> Unit)? = null
+    private var onSettingsSavedListener: ((Settings) -> Unit)? = null
 
-    private var initialVolume: Float? = null
+    private var initialSettings: Settings? = null
 
     companion object {
         fun newInstance() = SettingsDialog()
@@ -44,7 +45,7 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     override fun setupViews() {
         initializeManagers()
         setupClickListeners()
-        setupSeekBarListener()
+        setupSeekBarListeners()
         presenter.attachView(this)
         presenter.loadSettings()
     }
@@ -61,34 +62,34 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
         }
     }
 
-    private fun setupSeekBarListener() {
-        uiManager.setupSeekBarListener { volume ->
-            presenter.updateVolumePreview(volume)
+    private fun setupSeekBarListeners() {
+        uiManager.setupSeekBarListeners { soundVolume, musicVolume ->
+            presenter.updateVolumesPreview(soundVolume, musicVolume)
         }
     }
 
     private fun saveSettings() {
-        val volume = uiManager.getCurrentVolume()
-        presenter.saveSettings(volume)
+        val settings = uiManager.getCurrentSettings()
+        presenter.saveSettings(settings.soundVolume, settings.musicVolume)
     }
 
     private fun discardChanges() {
-        initialVolume?.let { volume ->
-            presenter.restoreVolume(volume)
+        initialSettings?.let { settings ->
+            presenter.restoreSettings(settings.soundVolume, settings.musicVolume)
         }
         dismiss()
     }
 
-    override fun displayVolume(volume: Float) {
-        if (initialVolume == null) {
-            initialVolume = volume
+    override fun displaySettings(settings: Settings) {
+        if (initialSettings == null) {
+            initialSettings = settings
         }
-        uiManager.displayVolume(volume)
+        uiManager.displaySettings(settings)
     }
 
     override fun onSettingsSaved() {
-        val volume = uiManager.getCurrentVolume()
-        onSettingsSavedListener?.invoke(volume)
+        val settings = uiManager.getCurrentSettings()
+        onSettingsSavedListener?.invoke(settings)
         dismiss()
     }
 

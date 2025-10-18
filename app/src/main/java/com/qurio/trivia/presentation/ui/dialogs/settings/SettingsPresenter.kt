@@ -1,8 +1,8 @@
 package com.qurio.trivia.presentation.ui.dialogs.settings
 
+import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.domain.repository.SettingsRepository
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.utils.Constants
 import com.qurio.trivia.utils.sound.SoundManager
 import javax.inject.Inject
 
@@ -11,62 +11,60 @@ class SettingsPresenter @Inject constructor(
     private val soundManager: SoundManager
 ) : BasePresenter<SettingsView>() {
 
-    private var initialVolume: Float? = null
+    private var initialSettings: Settings? = null
 
     fun loadSettings() {
         tryToExecute(
-            execute = { settingsRepository.getSoundVolume() },
-            onSuccess = { volume ->
-                initialVolume = volume
-                soundManager.updateVolume(volume)
-                withView { displayVolume(volume) }
+            execute = { settingsRepository.getSettings() },
+            onSuccess = { settings ->
+                initialSettings = settings
+                soundManager.updateVolume(settings.soundVolume)
+                withView { displaySettings(settings) }
             },
             onError = {
                 withView {
                     showError("Failed to load settings")
-                    displayVolume(Constants.Settings.DEFAULT_VOLUME)
+                    displaySettings(Settings.DEFAULT)
                 }
             },
             showLoading = false
         )
     }
 
-    fun updateVolumePreview(volume: Float) {
-        soundManager.updateVolume(volume)
+    fun updateVolumesPreview(soundVolume: Float, musicVolume: Float) {
+        soundManager.updateVolume(soundVolume)
     }
 
-    fun restoreVolume(volume: Float) {
-        soundManager.updateVolume(volume)
+    fun restoreSettings(soundVolume: Float, musicVolume: Float) {
+        soundManager.updateVolume(soundVolume)
     }
 
-    fun saveSettings(volume: Float) {
-        if (!isValidVolume(volume)) {
-            withView { showError("Invalid volume value") }
+    fun saveSettings(soundVolume: Float, musicVolume: Float) {
+        val newSettings = Settings(soundVolume, musicVolume)
+
+        if (!newSettings.isValid()) {
+            withView { showError("Invalid settings values") }
             return
         }
 
         tryToExecute(
             execute = {
-                settingsRepository.saveSoundVolume(volume)
-                soundManager.updateVolume(volume)
+                settingsRepository.saveSettings(newSettings)
+                soundManager.updateVolume(soundVolume)
             },
             onSuccess = {
-                initialVolume = volume
+                initialSettings = newSettings
                 withView { onSettingsSaved() }
             },
             onError = {
                 withView {
-                    initialVolume?.let { vol ->
-                        soundManager.updateVolume(vol)
+                    initialSettings?.let { settings ->
+                        soundManager.updateVolume(settings.soundVolume)
                     }
                     showError("Failed to save settings")
                 }
             },
             showLoading = true
         )
-    }
-
-    private fun isValidVolume(volume: Float): Boolean {
-        return volume in Constants.Settings.MIN_VOLUME..Constants.Settings.MAX_VOLUME
     }
 }
