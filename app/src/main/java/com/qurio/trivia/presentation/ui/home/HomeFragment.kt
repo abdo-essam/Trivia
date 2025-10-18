@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
@@ -14,7 +13,6 @@ import com.qurio.trivia.domain.model.Category
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.domain.model.GameResult
 import com.qurio.trivia.domain.model.UserProgress
-import com.qurio.trivia.presentation.ui.lastgames.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
@@ -24,6 +22,7 @@ import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialog
 import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
+import com.qurio.trivia.presentation.ui.lastgames.adapters.LastGamesAdapter
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
@@ -83,12 +82,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         binding.vpCategories.adapter = categoryAdapter
 
         carouselConfigurator = CarouselConfigurator(
-            viewPager = binding.vpCategories,
-            resources = resources,
-            coroutineScope = lifecycleScope
+            viewPager = binding.vpCategories
         )
-
-        lifecycle.addObserver(carouselConfigurator)
     }
 
     private fun setupRecyclerViews() {
@@ -136,9 +131,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
         categoryAdapter.submitList(categories)
 
-        if (hasCategories) {
-            carouselConfigurator.start(categories.size)
-        }
     }
 
     override fun displayLastGames(games: List<GameResult>) {
@@ -205,7 +197,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     }
 
     override fun onDestroyView() {
-        carouselConfigurator.stop()
         super.onDestroyView()
     }
 }

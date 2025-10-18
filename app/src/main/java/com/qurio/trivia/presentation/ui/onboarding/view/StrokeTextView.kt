@@ -1,4 +1,4 @@
-package com.qurio.trivia.presentation.ui.custom
+package com.qurio.trivia.presentation.ui.onboarding.view
 
 import android.content.Context
 import android.graphics.Canvas

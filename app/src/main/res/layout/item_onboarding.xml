@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Background Title with stroke effect (5% opacity) - Behind main title -->
-    <com.qurio.trivia.presentation.ui.custom.StrokeTextView
+    <com.qurio.trivia.presentation.ui.onboarding.view.StrokeTextView
         android:id="@+id/tv_title_background"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

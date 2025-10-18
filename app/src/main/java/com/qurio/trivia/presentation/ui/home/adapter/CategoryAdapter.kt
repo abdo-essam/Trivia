@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemCategoryBinding
 import com.qurio.trivia.domain.model.Category
+import com.qurio.trivia.presentation.mapper.borderColorRes
+import com.qurio.trivia.presentation.mapper.gradientColorRes
 import com.qurio.trivia.presentation.mapper.imageRes
 
-/**
- * Adapter for displaying trivia categories in ViewPager2
- */
 class CategoryAdapter(
     private val onCategoryClick: (Category) -> Unit
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
@@ -50,8 +49,7 @@ class CategoryAdapter(
         private var currentCategory: Category? = null
 
         init {
-            // Access the button through the root view
-            binding.root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
+            binding.root.findViewById<View>(R.id.btn_play_now).setOnClickListener {
                 currentCategory?.let { category ->
                     onCategoryClick(category)
                 }
@@ -60,9 +58,15 @@ class CategoryAdapter(
 
         fun bind(category: Category) {
             currentCategory = category
+
             binding.apply {
                 tvCategoryName.text = category.displayName
-                ivCategoryImage.setImageResource(category.imageRes())
+
+                categoryCard.apply {
+                    setCardImage(category.imageRes())
+                    setCardBorderColor(category.borderColorRes())
+                    setCardGradientColor(category.gradientColorRes())
+                }
             }
         }
     }
