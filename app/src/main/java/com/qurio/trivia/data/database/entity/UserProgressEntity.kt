@@ -9,8 +9,6 @@ data class UserProgressEntity(
     val lives: Int = 4,
     val totalCoins: Int = 0,
     val selectedCharacter: String = "rika",
-    val soundEnabled: Boolean = true,
-    val musicEnabled: Boolean = true,
     val currentStreak: Int = 0,
     val lastPlayedDate: String = "",
     val streakDays: String = ""

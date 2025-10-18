@@ -1,6 +1,5 @@
 package com.qurio.trivia.data.database
 
-import android.util.Log
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.database.entity.UserProgressEntity
 import com.qurio.trivia.domain.model.Character
@@ -14,17 +13,10 @@ import javax.inject.Singleton
 class DatabaseSeeder @Inject constructor(
     private val userProgressDao: UserProgressDao
 ) {
-    companion object {
-        private const val TAG = "DatabaseSeeder"
-    }
-
     suspend fun seedDatabase() = withContext(Dispatchers.IO) {
         try {
             seedUserProgress()
-            Log.d(TAG, "✓ Database seeded successfully")
-        } catch (e: Exception) {
-            Log.e(TAG, "✗ Error seeding database", e)
-        }
+        } catch (e: Exception) { }
     }
 
     private suspend fun seedUserProgress() {
@@ -33,16 +25,13 @@ class DatabaseSeeder @Inject constructor(
                 UserProgressEntity(
                     id = 1,
                     lives = 50,
-                    totalCoins = 12000,
+                    totalCoins = 10001,
                     selectedCharacter = Character.default().characterName,
-                    soundEnabled = true,
-                    musicEnabled = true,
-                    currentStreak = 3, // Test with 3 day streak
+                    currentStreak = 1,
                     lastPlayedDate = StreakHelper.getCurrentDate(), // Today
-                    streakDays = "0,1,2" // Sunday, Monday, Tuesday active
+                    streakDays = "0"
                 )
             )
-            Log.d(TAG, "✓ User progress seeded")
         }
     }
 }
