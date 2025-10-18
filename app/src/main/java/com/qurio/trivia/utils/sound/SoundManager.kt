@@ -38,7 +38,6 @@ class SoundManager @Inject constructor(
     }
 
     private fun loadSounds() {
-        // Load sound effects (not music)
         soundIds[SOUND_CORRECT] = soundPool?.load(context, R.raw.correct, 1) ?: 0
         soundIds[SOUND_WRONG] = soundPool?.load(context, R.raw.wrong, 1) ?: 0
         soundIds[SOUND_COINS] = soundPool?.load(context, R.raw.coins_sound, 1) ?: 0
@@ -48,7 +47,6 @@ class SoundManager @Inject constructor(
         soundVolume = (newSoundVolume / 100f).coerceIn(0f, 1f)
         musicVolume = (newMusicVolume / 100f).coerceIn(0f, 1f)
 
-        // Update music player volume in real-time
         musicPlayer?.setVolume(musicVolume, musicVolume)
     }
 
@@ -100,7 +98,6 @@ class SoundManager @Inject constructor(
     }
 
     companion object {
-        // Sound effects only
         const val SOUND_CORRECT = 2
         const val SOUND_WRONG = 3
         const val SOUND_COINS = 4

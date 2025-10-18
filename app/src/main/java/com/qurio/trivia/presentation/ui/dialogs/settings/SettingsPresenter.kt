@@ -31,10 +31,11 @@ class SettingsPresenter @Inject constructor(
         )
     }
 
-    /**
-     * Update volumes in real-time for preview (without saving)
-     */
     fun updateVolumesPreview(soundVolume: Float, musicVolume: Float) {
+        soundManager.updateVolumes(soundVolume, musicVolume)
+    }
+
+    fun restoreSettings(soundVolume: Float, musicVolume: Float) {
         soundManager.updateVolumes(soundVolume, musicVolume)
     }
 

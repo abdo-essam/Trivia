@@ -22,6 +22,8 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     private lateinit var uiManager: SettingsUIManager
     private var onSettingsSavedListener: ((Settings) -> Unit)? = null
 
+    private var initialSettings: Settings? = null
+
     companion object {
         const val TAG = "SettingsDialog"
         fun newInstance() = SettingsDialog()
@@ -55,15 +57,22 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener { dismiss() }
-            btnSave.setOnClickListener { saveSettings() }
-            btnDiscard.setOnClickListener { dismiss() }
+            btnClose.setOnClickListener {
+                discardChanges()
+            }
+
+            btnSave.setOnClickListener {
+                saveSettings()
+            }
+
+            btnDiscard.setOnClickListener {
+                discardChanges()
+            }
         }
     }
 
     private fun setupSeekBarListeners() {
         uiManager.setupSeekBarListeners { soundVolume, musicVolume ->
-            // Update volumes in real-time as user drags seekbar
             presenter.updateVolumesPreview(soundVolume, musicVolume)
         }
     }
@@ -73,7 +82,17 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
         presenter.saveSettings(settings.soundVolume, settings.musicVolume)
     }
 
+    private fun discardChanges() {
+        initialSettings?.let { settings ->
+            presenter.restoreSettings(settings.soundVolume, settings.musicVolume)
+        }
+        dismiss()
+    }
+
     override fun displaySettings(settings: Settings) {
+        if (initialSettings == null) {
+            initialSettings = Settings.DEFAULT
+        }
         uiManager.displaySettings(settings)
     }
 
