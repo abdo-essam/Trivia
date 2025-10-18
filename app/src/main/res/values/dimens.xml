@@ -35,4 +35,30 @@
     <dimen name="line_height_label_medium">22dp</dimen>
     <dimen name="line_height_label_small">16dp</dimen>
     <dimen name="line_height_label_xsmall">14dp</dimen>
+
+    <!-- Button Dimensions -->
+    <dimen name="button_height_default">44dp</dimen>
+    <dimen name="button_height_pressed">32dp</dimen>
+    <dimen name="button_padding_horizontal_default">12dp</dimen>
+    <dimen name="button_padding_horizontal_pressed">8dp</dimen>
+    <dimen name="button_padding_vertical">10dp</dimen>
+    <dimen name="button_corner_radius_default">16dp</dimen>
+    <dimen name="button_corner_radius_pressed">12dp</dimen>
+    <dimen name="button_min_width">70dp</dimen>
+    <dimen name="floating_tag_size">18dp</dimen>
+
+    <!-- Dialog dimensions -->
+    <dimen name="dialog_button_margin">12dp</dimen>
+
+    <!-- ViewPager2 Carousel Settings -->
+    <dimen name="page_margin">36dp</dimen>
+    <dimen name="page_offset">85dp</dimen>
+
+    <dimen name="spacing_12">12dp</dimen>
+    <dimen name="spacing_4">4dp</dimen>
+
+    <!-- Answer Options -->
+    <dimen name="answer_option_spacing">12dp</dimen>
+
+
 </resources>

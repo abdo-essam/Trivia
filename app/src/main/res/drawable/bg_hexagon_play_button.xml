@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Main hexagon shape -->
+    <item>
+        <vector
+            android:width="168dp"
+            android:height="44dp"
+            android:viewportWidth="168"
+            android:viewportHeight="44">
+
+            <!-- Base hexagon with primary color -->
+            <path
+                android:fillColor="@color/primary"
+                android:pathData="M31,0 L137,0 L168,22 L137,44 L31,44 L0,22 Z" />
+
+            <!-- Overlay with slight white tint -->
+            <path
+                android:fillColor="#12FFFFFF"
+                android:pathData="M31,0 L137,0 L168,22 L137,44 L31,44 L0,22 Z" />
+
+            <!-- Bottom highlight -->
+            <path
+                android:fillColor="#33FFFFFF"
+                android:pathData="M31,44 L137,44 L135,38 L33,38 Z" />
+
+            <!-- Left bottom edge -->
+            <path
+                android:fillColor="#33FFFFFF"
+                android:pathData="M0,22 L4,22 L33,38 L31,44 Z" />
+
+            <!-- Right bottom edge -->
+            <path
+                android:fillColor="#33FFFFFF"
+                android:pathData="M168,22 L165,22 L135,38 L137,44 Z" />
+        </vector>
+    </item>
+
+</layer-list>

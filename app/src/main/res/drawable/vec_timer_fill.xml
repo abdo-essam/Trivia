@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="328dp"
+    android:height="20dp"
+    android:viewportWidth="328"
+    android:viewportHeight="20">
+
+    <!-- Fill shape for timer progress -->
+    <path
+        android:fillColor="@color/timer_fill_color"
+        android:pathData="M4.75,0.5L0.73,5.45L18.26,19.5H309.50L327.27,5.45L323.24,0.5H4.75Z" />
+
+</vector>

@@ -1,269 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/background_dark"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Result Card -->
+    <!-- Main Content -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_result_card"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_card"
-        android:padding="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/surface"
+        android:padding="16dp">
 
-        <!-- Stars -->
-        <LinearLayout
-            android:id="@+id/layout_stars"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+        <!-- Main Result Card -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/result_card"
+            android:layout_width="match_parent"
+            android:layout_height="227dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginTop="170dp"
+            android:background="@drawable/bg_result_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_star1"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="4dp"
-                android:src="@drawable/ic_star_filled"
-                app:tint="@color/yellow" />
+            <include
+                android:id="@+id/layout_result_content"
+                layout="@layout/result_content" />
 
-            <ImageView
-                android:id="@+id/iv_star2"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_marginEnd="4dp"
-                android:src="@drawable/ic_star_filled"
-                app:tint="@color/yellow" />
-            <ImageView
-                android:id="@+id/iv_star3"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/ic_star_filled"
-                app:tint="@color/yellow" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>
-
-        <!-- Result Ribbon -->
-        <ImageView
-            android:id="@+id/iv_result_ribbon"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/ribbon_blue"
+        <!-- Victory Section -->
+        <include
+            android:id="@+id/victory_section"
+            layout="@layout/result_victory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginBottom="-45dp"
+            app:layout_constraintBottom_toTopOf="@id/result_card"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_stars" />
+            tools:visibility="visible" />
 
-        <!-- Result Title -->
-        <TextView
-            android:id="@+id/tv_result_title"
-            android:layout_width="wrap_content"
+        <!-- Lose Section -->
+        <include
+            android:id="@+id/lose_section"
+            layout="@layout/result_lose"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Great Job"
-            android:textColor="@color/white"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/iv_result_ribbon"
-            app:layout_constraintEnd_toEndOf="@id/iv_result_ribbon"
-            app:layout_constraintStart_toStartOf="@id/iv_result_ribbon"
-            app:layout_constraintTop_toTopOf="@id/iv_result_ribbon" />
-
-        <!-- Reward Section -->
-        <TextView
-            android:id="@+id/tv_reward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="reward"
-            android:textColor="@color/gray_light"
-            android:textSize="16sp"
+            android:visibility="gone"
+            android:layout_marginBottom="-45dp"
+            app:layout_constraintBottom_toTopOf="@id/result_card"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_result_ribbon" />
-
-        <LinearLayout
-            android:id="@+id/layout_reward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_reward">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_coin"
-                app:tint="@color/orange" />
-
-            <TextView
-                android:id="@+id/tv_coins_earned"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:text="500"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-        </LinearLayout>
-
-        <!-- Statistics -->
-        <LinearLayout
-            android:id="@+id/layout_stats"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_reward">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Correct"
-                    android:textColor="@color/gray_light"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_correct_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="10"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Incorrect"
-                    android:textColor="@color/gray_light"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_incorrect_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="2"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Skipped"
-                    android:textColor="@color/gray_light"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_skipped_count"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"/>
 
         <!-- Share Button -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_share_with_friends"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="24dp"
-            android:backgroundTint="@color/blue_primary"
-            android:text="Share with friends ↗"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:cornerRadius="24dp"
-            app:icon="@drawable/ic_arrow_back"
-            app:iconTint="@color/white"
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_share"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_button_primary"
+            android:drawableEnd="@drawable/ic_share"
+            android:drawablePadding="8dp"
+            android:paddingHorizontal="16dp"
+            android:text="@string/share_win_with_friends"
+            android:textAllCaps="false"
+            android:textColor="@color/on_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_stats" />
+            app:layout_constraintTop_toBottomOf="@id/result_card" />
 
-        <!-- Action Buttons -->
-        <LinearLayout
+        <!-- Play Again Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_play_again"
+            style="@style/TextAppearance.Label.Medium"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/bg_button_primary"
+            android:text="@string/play_again"
+            android:textAllCaps="false"
+            android:textColor="@color/on_primary"
+            app:layout_constraintBottom_toTopOf="@id/btn_back_to_home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_share_with_friends">
+            app:layout_constraintTop_toBottomOf="@id/btn_share"
+            app:layout_constraintVertical_bias="1" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_play_again"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/blue_primary"
-                android:text="Play again"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:cornerRadius="24dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_back_to_home"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="1"
-                android:backgroundTint="@color/gray_dark"
-                android:text="Back to home"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                app:cornerRadius="24dp" />
-
-        </LinearLayout>
+        <!-- Back to Home Button -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_back_to_home"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_button_secondary"
+            android:text="@string/back_to_home"
+            android:textAllCaps="false"
+            android:textColor="@color/shade_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Loading Overlay - Outside content to cover full screen -->
+    <include
+        layout="@layout/layout_loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+
+</FrameLayout>

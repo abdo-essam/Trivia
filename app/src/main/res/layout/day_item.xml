@@ -8,25 +8,40 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <!-- Fire Icon with Circle Background -->
-    <ImageView
-        android:id="@+id/ivDayFire"
+    <!-- Circle Background with Fire Icon Container -->
+    <FrameLayout
+        android:id="@+id/circleContainer"
         android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:contentDescription="@string/day_fire"
-        android:padding="4dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/ic_fire"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_height="28dp">
 
-    <!-- Day Label -->
+        <!-- Circle Background (Always visible) -->
+        <ImageView
+            android:id="@+id/ivCircleBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@null"
+            android:src="@drawable/bg_day_circle" />
+
+        <!-- Fire Icon (Shows on active days only) -->
+        <ImageView
+            android:id="@+id/ivDayFire"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/day_fire"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_fire"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+    <!-- Day Label (ALWAYS VISIBLE) -->
     <TextView
         android:id="@+id/tvDayLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:fontFamily="@font/fredoka"
+        android:textAppearance="@style/TextAppearance.Label.XSmall"
         android:textColor="@color/shade_tertiary"
         android:textSize="10sp"
         tools:ignore="SmallSp"
