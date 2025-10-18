@@ -38,13 +38,6 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideStreakRepository(
-        userProgressDao: UserProgressDao
-    ): StreakRepository {
-        return StreakRepositoryImpl(userProgressDao)
-    }
-    @Provides
-    @Singleton
     fun provideUserRepository(
         userProgressDao: UserProgressDao,
         userProgressMapper: UserProgressMapper
