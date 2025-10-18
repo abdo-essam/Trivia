@@ -28,12 +28,7 @@ class GamesPresenter @Inject constructor(
         )
     }
 
-    fun checkLivesAndStartGame(category: Category?, difficulty: Difficulty) {
-        if (category == null) {
-            withView { showError("Please select a category") }
-            return
-        }
-
+    fun checkLivesAndStartGame(category: Category, difficulty: Difficulty) {
         tryToExecute(
             execute = {
                 userRepository.getUserProgress()

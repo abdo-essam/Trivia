@@ -2,17 +2,19 @@ package com.qurio.trivia.presentation.ui.dialogs.buycharacter
 
 import com.qurio.trivia.domain.model.Character
 import com.qurio.trivia.domain.repository.CharacterRepository
+import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
 import javax.inject.Inject
 
 class BuyCharacterPresenter @Inject constructor(
-    private val repository: CharacterRepository
+    private val characterRepository: CharacterRepository,
+    private val userRepository: UserRepository
 ) : BasePresenter<BuyCharacterView>() {
 
     fun loadUserCoins() {
         tryToExecute(
             execute = {
-                repository.getUserCoins()
+                userRepository.getUserCoins()
             },
             onSuccess = { coins ->
                 withView { updateUserCoins(coins) }
@@ -27,7 +29,7 @@ class BuyCharacterPresenter @Inject constructor(
     fun purchaseCharacter(character: Character) {
         tryToExecute(
             execute = {
-                repository.purchaseCharacter(character)
+                characterRepository.purchaseCharacter(character)
             },
             onSuccess = { result ->
                 handlePurchaseResult(result, character)

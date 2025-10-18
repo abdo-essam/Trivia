@@ -23,7 +23,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     lateinit var gamesPresenter: GamesPresenter
 
     private lateinit var uiManager: GamesUIManager
-    private var selectedCategory: Category? = null
+    private var selectedCategory: Category = Category.GENERAL_KNOWLEDGE
 
     private val allGamesAdapter by lazy {
         AllGamesAdapter(::onCategoryClick)

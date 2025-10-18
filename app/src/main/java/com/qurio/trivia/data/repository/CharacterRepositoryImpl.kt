@@ -43,10 +43,6 @@ class CharacterRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun getUserCoins(): Int = withContext(Dispatchers.IO) {
-        userProgressDao.getUserProgress()?.totalCoins ?: 0
-    }
-
     override suspend fun isCharacterUnlocked(character: Character): Boolean =
         withContext(Dispatchers.IO) {
             // Free characters are always unlocked

@@ -13,12 +13,4 @@ class CategoryRepositoryImpl @Inject constructor() : CategoryRepository {
     override suspend fun getAllCategories(): List<Category> = withContext(Dispatchers.IO) {
         Category.all()
     }
-
-    override suspend fun getCategoryById(id: Int): Category? = withContext(Dispatchers.IO) {
-        Category.fromId(id)
-    }
-
-    override suspend fun getCategoryByName(name: String): Category? = withContext(Dispatchers.IO) {
-        Category.fromName(name)
-    }
 }

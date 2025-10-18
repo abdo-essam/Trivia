@@ -11,11 +11,6 @@ class SettingsRepositoryImpl @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) : SettingsRepository {
 
-    companion object {
-        private const val KEY_SOUND_VOLUME = "sound_volume"
-        private const val KEY_MUSIC_VOLUME = "music_volume"
-    }
-
     override suspend fun getSettings(): Settings = withContext(Dispatchers.IO) {
         Settings(
             soundVolume = sharedPreferences.getFloat(KEY_SOUND_VOLUME, Settings.DEFAULT.soundVolume),
@@ -35,4 +30,10 @@ class SettingsRepositoryImpl @Inject constructor(
         saveSettings(Settings.DEFAULT)
         Settings.DEFAULT
     }
+
+    companion object {
+        private const val KEY_SOUND_VOLUME = "sound_volume"
+        private const val KEY_MUSIC_VOLUME = "music_volume"
+    }
+
 }

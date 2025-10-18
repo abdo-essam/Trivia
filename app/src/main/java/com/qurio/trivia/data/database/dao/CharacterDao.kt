@@ -16,21 +16,7 @@ interface CharacterDao {
     @Query("SELECT * FROM characters WHERE name = :name")
     suspend fun getCharacterByName(name: String): CharacterEntity?
 
-    @Query("SELECT * FROM characters WHERE isUnlocked = 1")
-    suspend fun getUnlockedCharacters(): List<CharacterEntity>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCharacter(character: CharacterEntity)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCharacters(characters: List<CharacterEntity>)
-
-    @Update
-    suspend fun updateCharacter(character: CharacterEntity)
-
-    @Query("UPDATE characters SET isUnlocked = 1 WHERE name = :name")
-    suspend fun unlockCharacter(name: String)
-
-    @Query("SELECT COUNT(*) FROM characters")
-    suspend fun getCharacterCount(): Int
 }
