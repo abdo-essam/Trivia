@@ -1,4 +1,4 @@
-package com.qurio.trivia.data.repository.util
+package com.qurio.trivia.data.repository.utils
 
 import com.qurio.trivia.data.database.entity.GameResultEntity
 import com.qurio.trivia.data.database.entity.UserProgressEntity

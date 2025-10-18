@@ -4,7 +4,7 @@ import com.qurio.trivia.data.database.dao.GameResultDao
 import com.qurio.trivia.data.database.dao.UserAchievementDao
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.database.entity.UserAchievementEntity
-import com.qurio.trivia.data.repository.util.AchievementChecker
+import com.qurio.trivia.data.repository.utils.AchievementChecker
 import com.qurio.trivia.domain.model.Achievement
 import com.qurio.trivia.domain.model.UserAchievement
 import com.qurio.trivia.domain.repository.AchievementsRepository
