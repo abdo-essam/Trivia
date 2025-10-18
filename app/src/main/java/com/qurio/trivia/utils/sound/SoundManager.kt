@@ -38,25 +38,21 @@ class SoundManager @Inject constructor(
     }
 
     private fun loadSounds() {
-         //soundIds[SOUND_BUTTON_CLICK] = soundPool?.load(context, R.raw.button_click, 1) ?: 0
-         soundIds[SOUND_BUTTON_CLICK] = soundPool?.load(context, R.raw.coins_sound, 1) ?: 0
-         soundIds[SOUND_CORRECT] = soundPool?.load(context, R.raw.correct, 1) ?: 0
-         soundIds[SOUND_WRONG] = soundPool?.load(context, R.raw.wrong, 1) ?: 0
-            soundIds[SOUND_BACKGROUND] = soundPool?.load(context, R.raw.app_theme_1, 1) ?: 0
-
+        // Load sound effects (not music)
+        soundIds[SOUND_CORRECT] = soundPool?.load(context, R.raw.correct, 1) ?: 0
+        soundIds[SOUND_WRONG] = soundPool?.load(context, R.raw.wrong, 1) ?: 0
+        soundIds[SOUND_COINS] = soundPool?.load(context, R.raw.coins_sound, 1) ?: 0
     }
 
-    fun updateVolumes(newMusicVolume: Float, newSoundVolume: Float) {
-        musicVolume = (newMusicVolume / 100f).coerceIn(0f, 1f)
+    fun updateVolumes(newSoundVolume: Float, newMusicVolume: Float) {
         soundVolume = (newSoundVolume / 100f).coerceIn(0f, 1f)
+        musicVolume = (newMusicVolume / 100f).coerceIn(0f, 1f)
 
+        // Update music player volume in real-time
         musicPlayer?.setVolume(musicVolume, musicVolume)
     }
 
-
-
     fun playBackgroundMusic(@RawRes resId: Int, loop: Boolean = true) {
-
         try {
             stopMusic()
 
@@ -75,7 +71,6 @@ class SoundManager @Inject constructor(
     }
 
     fun playSound(soundId: Int) {
-
         soundIds[soundId]?.let { id ->
             soundPool?.play(id, soundVolume, soundVolume, 1, 0, 1f)
         }
@@ -105,10 +100,9 @@ class SoundManager @Inject constructor(
     }
 
     companion object {
-        const val SOUND_BUTTON_CLICK = 1
+        // Sound effects only
         const val SOUND_CORRECT = 2
         const val SOUND_WRONG = 3
-        const val SOUND_TICK = 4
-        const val SOUND_BACKGROUND = 5
+        const val SOUND_COINS = 4
     }
 }

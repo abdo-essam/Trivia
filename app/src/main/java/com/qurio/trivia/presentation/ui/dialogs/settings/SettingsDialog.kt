@@ -44,6 +44,7 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     override fun setupViews() {
         initializeManagers()
         setupClickListeners()
+        setupSeekBarListeners()
         presenter.attachView(this)
         presenter.loadSettings()
     }
@@ -57,6 +58,13 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
             btnClose.setOnClickListener { dismiss() }
             btnSave.setOnClickListener { saveSettings() }
             btnDiscard.setOnClickListener { dismiss() }
+        }
+    }
+
+    private fun setupSeekBarListeners() {
+        uiManager.setupSeekBarListeners { soundVolume, musicVolume ->
+            // Update volumes in real-time as user drags seekbar
+            presenter.updateVolumesPreview(soundVolume, musicVolume)
         }
     }
 

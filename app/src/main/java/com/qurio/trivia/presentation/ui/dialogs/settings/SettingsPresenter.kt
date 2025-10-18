@@ -18,7 +18,7 @@ class SettingsPresenter @Inject constructor(
             execute = { settingsRepository.getSettings() },
             onSuccess = { settings ->
                 initialSettings = settings
-                soundManager.updateVolumes(settings.musicVolume, settings.soundVolume)
+                soundManager.updateVolumes(settings.soundVolume, settings.musicVolume)
                 withView { displaySettings(settings) }
             },
             onError = {
@@ -29,6 +29,13 @@ class SettingsPresenter @Inject constructor(
             },
             showLoading = false
         )
+    }
+
+    /**
+     * Update volumes in real-time for preview (without saving)
+     */
+    fun updateVolumesPreview(soundVolume: Float, musicVolume: Float) {
+        soundManager.updateVolumes(soundVolume, musicVolume)
     }
 
     fun saveSettings(soundVolume: Float, musicVolume: Float) {
@@ -42,14 +49,19 @@ class SettingsPresenter @Inject constructor(
         tryToExecute(
             execute = {
                 settingsRepository.saveSettings(newSettings)
-                soundManager.updateVolumes(musicVolume, soundVolume)
+                soundManager.updateVolumes(soundVolume, musicVolume)
             },
             onSuccess = {
                 initialSettings = newSettings
                 withView { onSettingsSaved() }
             },
             onError = {
-                withView { showError("Failed to save settings") }
+                withView {
+                    initialSettings?.let { settings ->
+                        soundManager.updateVolumes(settings.soundVolume, settings.musicVolume)
+                    }
+                    showError("Failed to save settings")
+                }
             },
             showLoading = true
         )
