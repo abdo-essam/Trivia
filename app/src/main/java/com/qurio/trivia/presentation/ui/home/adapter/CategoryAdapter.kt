@@ -46,18 +46,7 @@ class CategoryAdapter(
         private val onCategoryClick: (Category) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var currentCategory: Category? = null
-
-        init {
-            binding.root.findViewById<View>(R.id.btn_play_now).setOnClickListener {
-                currentCategory?.let { category ->
-                    onCategoryClick(category)
-                }
-            }
-        }
-
         fun bind(category: Category) {
-            currentCategory = category
 
             binding.apply {
                 tvCategoryName.text = category.displayName
@@ -66,6 +55,9 @@ class CategoryAdapter(
                     setCardImage(category.imageRes())
                     setCardBorderColor(category.borderColorRes())
                     setCardGradientColor(category.gradientColorRes())
+                }
+                root.findViewById<View>(R.id.btn_play_now)?.setOnClickListener {
+                    onCategoryClick(category)
                 }
             }
         }
