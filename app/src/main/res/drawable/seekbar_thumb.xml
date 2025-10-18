@@ -1,10 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="33dp"
-    android:height="36dp"
-    android:viewportWidth="33"
-    android:viewportHeight="36">
-    <path
-        android:fillColor="@color/primary"
-        android:pathData="M14.445,5.155C15.682,4.44 17.207,4.44 18.445,5.155L26.569,9.845C27.806,10.56 28.569,11.88 28.569,13.309V22.691C28.569,24.12 27.806,25.44 26.569,26.155L18.445,30.845C17.207,31.56 15.682,31.56 14.445,30.845L6.32,26.155C5.083,25.44 4.32,24.12 4.32,22.691V13.309C4.32,11.88 5.083,10.56 6.32,9.845L14.445,5.155Z" />
-</vector>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Single Glow Layer (simulates setShadowLayer) -->
+    <item
+        android:width="53dp"
+        android:height="56dp"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <size
+                android:width="53dp"
+                android:height="56dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="16dp"
+                android:startColor="#8049BAF2"
+                android:centerColor="#4049BAF2"
+                android:endColor="#0049BAF2" />
+        </shape>
+    </item>
+
+    <!-- Hexagon Thumb -->
+    <item
+        android:width="33dp"
+        android:height="36dp"
+        android:gravity="center">
+        <vector
+            android:width="33dp"
+            android:height="36dp"
+            android:viewportWidth="33.999"
+            android:viewportHeight="36">
+            <path
+                android:fillColor="@color/primary"
+                android:pathData="M14.9999,5.1547C16.2375,4.4402 17.7623,4.4402 18.9999,5.1547L27.1242,9.8453C28.3618,10.5598 29.1242,11.8803 29.1242,13.3094V22.6906C29.1242,24.1197 28.3618,25.4402 27.1242,26.1547L18.9999,30.8453C17.7623,31.5598 16.2375,31.5598 14.9999,30.8453L6.8755,26.1547C5.6379,25.4402 4.8755,24.1197 4.8755,22.6906V13.3094C4.8755,11.8803 5.6379,10.5598 6.8755,9.8453L14.9999,5.1547Z" />
+        </vector>
+    </item>
+
+</layer-list>
