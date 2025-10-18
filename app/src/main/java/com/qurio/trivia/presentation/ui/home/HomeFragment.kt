@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
@@ -84,11 +83,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
         carouselConfigurator = CarouselConfigurator(
             viewPager = binding.vpCategories,
-            resources = resources,
-            coroutineScope = lifecycleScope
         )
-
-        lifecycle.addObserver(carouselConfigurator)
     }
 
     private fun setupRecyclerViews() {
@@ -135,10 +130,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
         binding.vpCategories.isVisible = hasCategories
 
         categoryAdapter.submitList(categories)
-
-        if (hasCategories) {
-            carouselConfigurator.start(categories.size)
-        }
     }
 
     override fun displayLastGames(games: List<GameResult>) {
@@ -202,10 +193,5 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun navigateToAllLastGames() {
         findNavController().navigate(R.id.action_home_to_last_games)
-    }
-
-    override fun onDestroyView() {
-        carouselConfigurator.stop()
-        super.onDestroyView()
     }
 }
