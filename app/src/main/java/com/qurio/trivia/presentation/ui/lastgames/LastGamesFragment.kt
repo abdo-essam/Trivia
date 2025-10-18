@@ -9,7 +9,7 @@ import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.FragmentLastGamesBinding
 import com.qurio.trivia.domain.model.GameResult
-import com.qurio.trivia.presentation.adapters.LastGamesAdapter
+import com.qurio.trivia.presentation.ui.lastgames.adapters.LastGamesAdapter
 import com.qurio.trivia.presentation.base.BaseFragment
 import com.qurio.trivia.presentation.ui.lastgames.managers.LastGamesUIManager
 import javax.inject.Inject

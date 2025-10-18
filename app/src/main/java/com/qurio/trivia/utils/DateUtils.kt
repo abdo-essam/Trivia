@@ -1,5 +1,6 @@
 package com.qurio.trivia.utils
 
+import android.util.Log
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -9,7 +10,7 @@ import java.util.concurrent.TimeUnit
 object DateUtils {
 
     // Date formats
-    private const val DATE_INPUT_FORMAT = "yyyy-MM-dd"
+    private const val DATE_INPUT_FORMAT = "MMM dd, yyyy"
     private const val DATE_OUTPUT_FORMAT = "dd-MM-yyyy"
     private const val DATE_STORAGE_FORMAT = "MMM dd, yyyy"
 
