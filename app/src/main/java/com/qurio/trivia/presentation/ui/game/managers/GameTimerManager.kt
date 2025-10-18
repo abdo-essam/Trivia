@@ -8,7 +8,9 @@ import com.qurio.trivia.utils.Constants
 
 class GameTimerManager(
     private val binding: FragmentGameBinding,
-    private val onTimerFinish: () -> Unit
+    private val onTimerFinish: () -> Unit,
+    private val onTimerStart: () -> Unit,
+    private val onTimerStop: () -> Unit
 ) {
     private var countDownTimer: CountDownTimer? = null
 
@@ -21,6 +23,8 @@ class GameTimerManager(
         }
 
         countDownTimer?.cancel()
+        onTimerStart()
+
         countDownTimer = object : CountDownTimer(timeLimit, TIMER_TICK_INTERVAL) {
             override fun onTick(millisUntilFinished: Long) {
                 updateUI(millisUntilFinished)
@@ -60,12 +64,14 @@ class GameTimerManager(
             tvTimerText.text = binding.root.context.getString(R.string.timer_seconds_format, 0)
             progressTimer.progress = 0
         }
+        onTimerStop()
         onTimerFinish()
     }
 
     fun stop() {
         countDownTimer?.cancel()
         countDownTimer = null
+        onTimerStop()
     }
 
     companion object {

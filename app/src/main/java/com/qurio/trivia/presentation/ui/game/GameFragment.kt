@@ -19,6 +19,10 @@ import com.qurio.trivia.presentation.ui.game.managers.GameAnimationManager
 import com.qurio.trivia.presentation.ui.game.managers.GameStateManager
 import com.qurio.trivia.presentation.ui.game.managers.GameTimerManager
 import com.qurio.trivia.presentation.ui.game.managers.GameUIManager
+import com.qurio.trivia.utils.sound.playCorrectSound
+import com.qurio.trivia.utils.sound.playWrongSound
+import com.qurio.trivia.utils.sound.startClockTicking
+import com.qurio.trivia.utils.sound.stopClockTicking
 import javax.inject.Inject
 
 class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(), GameView {
@@ -63,7 +67,12 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
     private fun initializeManagers() {
         stateManager = GameStateManager()
         uiManager = GameUIManager(binding, answerAdapter)
-        timerManager = GameTimerManager(binding) { presenter.timeUp() }
+        timerManager = GameTimerManager(
+            binding = binding,
+            onTimerFinish = { presenter.timeUp() },
+            onTimerStart = { startClockTicking() },
+            onTimerStop = { stopClockTicking() }
+        )
         animationManager = GameAnimationManager(
             binding.floatingTagsContainer,
             resources.getDimensionPixelSize(R.dimen.floating_tag_size)
@@ -139,6 +148,12 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
 
     override fun showCorrectAnswer(correctAnswerIndex: Int, isCorrect: Boolean) {
         timerManager.stop()
+
+        if (isCorrect) {
+            playCorrectSound()
+        } else {
+            playWrongSound()
+        }
 
         uiManager.showCorrectAnswer(
             stateManager.currentAnswers,

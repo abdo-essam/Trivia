@@ -31,3 +31,11 @@ fun Fragment.playWrongSound() {
 fun Fragment.playCoinsSound() {
     playSound(Constants.Sound.SOUND_COINS)
 }
+
+fun Fragment.startClockTicking() {
+    getSoundManager()?.playLoopingSound(Constants.Sound.SOUND_CLOCK_TICKING)
+}
+
+fun Fragment.stopClockTicking() {
+    getSoundManager()?.stopLoopingSound()
+}

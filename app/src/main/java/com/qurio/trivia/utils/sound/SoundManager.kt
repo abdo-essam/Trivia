@@ -17,6 +17,8 @@ class SoundManager @Inject constructor(
     private val soundIds = mutableMapOf<Int, Int>()
     private var soundVolume: Float = Constants.Settings.DEFAULT_VOLUME / 100f
 
+    private var tickingStreamId: Int = 0
+
     init {
         initializeSoundPool()
         loadSounds()
@@ -40,6 +42,7 @@ class SoundManager @Inject constructor(
         soundIds[Constants.Sound.SOUND_COINS] = loadSound(R.raw.coins_sound)
         soundIds[Constants.Sound.SOUND_DIALOG_OPEN] = loadSound(R.raw.board_pop_up)
         soundIds[Constants.Sound.SOUND_DIALOG_CLOSE] = loadSound(R.raw.pop_sound)
+        soundIds[Constants.Sound.SOUND_CLOCK_TICKING] = loadSound(R.raw.clock_ticking)
     }
 
     private fun loadSound(@RawRes resId: Int): Int {
@@ -51,6 +54,10 @@ class SoundManager @Inject constructor(
             Constants.Settings.MIN_VOLUME / 100f,
             Constants.Settings.MAX_VOLUME / 100f
         )
+
+        if (tickingStreamId != 0) {
+            soundPool?.setVolume(tickingStreamId, soundVolume, soundVolume)
+        }
     }
 
     fun playSound(soundId: Int) {
@@ -59,7 +66,22 @@ class SoundManager @Inject constructor(
         }
     }
 
+    fun playLoopingSound(soundId: Int) {
+        stopLoopingSound()
+        soundIds[soundId]?.let { id ->
+            tickingStreamId = soundPool?.play(id, soundVolume, soundVolume, 1, -1, 1f) ?: 0
+        }
+    }
+
+    fun stopLoopingSound() {
+        if (tickingStreamId != 0) {
+            soundPool?.stop(tickingStreamId)
+            tickingStreamId = 0
+        }
+    }
+
     fun release() {
+        stopLoopingSound()
         soundPool?.release()
         soundPool = null
         soundIds.clear()
