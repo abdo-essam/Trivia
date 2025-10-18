@@ -3,6 +3,7 @@ package com.qurio.trivia.data.repository
 import android.content.SharedPreferences
 import com.qurio.trivia.domain.repository.SettingsRepository
 import com.qurio.trivia.utils.Constants
+import com.qurio.trivia.utils.PreferenceKeys.SOUND_VOLUME
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -13,7 +14,7 @@ class SettingsRepositoryImpl @Inject constructor(
 
     override suspend fun getSoundVolume(): Float = withContext(Dispatchers.IO) {
         sharedPreferences.getFloat(
-            Constants.Settings.KEY_SOUND_VOLUME,
+            SOUND_VOLUME,
             Constants.Settings.DEFAULT_VOLUME
         )
     }
@@ -21,7 +22,7 @@ class SettingsRepositoryImpl @Inject constructor(
     override suspend fun saveSoundVolume(volume: Float) {
         withContext(Dispatchers.IO) {
             sharedPreferences.edit().apply {
-                putFloat(Constants.Settings.KEY_SOUND_VOLUME, volume)
+                putFloat(SOUND_VOLUME, volume)
                 apply()
             }
         }

@@ -8,7 +8,6 @@ import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.DialogSettingsBinding
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.manager.SettingsUIManager
-import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
 class SettingsDialog : BaseDialogFragment(), SettingsView {
@@ -99,10 +98,6 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     override fun hideLoading() {
         uiManager.setControlsEnabled(true)
-    }
-
-    fun setOnSettingsSavedListener(listener: (Float) -> Unit) {
-        onSettingsSavedListener = listener
     }
 
     override fun onDestroyView() {
