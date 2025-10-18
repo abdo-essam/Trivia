@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.DialogDifficultyBinding
 import com.qurio.trivia.domain.model.Difficulty
 import com.qurio.trivia.presentation.base.BaseDialogFragment
@@ -26,7 +26,7 @@ class DifficultyDialog : BaseDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
     }
 
     override fun onCreateView(

@@ -1,7 +1,7 @@
 package com.qurio.trivia.di
 
 import android.content.Context
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementInfoDialog
 import com.qurio.trivia.presentation.ui.dialogs.achievements.AchievementsDialog
 import com.qurio.trivia.presentation.ui.dialogs.buycharacter.BuyCharacterDialog
@@ -38,7 +38,7 @@ interface AppComponent {
     }
 
     // App
-    fun inject(app: QuriοApp)
+    fun inject(app: QurioApp)
 
     // Fragments
     fun inject(fragment: OnboardingFragment)

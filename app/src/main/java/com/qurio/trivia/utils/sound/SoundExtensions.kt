@@ -1,10 +1,10 @@
 package com.qurio.trivia.utils.sound
 
 import androidx.fragment.app.Fragment
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 
 fun Fragment.getSoundManager(): SoundManager? {
-    return (requireActivity().application as? QuriοApp)?.soundManager
+    return (requireActivity().application as? QurioApp)?.soundManager
 }
 
 fun Fragment.playSound(soundId: Int) {

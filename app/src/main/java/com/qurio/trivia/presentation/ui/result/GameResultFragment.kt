@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.FragmentGameResultBinding
 import com.qurio.trivia.presentation.base.BaseFragment
@@ -27,7 +27,7 @@ class GameResultFragment : BaseFragment<FragmentGameResultBinding, GameResultVie
     private lateinit var shareManager: GameResultShareManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
         super.onCreate(savedInstanceState)
     }
 

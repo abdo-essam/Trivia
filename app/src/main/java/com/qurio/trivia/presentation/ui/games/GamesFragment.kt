@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.FragmentGamesBinding
 import com.qurio.trivia.domain.model.Category
@@ -34,7 +34,7 @@ class GamesFragment : BaseFragment<FragmentGamesBinding, GamesView, GamesPresent
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
         super.onCreate(savedInstanceState)
     }
 

@@ -2,7 +2,6 @@ package com.qurio.trivia.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.qurio.trivia.utils.PreferenceKeys
 import com.qurio.trivia.utils.PreferenceKeys.PREFS_NAME
 import com.qurio.trivia.utils.sound.SoundManager
 import dagger.Module

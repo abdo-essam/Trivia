@@ -6,7 +6,7 @@ import com.qurio.trivia.di.DaggerAppComponent
 import com.qurio.trivia.utils.sound.SoundManager
 import javax.inject.Inject
 
-class QuriοApp : Application() {
+class QurioApp : Application() {
 
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(applicationContext)
@@ -26,5 +26,4 @@ class QuriοApp : Application() {
         soundManager.release()
         super.onTerminate()
     }
-
 }

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.DialogBuyCharacterBinding
 import com.qurio.trivia.domain.model.Character
@@ -38,7 +38,7 @@ class BuyCharacterDialog : BaseDialogFragment(), BuyCharacterView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
 
         val characterName = arguments?.getString(ARG_CHARACTER_NAME)
         character = Character.fromName(characterName ?: "") ?: Character.default()

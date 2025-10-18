@@ -16,7 +16,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
 
     private val soundManager: SoundManager by lazy {
-        (application as QuriοApp).soundManager
+        (application as QurioApp).soundManager
     }
 
 

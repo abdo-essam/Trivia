@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.DialogSettingsBinding
 import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.presentation.base.BaseDialogFragment
@@ -31,7 +31,7 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
     }
 
     override fun onCreateView(

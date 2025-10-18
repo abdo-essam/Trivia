@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.FragmentHomeBinding
 import com.qurio.trivia.domain.model.Category
@@ -37,7 +37,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
     private var selectedCategory: Category? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
         super.onCreate(savedInstanceState)
     }
 

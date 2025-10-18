@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.qurio.trivia.QuriοApp
+import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.FragmentOnboardingBinding
 import com.qurio.trivia.databinding.LayoutSwipeUpBinding
 import com.qurio.trivia.presentation.base.BaseFragment
@@ -30,7 +30,7 @@ class OnboardingFragment : BaseFragment<FragmentOnboardingBinding, OnboardingVie
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (requireActivity().application as QuriοApp).appComponent.inject(this)
+        (requireActivity().application as QurioApp).appComponent.inject(this)
     }
 
     override fun initViewBinding(
