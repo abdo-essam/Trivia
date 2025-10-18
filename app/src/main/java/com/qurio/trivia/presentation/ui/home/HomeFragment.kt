@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.qurio.trivia.QuriοApp
 import com.qurio.trivia.R
@@ -22,7 +21,6 @@ import com.qurio.trivia.presentation.ui.dialogs.buylife.BuyLifeDialog
 import com.qurio.trivia.presentation.ui.dialogs.characterselection.CharacterSelectionDialog
 import com.qurio.trivia.presentation.ui.dialogs.difficulty.DifficultyDialog
 import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialog
-import com.qurio.trivia.presentation.ui.game.GameFragmentArgs
 import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
@@ -32,8 +30,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     @Inject
     lateinit var homePresenter: HomePresenter
-
-    private val args: GameFragmentArgs by navArgs()
 
     private val categoryAdapter by lazy { CategoryAdapter(::onCategoryClick) }
     private val lastGamesAdapter by lazy { LastGamesAdapter() }
