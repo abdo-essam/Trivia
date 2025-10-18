@@ -9,6 +9,7 @@ import com.qurio.trivia.R
 import com.qurio.trivia.databinding.DialogBuyLifeBinding
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.buylife.manager.BuyLifeUIManager
+import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
 class BuyLifeDialog : BaseDialogFragment(), BuyLifeView {
@@ -24,8 +25,6 @@ class BuyLifeDialog : BaseDialogFragment(), BuyLifeView {
 
     companion object {
         const val TAG = "BuyLifeDialog"
-        private const val LIFE_COST = 200
-
         fun newInstance() = BuyLifeDialog()
     }
 
@@ -52,19 +51,21 @@ class BuyLifeDialog : BaseDialogFragment(), BuyLifeView {
 
     private fun initializeManagers() {
         uiManager = BuyLifeUIManager(binding)
-        uiManager.displayLifeCost(LIFE_COST)
+        uiManager.displayLifeCost(Constants.BuyLife.LIFE_COST)
     }
 
     private fun setupClickListeners() {
         binding.apply {
             btnClose.setOnClickListener { dismiss() }
             btnCancel.setOnClickListener { dismiss() }
-            btnBuy.setOnClickListener { presenter.purchaseLife(LIFE_COST) }
+            btnBuy.setOnClickListener {
+                presenter.purchaseLife(Constants.BuyLife.LIFE_COST)
+            }
         }
     }
 
     override fun updateUserCoins(coins: Int) {
-        uiManager.updateBuyButtonState(coins >= LIFE_COST)
+        uiManager.updateBuyButtonState(coins >= Constants.BuyLife.LIFE_COST)
     }
 
     override fun onPurchaseSuccess(remainingCoins: Int, remainingLives: Int) {

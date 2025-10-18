@@ -18,4 +18,9 @@ object Constants {
         const val ONE_STAR_COINS = 25
         const val LOSE_COINS = 0
     }
+
+    // Buy Life
+    object BuyLife {
+        const val LIFE_COST = 200
+    }
 }

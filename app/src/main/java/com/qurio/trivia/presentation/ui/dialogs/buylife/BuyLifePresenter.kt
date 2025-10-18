@@ -17,14 +17,12 @@ class BuyLifePresenter @Inject constructor(
             onSuccess = { coins ->
                 withView { updateUserCoins(coins) }
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Failed to load coins") }
             },
             showLoading = false
         )
     }
-
-    // ========== Purchase Life ==========
 
     fun purchaseLife(cost: Int) {
         tryToExecute(
@@ -34,14 +32,12 @@ class BuyLifePresenter @Inject constructor(
             onSuccess = { result ->
                 handlePurchaseResult(result)
             },
-            onError = { error ->
+            onError = {
                 withView { showError("Purchase Failed") }
             },
             showLoading = true
         )
     }
-
-    // ========== Handle Purchase Result ==========
 
     private fun handlePurchaseResult(result: PurchaseResult) {
         when (result) {
