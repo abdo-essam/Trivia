@@ -16,7 +16,7 @@
             <gradient
                 android:startY="0"
                 android:endY="40"
-                android:startColor="#30ABE8"
+                android:startColor="@color/primary"
                 android:endColor="#49BAF2"
                 android:type="linear" />
         </aapt:attr>
