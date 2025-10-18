@@ -76,17 +76,6 @@ object DateUtils {
     }
 
     /**
-     * Get day of week from date string (0 = Sunday, 6 = Saturday)
-     */
-    fun getDayOfWeek(dateString: String? = null): Int {
-        val calendar = Calendar.getInstance()
-        if (!dateString.isNullOrEmpty()) {
-            parseDate(dateString)?.let { calendar.time = it }
-        }
-        return calendar.get(Calendar.DAY_OF_WEEK) - 1
-    }
-
-    /**
      * Get current day of week (0 = Sunday, 6 = Saturday)
      */
     fun getCurrentDayOfWeek(): Int {
@@ -116,16 +105,4 @@ object DateUtils {
         return diffInDays == 1L
     }
 
-    /**
-     * Calculate days difference between two dates
-     */
-    fun calculateDaysDifference(fromDate: String?, toDate: String = getCurrentStreakDate()): Long {
-        if (fromDate.isNullOrEmpty()) return Long.MAX_VALUE
-
-        val from = parseDate(fromDate) ?: return Long.MAX_VALUE
-        val to = parseDate(toDate) ?: return Long.MAX_VALUE
-
-        val diffInMillis = to.time - from.time
-        return TimeUnit.MILLISECONDS.toDays(diffInMillis)
-    }
 }
