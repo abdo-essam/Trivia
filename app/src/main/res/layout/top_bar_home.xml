@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/top_bar_container"
     android:layout_width="match_parent"
-    android:layout_height="64dp"
-    >
+    android:layout_height="64dp">
 
     <!-- Content Container -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,8 +23,7 @@
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
             android:contentDescription="@string/character_image"
-            android:scaleType="fitCenter"
-            android:visibility="visible"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -36,33 +34,28 @@
             android:id="@+id/layout_welcome"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginStart="56dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_character"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintBottom_toBottomOf="@+id/iv_character"
+            app:layout_constraintStart_toEndOf="@+id/iv_character"
+            app:layout_constraintStart_toStartOf="@+id/iv_character"
+            >
 
             <TextView
                 android:id="@+id/tv_welcome"
+                style="@style/TextAppearance.Body.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:includeFontPadding="false"
-                style="@style/TextAppearance.Body.Small"
                 android:maxLines="1"
                 android:text="@string/welcome_qurio_explorer"
-                android:textColor="@color/shade_secondary"
-                />
+                android:textColor="@color/shade_secondary" />
 
             <TextView
                 android:id="@+id/tv_character_name"
+                style="@style/TextAppearance.Label.Medium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:ellipsize="end"
-                style="@style/TextAppearance.Label.Medium"
-                android:includeFontPadding="false"
+                android:layout_marginTop="4dp"
                 android:maxLines="1"
                 android:textColor="@color/shade_primary"
                 tools:text="Rika" />
@@ -78,9 +71,9 @@
             android:layout_marginEnd="16dp"
             android:scaleType="fitEnd"
             android:src="@drawable/ic_settings"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_character"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+          />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
