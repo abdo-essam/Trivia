@@ -3,10 +3,7 @@ package com.qurio.trivia.presentation.ui.home.carousel
 import androidx.viewpager2.widget.ViewPager2
 import kotlin.math.abs
 
-
 fun carouselPageTransformer(): ViewPager2.PageTransformer {
-
-
     return ViewPager2.PageTransformer { page, position ->
         val absPosition = abs(position)
 
@@ -15,14 +12,16 @@ fun carouselPageTransformer(): ViewPager2.PageTransformer {
         page.scaleX = scale
         page.scaleY = scale
 
-        // Rotation for 3D carousel effect
-        page.rotationY = -position * 25f
+        // Simple 2D rotation matching Figma design
+        // Left card: -4°, Center: 0°, Right card: +4°
+        page.rotation = position * 4f
 
-        // Slight tilt for depth
-        page.rotationX = absPosition * 10f
+        // Set pivot point for natural rotation
+        page.pivotX = page.width / 2f
+        page.pivotY = page.height / 2f
 
         // Horizontal spacing
-        page.translationX = -position * page.width * 0.25f
+        page.translationX = -position * page.width * 0.20f
 
         // Vertical lift for center card
         page.translationY = absPosition * page.height * 0.08f
@@ -37,7 +36,10 @@ fun carouselPageTransformer(): ViewPager2.PageTransformer {
         // Elevation for depth
         page.translationZ = (1f - absPosition.coerceAtMost(1f)) * 8f
 
-        // 3D perspective
-        page.cameraDistance = page.width * 12f
+        // Remove 3D effects
+        page.rotationY = 0f
+        page.rotationX = 0f
+        page.elevation = 0f
+        page.cameraDistance = page.width * 15f
     }
 }
