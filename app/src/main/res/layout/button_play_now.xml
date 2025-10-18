@@ -32,8 +32,7 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackgroundBorderless">
+            android:focusable="true">
 
             <ImageView
                 android:layout_width="6dp"

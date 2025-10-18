@@ -73,7 +73,6 @@
         android:id="@+id/btn_close"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:contentDescription="@string/back"
         android:focusable="true"

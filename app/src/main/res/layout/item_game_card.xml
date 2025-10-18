@@ -9,9 +9,10 @@
     <ImageView
         android:id="@+id/iv_category_image"
         android:layout_width="match_parent"
-        android:layout_height="366dp"
+        android:layout_height="320dp"
         android:layout_gravity="center_horizontal|top"
         android:scaleType="fitXY"
+        android:padding="4dp"
         tools:src="@drawable/category_geography" />
 
     <!-- Category Name (overlaid on image) -->
@@ -34,7 +35,7 @@
     <!-- Play Now Button Section (overlapping the bottom of the card image) -->
     <include
         layout="@layout/button_play_now_small"
-        android:layout_width="120dp"
+        android:layout_width="match_parent"
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal|bottom" />
 
