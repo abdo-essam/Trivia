@@ -1,5 +1,6 @@
 package com.qurio.trivia.presentation.base
 
+import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -60,9 +61,9 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
         }
     }
 
-    override fun dismiss() {
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
         playDialogCloseSound()
-        super.dismiss()
     }
 
     override fun getTheme(): Int = R.style.DialogTheme
