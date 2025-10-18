@@ -6,5 +6,4 @@ import com.qurio.trivia.presentation.base.BaseView
 interface SettingsView : BaseView {
     fun displaySettings(settings: Settings)
     fun onSettingsSaved()
-    fun onSettingsDiscarded()
 }

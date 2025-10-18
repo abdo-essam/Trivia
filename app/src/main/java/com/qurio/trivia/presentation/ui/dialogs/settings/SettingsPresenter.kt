@@ -3,10 +3,12 @@ package com.qurio.trivia.presentation.ui.dialogs.settings
 import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.domain.repository.SettingsRepository
 import com.qurio.trivia.presentation.base.BasePresenter
+import com.qurio.trivia.utils.sound.SoundManager
 import javax.inject.Inject
 
 class SettingsPresenter @Inject constructor(
-    private val settingsRepository: SettingsRepository
+    private val settingsRepository: SettingsRepository,
+    private val soundManager: SoundManager
 ) : BasePresenter<SettingsView>() {
 
     private var initialSettings: Settings? = null
@@ -16,6 +18,7 @@ class SettingsPresenter @Inject constructor(
             execute = { settingsRepository.getSettings() },
             onSuccess = { settings ->
                 initialSettings = settings
+                soundManager.updateVolumes(settings.musicVolume, settings.soundVolume)
                 withView { displaySettings(settings) }
             },
             onError = {
@@ -37,7 +40,10 @@ class SettingsPresenter @Inject constructor(
         }
 
         tryToExecute(
-            execute = { settingsRepository.saveSettings(newSettings) },
+            execute = {
+                settingsRepository.saveSettings(newSettings)
+                soundManager.updateVolumes(musicVolume, soundVolume)
+            },
             onSuccess = {
                 initialSettings = newSettings
                 withView { onSettingsSaved() }
@@ -47,14 +53,5 @@ class SettingsPresenter @Inject constructor(
             },
             showLoading = true
         )
-    }
-
-    fun discardChanges() {
-        initialSettings?.let { settings ->
-            withView {
-                displaySettings(settings)
-                onSettingsDiscarded()
-            }
-        } ?: withView { onSettingsDiscarded() }
     }
 }

@@ -54,9 +54,9 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener { presenter.discardChanges() }
+            btnClose.setOnClickListener { dismiss() }
             btnSave.setOnClickListener { saveSettings() }
-            btnDiscard.setOnClickListener { presenter.discardChanges() }
+            btnDiscard.setOnClickListener { dismiss() }
         }
     }
 
@@ -75,20 +75,12 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
         dismiss()
     }
 
-    override fun onSettingsDiscarded() {
-        dismiss()
-    }
-
     override fun showLoading() {
         uiManager.setControlsEnabled(false)
     }
 
     override fun hideLoading() {
         uiManager.setControlsEnabled(true)
-    }
-
-    fun setOnSettingsSavedListener(listener: (Settings) -> Unit) {
-        onSettingsSavedListener = listener
     }
 
     override fun onDestroyView() {
