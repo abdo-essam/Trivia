@@ -173,6 +173,7 @@
 
     <!-- Generic Strings -->
     <string name="how_to_get_it">How to get it:</string>
+    <string name="offline_error">Oops! It looks like you’re offline. Please check your internet connection to continue playing</string>
 
 
 </resources>

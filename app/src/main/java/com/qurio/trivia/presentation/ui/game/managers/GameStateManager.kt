@@ -39,8 +39,6 @@ class GameStateManager {
 
     fun getTotalQuestions(): Int = questions.size
 
-    fun hasQuestions(): Boolean = questions.isNotEmpty()
-
     fun moveToNextQuestion(): Boolean {
         currentQuestionIndex++
         return currentQuestionIndex < questions.size
@@ -84,8 +82,6 @@ class GameStateManager {
     }
 
     fun hasLives(): Boolean = currentLives > 0
-
-    fun getLives(): Int = currentLives
 
     fun getElapsedTime(): Long {
         return System.currentTimeMillis() - gameStartTime

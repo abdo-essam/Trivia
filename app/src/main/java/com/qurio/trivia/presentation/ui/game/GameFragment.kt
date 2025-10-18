@@ -101,6 +101,11 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         )
     }
 
+    override fun onRetryConnection() {
+        super.onRetryConnection()
+        loadQuestions()
+    }
+
     private fun handleAnswerClick(position: Int) {
         if (stateManager.selectedAnswerIndex == position) return
 
@@ -150,6 +155,7 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         uiManager.disableAnswerButtons()
         uiManager.showNextButton()
     }
+
     override fun navigateToResults(
         correctAnswers: Int,
         incorrectAnswers: Int,
@@ -174,6 +180,11 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         timerManager.stop()
         uiManager.disableAnswerButtons()
         showBuyLifeDialog()
+    }
+
+    override fun showNoConnection() {
+        timerManager.stop()
+        super.showNoConnection()
     }
 
     private fun showBuyLifeDialog() {
@@ -201,4 +212,3 @@ class GameFragment : BaseFragment<FragmentGameBinding, GameView, GamePresenter>(
         super.onDestroyView()
     }
 }
-
