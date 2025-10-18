@@ -12,10 +12,14 @@ class CarouselConfigurator(
     }
 
     private fun setupViewPager() {
+
+
         viewPager.apply {
             offscreenPageLimit = 3
+
             setPageTransformer(carouselPageTransformer())
 
+            // Smooth scrolling
             (getChildAt(0) as? RecyclerView)?.overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         }
     }
