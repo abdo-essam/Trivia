@@ -2,10 +2,10 @@ package com.qurio.trivia.utils.sound
 
 import android.content.Context
 import android.media.AudioAttributes
-import android.media.MediaPlayer
 import android.media.SoundPool
 import androidx.annotation.RawRes
 import com.qurio.trivia.R
+import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -13,12 +13,9 @@ import javax.inject.Singleton
 class SoundManager @Inject constructor(
     private val context: Context
 ) {
-    private var musicPlayer: MediaPlayer? = null
     private var soundPool: SoundPool? = null
     private val soundIds = mutableMapOf<Int, Int>()
-
-    private var musicVolume: Float = 0.6f
-    private var soundVolume: Float = 0.8f
+    private var soundVolume: Float = Constants.Settings.DEFAULT_VOLUME / 100f
 
     init {
         initializeSoundPool()
@@ -38,34 +35,22 @@ class SoundManager @Inject constructor(
     }
 
     private fun loadSounds() {
-        soundIds[SOUND_CORRECT] = soundPool?.load(context, R.raw.correct, 1) ?: 0
-        soundIds[SOUND_WRONG] = soundPool?.load(context, R.raw.wrong, 1) ?: 0
-        soundIds[SOUND_COINS] = soundPool?.load(context, R.raw.coins_sound, 1) ?: 0
+        soundIds[Constants.Sound.SOUND_CORRECT] = loadSound(R.raw.correct)
+        soundIds[Constants.Sound.SOUND_WRONG] = loadSound(R.raw.wrong)
+        soundIds[Constants.Sound.SOUND_COINS] = loadSound(R.raw.coins_sound)
+        soundIds[Constants.Sound.SOUND_DIALOG_OPEN] = loadSound(R.raw.board_pop_up)
+        soundIds[Constants.Sound.SOUND_DIALOG_CLOSE] = loadSound(R.raw.pop_sound)
     }
 
-    fun updateVolumes(newSoundVolume: Float, newMusicVolume: Float) {
-        soundVolume = (newSoundVolume / 100f).coerceIn(0f, 1f)
-        musicVolume = (newMusicVolume / 100f).coerceIn(0f, 1f)
-
-        musicPlayer?.setVolume(musicVolume, musicVolume)
+    private fun loadSound(@RawRes resId: Int): Int {
+        return soundPool?.load(context, resId, 1) ?: 0
     }
 
-    fun playBackgroundMusic(@RawRes resId: Int, loop: Boolean = true) {
-        try {
-            stopMusic()
-
-            musicPlayer = MediaPlayer.create(context, resId).apply {
-                isLooping = loop
-                setVolume(musicVolume, musicVolume)
-                setOnErrorListener { _, _, _ ->
-                    release()
-                    true
-                }
-                start()
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+    fun updateVolume(newVolume: Float) {
+        soundVolume = (newVolume / 100f).coerceIn(
+            Constants.Settings.MIN_VOLUME / 100f,
+            Constants.Settings.MAX_VOLUME / 100f
+        )
     }
 
     fun playSound(soundId: Int) {
@@ -74,32 +59,9 @@ class SoundManager @Inject constructor(
         }
     }
 
-    fun pauseMusic() {
-        musicPlayer?.pause()
-    }
-
-    fun resumeMusic() {
-        musicPlayer?.start()
-    }
-
-    fun stopMusic() {
-        musicPlayer?.apply {
-            stop()
-            release()
-        }
-        musicPlayer = null
-    }
-
     fun release() {
-        stopMusic()
         soundPool?.release()
         soundPool = null
         soundIds.clear()
-    }
-
-    companion object {
-        const val SOUND_CORRECT = 2
-        const val SOUND_WRONG = 3
-        const val SOUND_COINS = 4
     }
 }

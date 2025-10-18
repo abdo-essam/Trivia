@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.qurio.trivia.QurioApp
 import com.qurio.trivia.databinding.DialogSettingsBinding
-import com.qurio.trivia.domain.model.Settings
 import com.qurio.trivia.presentation.base.BaseDialogFragment
 import com.qurio.trivia.presentation.ui.dialogs.settings.manager.SettingsUIManager
+import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
 class SettingsDialog : BaseDialogFragment(), SettingsView {
@@ -20,12 +20,11 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     lateinit var presenter: SettingsPresenter
 
     private lateinit var uiManager: SettingsUIManager
-    private var onSettingsSavedListener: ((Settings) -> Unit)? = null
+    private var onSettingsSavedListener: ((Float) -> Unit)? = null
 
-    private var initialSettings: Settings? = null
+    private var initialVolume: Float? = null
 
     companion object {
-        const val TAG = "SettingsDialog"
         fun newInstance() = SettingsDialog()
     }
 
@@ -46,7 +45,7 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
     override fun setupViews() {
         initializeManagers()
         setupClickListeners()
-        setupSeekBarListeners()
+        setupSeekBarListener()
         presenter.attachView(this)
         presenter.loadSettings()
     }
@@ -57,48 +56,40 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     private fun setupClickListeners() {
         binding.apply {
-            btnClose.setOnClickListener {
-                discardChanges()
-            }
-
-            btnSave.setOnClickListener {
-                saveSettings()
-            }
-
-            btnDiscard.setOnClickListener {
-                discardChanges()
-            }
+            btnClose.setOnClickListener { discardChanges() }
+            btnSave.setOnClickListener { saveSettings() }
+            btnDiscard.setOnClickListener { discardChanges() }
         }
     }
 
-    private fun setupSeekBarListeners() {
-        uiManager.setupSeekBarListeners { soundVolume, musicVolume ->
-            presenter.updateVolumesPreview(soundVolume, musicVolume)
+    private fun setupSeekBarListener() {
+        uiManager.setupSeekBarListener { volume ->
+            presenter.updateVolumePreview(volume)
         }
     }
 
     private fun saveSettings() {
-        val settings = uiManager.getCurrentSettings()
-        presenter.saveSettings(settings.soundVolume, settings.musicVolume)
+        val volume = uiManager.getCurrentVolume()
+        presenter.saveSettings(volume)
     }
 
     private fun discardChanges() {
-        initialSettings?.let { settings ->
-            presenter.restoreSettings(settings.soundVolume, settings.musicVolume)
+        initialVolume?.let { volume ->
+            presenter.restoreVolume(volume)
         }
         dismiss()
     }
 
-    override fun displaySettings(settings: Settings) {
-        if (initialSettings == null) {
-            initialSettings = Settings.DEFAULT
+    override fun displayVolume(volume: Float) {
+        if (initialVolume == null) {
+            initialVolume = volume
         }
-        uiManager.displaySettings(settings)
+        uiManager.displayVolume(volume)
     }
 
     override fun onSettingsSaved() {
-        val settings = uiManager.getCurrentSettings()
-        onSettingsSavedListener?.invoke(settings)
+        val volume = uiManager.getCurrentVolume()
+        onSettingsSavedListener?.invoke(volume)
         dismiss()
     }
 
@@ -108,6 +99,10 @@ class SettingsDialog : BaseDialogFragment(), SettingsView {
 
     override fun hideLoading() {
         uiManager.setControlsEnabled(true)
+    }
+
+    fun setOnSettingsSavedListener(listener: (Float) -> Unit) {
+        onSettingsSavedListener = listener
     }
 
     override fun onDestroyView() {

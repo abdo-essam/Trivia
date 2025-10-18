@@ -9,20 +9,18 @@ import android.widget.Toast
 import androidx.core.graphics.drawable.toDrawable
 import androidx.fragment.app.DialogFragment
 import com.qurio.trivia.R
+import com.qurio.trivia.utils.sound.playDialogCloseSound
+import com.qurio.trivia.utils.sound.playDialogOpenSound
 
-/**
- * Base class for all dialog fragments with common functionality
- */
 abstract class BaseDialogFragment : DialogFragment(), BaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupDialog()
+        playDialogOpenSound()
         setupViews()
     }
-    /**
-     * Setup dialog window properties
-     */
+
     private fun setupDialog() {
         dialog?.window?.apply {
             setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
@@ -31,30 +29,18 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
 
-            // Add dim background
             addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
             setDimAmount(DIM_AMOUNT)
 
-            // Add animations
             attributes?.windowAnimations = R.style.DialogAnimation
         }
     }
 
-    /**
-     * Setup views - to be implemented by subclasses
-     */
     protected abstract fun setupViews()
 
+    override fun showLoading() {}
 
-    // ========== BaseView Implementation ==========
-
-    override fun showLoading() {
-        // Default implementation - can be overridden
-    }
-
-    override fun hideLoading() {
-        // Default implementation - can be overridden
-    }
+    override fun hideLoading() {}
 
     override fun showError(message: String) {
         if (isAdded) {
@@ -62,7 +48,7 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
         }
     }
 
-    fun showMessage(message: String){
+    fun showMessage(message: String) {
         if (isAdded) {
             Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
         }
@@ -72,6 +58,11 @@ abstract class BaseDialogFragment : DialogFragment(), BaseView {
         if (isAdded) {
             showError("No internet connection")
         }
+    }
+
+    override fun dismiss() {
+        playDialogCloseSound()
+        super.dismiss()
     }
 
     override fun getTheme(): Int = R.style.DialogTheme

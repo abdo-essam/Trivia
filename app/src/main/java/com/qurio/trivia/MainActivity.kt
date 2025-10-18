@@ -8,17 +8,11 @@ import androidx.navigation.fragment.NavHostFragment
 import com.qurio.trivia.databinding.ActivityMainBinding
 import com.qurio.trivia.utils.PreferenceKeys.IS_FIRST_LAUNCH
 import com.qurio.trivia.utils.PreferenceKeys.PREFS_NAME
-import com.qurio.trivia.utils.sound.SoundManager
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-
-    private val soundManager: SoundManager by lazy {
-        (application as QurioApp).soundManager
-    }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,8 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         installSplashScreen()
         setupNavigation()
-
-        soundManager.playBackgroundMusic(R.raw.app_theme_1)
     }
 
     private fun setupNavigation() {
@@ -51,21 +43,4 @@ class MainActivity : AppCompatActivity() {
         navGraph.setStartDestination(startDestination)
         navController.graph = navGraph
     }
-
-
-    override fun onPause() {
-        super.onPause()
-        soundManager.pauseMusic()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        soundManager.resumeMusic()
-    }
-
-    override fun onDestroy() {
-        soundManager.stopMusic()
-        super.onDestroy()
-    }
-
 }

@@ -23,6 +23,7 @@ import com.qurio.trivia.presentation.ui.dialogs.settings.SettingsDialog
 import com.qurio.trivia.presentation.ui.home.adapter.CategoryAdapter
 import com.qurio.trivia.presentation.ui.home.carousel.CarouselConfigurator
 import com.qurio.trivia.presentation.ui.home.managers.HomeUIManager
+import com.qurio.trivia.utils.Constants
 import javax.inject.Inject
 
 class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(), HomeView {
@@ -184,7 +185,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding, HomeView, HomePresenter>(
 
     private fun showSettingsDialog() {
         SettingsDialog.newInstance()
-            .show(childFragmentManager, SettingsDialog.TAG)
+            .show(childFragmentManager, Constants.Settings.TAG)
     }
 
     private fun navigateToAllCategories() {
