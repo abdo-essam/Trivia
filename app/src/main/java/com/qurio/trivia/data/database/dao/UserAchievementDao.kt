@@ -12,14 +12,8 @@ interface UserAchievementDao {
     @Query("SELECT * FROM user_achievements")
     suspend fun getAllAchievements(): List<UserAchievementEntity>
 
-    @Query("SELECT * FROM user_achievements WHERE achievementId = :achievementId")
-    suspend fun getAchievement(achievementId: String): UserAchievementEntity?
-
     @Query("SELECT * FROM user_achievements WHERE isUnlocked = 0")
     suspend fun getLockedAchievements(): List<UserAchievementEntity>
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertAchievement(achievement: UserAchievementEntity)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAchievements(achievements: List<UserAchievementEntity>)

@@ -15,7 +15,4 @@ interface GameResultDao {
 
     @Query("SELECT * FROM game_results ORDER BY timestamp DESC")
     suspend fun getAllGames(): List<GameResultEntity>
-
-    @Query("SELECT COUNT(*) FROM game_results")
-    suspend fun getGameCount(): Int
 }

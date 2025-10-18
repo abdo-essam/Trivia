@@ -26,11 +26,6 @@ class SettingsRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun resetToDefaults(): Settings = withContext(Dispatchers.IO) {
-        saveSettings(Settings.DEFAULT)
-        Settings.DEFAULT
-    }
-
     companion object {
         private const val KEY_SOUND_VOLUME = "sound_volume"
         private const val KEY_MUSIC_VOLUME = "music_volume"

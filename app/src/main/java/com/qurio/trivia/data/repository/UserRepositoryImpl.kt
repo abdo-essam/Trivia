@@ -26,10 +26,6 @@ class UserRepositoryImpl @Inject constructor(
         userProgressDao.getUserProgress()?.totalCoins ?: 0
     }
 
-    override suspend fun getUserLives(): Int = withContext(Dispatchers.IO) {
-        userProgressDao.getUserProgress()?.lives ?: 0
-    }
-
 
     override suspend fun updateLives(lives: Int) = withContext(Dispatchers.IO) {
         userProgressDao.updateLives(lives)
@@ -48,15 +44,6 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun updateCoins(coins: Int) = withContext(Dispatchers.IO) {
         userProgressDao.updateCoins(coins)
-    }
-
-    override suspend fun updateSelectedCharacter(character: String) = withContext(Dispatchers.IO) {
-        userProgressDao.updateSelectedCharacter(character)
-    }
-
-
-    override suspend fun updateStreak(streak: Int, date: String, days: String) = withContext(Dispatchers.IO) {
-        userProgressDao.updateStreak(streak, date, days)
     }
 
     override suspend fun checkAndUpdateStreak(): UserProgress? = withContext(Dispatchers.IO) {

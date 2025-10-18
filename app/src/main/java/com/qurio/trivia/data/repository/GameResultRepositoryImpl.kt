@@ -29,8 +29,4 @@ class GameResultRepositoryImpl @Inject constructor(
         val entities = gameResultDao.getAllGames()
         gameResultMapper.toDomainList(entities)
     }
-
-    override suspend fun getGameCount(): Int = withContext(Dispatchers.IO) {
-        gameResultDao.getGameCount()
-    }
 }

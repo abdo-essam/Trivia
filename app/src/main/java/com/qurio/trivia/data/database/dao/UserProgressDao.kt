@@ -25,7 +25,4 @@ interface UserProgressDao {
 
     @Query("UPDATE user_progress SET currentStreak = :streak, lastPlayedDate = :date, streakDays = :days WHERE id = 1")
     suspend fun updateStreak(streak: Int, date: String, days: String)
-
-    @Query("SELECT currentStreak FROM user_progress WHERE id = 1")
-    suspend fun getCurrentStreak(): Int?
 }
