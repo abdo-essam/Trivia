@@ -5,6 +5,7 @@ import com.qurio.trivia.data.mapper.UserProgressMapper
 import com.qurio.trivia.domain.model.PurchaseResult
 import com.qurio.trivia.domain.model.UserProgress
 import com.qurio.trivia.domain.repository.UserRepository
+import com.qurio.trivia.utils.DateUtils
 import com.qurio.trivia.utils.StreakHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -18,14 +19,12 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
 
     override suspend fun getUserProgress(): UserProgress? = withContext(Dispatchers.IO) {
-        val entity = userProgressDao.getUserProgress()
-        entity?.let { userProgressMapper.toDomain(it) }
+        userProgressDao.getUserProgress()?.let { userProgressMapper.toDomain(it) }
     }
 
     override suspend fun getUserCoins(): Int = withContext(Dispatchers.IO) {
         userProgressDao.getUserProgress()?.totalCoins ?: 0
     }
-
 
     override suspend fun updateLives(lives: Int) = withContext(Dispatchers.IO) {
         userProgressDao.updateLives(lives)
@@ -49,13 +48,24 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun checkAndUpdateStreak(): UserProgress? = withContext(Dispatchers.IO) {
         val entity = userProgressDao.getUserProgress() ?: return@withContext null
 
-        if (StreakHelper.shouldResetStreak(entity.lastPlayedDate)) {
-            userProgressDao.updateStreak(
-                streak = 0,
-                date = "",
-                days = ""
-            )
+        // If already updated today, skip
+        if (DateUtils.isToday(entity.lastPlayedDate)) {
+            return@withContext getUserProgress()
         }
+
+        // Calculate new streak based on last played date
+        val newStreakData = StreakHelper.calculateNewStreak(
+            lastPlayedDate = entity.lastPlayedDate,
+            currentStreak = entity.currentStreak,
+            streakDays = entity.streakDays
+        )
+
+        // Update database
+        userProgressDao.updateStreak(
+            streak = newStreakData.streak,
+            date = newStreakData.date,
+            days = newStreakData.days
+        )
 
         getUserProgress()
     }
@@ -68,12 +78,10 @@ class UserRepositoryImpl @Inject constructor(
             val currentCoins = userProgress.totalCoins
             val currentLives = userProgress.lives
 
-            // Validate sufficient funds
             if (currentCoins < cost) {
                 return@withContext PurchaseResult.InsufficientCoins(currentCoins, cost)
             }
 
-            // Process purchase
             val newCoins = currentCoins - cost
             val newLives = currentLives + 1
 

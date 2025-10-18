@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.qurio.trivia.R
 import com.qurio.trivia.databinding.ItemLastGameBinding
 import com.qurio.trivia.domain.model.GameResult
-import com.qurio.trivia.utils.FormatUtils
+import com.qurio.trivia.utils.DateUtils
 
 class LastGamesAdapter : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHolder>(LastGameDiffCallback()) {
 
@@ -32,11 +32,11 @@ class LastGamesAdapter : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHo
 
         fun bind(gameResult: GameResult) {
             binding.apply {
-                tvDate.text = FormatUtils.formatDate(gameResult.date)
+                tvDate.text = DateUtils.formatDate(gameResult.date)
                 tvCategory.text = gameResult.category
 
                 val coinsValue = gameResult.coins
-                tvCoins.text = FormatUtils.formatCoins(coinsValue)
+                tvCoins.text = DateUtils.formatCoins(coinsValue)
                 tvCoins.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,
@@ -45,7 +45,7 @@ class LastGamesAdapter : ListAdapter<GameResult, LastGamesAdapter.LastGameViewHo
                 )
 
                 tvStars.text = gameResult.stars.toString()
-                tvTime.text = FormatUtils.formatTime(gameResult.timeTaken)
+                tvTime.text = DateUtils.formatTime(gameResult.timeTaken)
             }
         }
     }

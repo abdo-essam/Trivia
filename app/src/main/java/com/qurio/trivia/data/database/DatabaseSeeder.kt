@@ -3,7 +3,6 @@ package com.qurio.trivia.data.database
 import com.qurio.trivia.data.database.dao.UserProgressDao
 import com.qurio.trivia.data.database.entity.UserProgressEntity
 import com.qurio.trivia.domain.model.Character
-import com.qurio.trivia.utils.StreakHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -26,10 +25,7 @@ class DatabaseSeeder @Inject constructor(
                     id = 1,
                     lives = 50,
                     totalCoins = 10001,
-                    selectedCharacter = Character.default().characterName,
-                    currentStreak = 1,
-                    lastPlayedDate = StreakHelper.getCurrentDate(), // Today
-                    streakDays = "0"
+                    selectedCharacter = Character.default().characterName
                 )
             )
         }

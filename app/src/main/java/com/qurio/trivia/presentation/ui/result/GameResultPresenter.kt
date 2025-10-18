@@ -5,7 +5,7 @@ import com.qurio.trivia.domain.repository.AchievementsRepository
 import com.qurio.trivia.domain.repository.GameResultRepository
 import com.qurio.trivia.domain.repository.UserRepository
 import com.qurio.trivia.presentation.base.BasePresenter
-import com.qurio.trivia.utils.FormatUtils
+import com.qurio.trivia.utils.DateUtils
 import javax.inject.Inject
 
 class GameResultPresenter @Inject constructor(
@@ -74,7 +74,7 @@ class GameResultPresenter @Inject constructor(
     ): GameResult {
         return GameResult(
             id = 0L,
-            date = FormatUtils.getCurrentFormattedDate(),
+            date = DateUtils.getCurrentFormattedDate(),
             category = category,
             totalQuestions = correctAnswers + incorrectAnswers + skippedAnswers,
             correctAnswers = correctAnswers,

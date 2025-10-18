@@ -81,13 +81,15 @@ class HomePresenter @Inject constructor(
         )
     }
 
+
     fun checkAndUpdateStreak() {
         tryToExecute(
             execute = {
                 userRepository.checkAndUpdateStreak()
             },
-            onSuccess = {},
-            onError = {},
+            onSuccess = {
+                loadUserProgress()
+            },
             showLoading = false
         )
     }
