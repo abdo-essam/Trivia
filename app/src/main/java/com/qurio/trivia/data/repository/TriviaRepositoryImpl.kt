@@ -5,7 +5,7 @@ import com.qurio.trivia.data.remote.TriviaApiService
 import com.qurio.trivia.domain.repository.TriviaRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.io.IOException
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,46 +27,14 @@ class TriviaRepositoryImpl @Inject constructor(
             )
 
             if (response.isSuccessful && response.body() != null) {
-                val triviaResponse = response.body()!!
-                handleApiResponse(triviaResponse)
+                Result.success(response.body()!!)
             } else {
-                Result.failure(
-                    ApiException("HTTP ${response.code()}: ${response.message()}")
-                )
+                Result.failure(Exception("Failed to fetch questions"))
             }
-        } catch (e: IOException) {
-            Result.failure(NetworkException("Network error occurred", e))
+        } catch (e: UnknownHostException) {
+            Result.failure(Exception("No internet connection"))
         } catch (e: Exception) {
-            Result.failure(ApiException("Unexpected error: ${e.message}"))
+            Result.failure(Exception("An error occurred"))
         }
-    }
-
-    private fun handleApiResponse(response: TriviaResponse): Result<TriviaResponse> {
-        return when (response.responseCode) {
-            RESPONSE_CODE_SUCCESS -> Result.success(response)
-            RESPONSE_CODE_NO_RESULTS -> Result.failure(
-                NoQuestionsException("No questions found for the given parameters")
-            )
-            RESPONSE_CODE_INVALID_PARAMETER -> Result.failure(
-                InvalidParameterException("Invalid parameter in request")
-            )
-            RESPONSE_CODE_TOKEN_NOT_FOUND -> Result.failure(
-                TokenNotFoundException("Session token not found")
-            )
-            RESPONSE_CODE_TOKEN_EMPTY -> Result.failure(
-                TokenEmptyException("Session token has returned all possible questions")
-            )
-            else -> Result.failure(
-                UnknownApiException("Unknown API response code: ${response.responseCode}")
-            )
-        }
-    }
-
-    companion object {
-        private const val RESPONSE_CODE_SUCCESS = 0
-        private const val RESPONSE_CODE_NO_RESULTS = 1
-        private const val RESPONSE_CODE_INVALID_PARAMETER = 2
-        private const val RESPONSE_CODE_TOKEN_NOT_FOUND = 3
-        private const val RESPONSE_CODE_TOKEN_EMPTY = 4
     }
 }
