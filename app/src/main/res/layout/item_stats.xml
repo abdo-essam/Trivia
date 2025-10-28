@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/stats_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginTop="24dp"
+    android:paddingBottom="8dp"
+    android:clipChildren="false"
+    android:clipToPadding="false">
+
+    <!-- ========================================= -->
+    <!-- LIVES SECTION                             -->
+    <!-- ========================================= -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/stats_lives_container"
+        android:layout_width="98dp"
+        android:layout_height="52dp"
+        android:background="@drawable/bg_stats_lives"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/stats_points_container"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- Label -->
+        <TextView
+            android:id="@+id/tv_lives_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lives"
+            android:textAppearance="@style/TextAppearance.Label.XSmall"
+            android:textColor="@color/shade_tertiary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Icon & Count -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_lives_label">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/lives"
+                android:src="@drawable/ic_heart" />
+
+            <TextView
+                android:id="@+id/tv_lives"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textAppearance="@style/TextAppearance.Label.Medium"
+                android:textColor="@color/shade_primary"
+                tools:text="4" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Lives Glow Indicator -->
+    <View
+        android:id="@+id/lives_glow"
+        android:layout_width="48dp"
+        android:layout_height="2dp"
+        android:background="@drawable/statistics_indicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/stats_lives_container"
+        app:layout_constraintStart_toStartOf="@id/stats_lives_container" />
+
+    <!-- ========================================= -->
+    <!-- POINTS SECTION                            -->
+    <!-- ========================================= -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/stats_points_container"
+        android:layout_width="143dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_stats_points"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/stats_awards_container"
+        app:layout_constraintStart_toEndOf="@id/stats_lives_container">
+
+        <!-- Label -->
+        <TextView
+            android:id="@+id/tv_points_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/points"
+            android:textAppearance="@style/TextAppearance.Label.XSmall"
+            android:textColor="@color/shade_tertiary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Icon & Count -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_points_label">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:contentDescription="@string/coins"
+                android:src="@drawable/ic_coin_stack" />
+
+            <TextView
+                android:id="@+id/tv_coins"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textAppearance="@style/TextAppearance.Label.Medium"
+                android:textColor="@color/shade_primary"
+                tools:text="5,400" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Points Glow Indicator -->
+    <View
+        android:id="@+id/points_glow"
+        android:layout_width="67dp"
+        android:layout_height="2dp"
+        android:background="@drawable/statistics_indicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/stats_points_container"
+        app:layout_constraintStart_toStartOf="@id/stats_points_container" />
+
+    <!-- ========================================= -->
+    <!-- AWARDS SECTION                            -->
+    <!-- ========================================= -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/stats_awards_container"
+        android:layout_width="98dp"
+        android:layout_height="52dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_stats_awards"
+        android:clickable="true"
+        android:focusable="true"
+        android:paddingHorizontal="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="6dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/stats_points_container">
+
+        <!-- Label -->
+        <TextView
+            android:id="@+id/tv_awards_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/awards"
+            android:textAppearance="@style/TextAppearance.Label.XSmall"
+            android:textColor="@color/shade_tertiary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Icon, Count & Arrow Button -->
+        <LinearLayout
+            android:id="@+id/awards_value_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_awards_label">
+
+            <!-- Trophy Icon -->
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/awards"
+                android:src="@drawable/ic_trophy" />
+
+            <!-- Count -->
+            <TextView
+                android:id="@+id/tv_awards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textAppearance="@style/TextAppearance.Label.Medium"
+                android:textColor="@color/shade_primary"
+                tools:text="2" />
+
+            <!-- Arrow Button (Beside count) -->
+            <ImageView
+                android:id="@+id/iv_view_awards"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="8dp"
+                android:contentDescription="@string/view_awards"
+                android:src="@drawable/ic_back_arrow" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Awards Glow Indicator -->
+    <View
+        android:id="@+id/awards_glow"
+        android:layout_width="48dp"
+        android:layout_height="2dp"
+        android:background="@drawable/statistics_indicator"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/stats_awards_container"
+        app:layout_constraintStart_toStartOf="@id/stats_awards_container" />
+
+    <!-- ============================================== -->
+    <!-- FLOATING BUTTONS/ICONS (Above Cards)          -->
+    <!-- ============================================== -->
+
+    <!-- Add Life Button (Top-left of Lives card) -->
+    <ImageView
+        android:id="@+id/iv_add_life"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="-3dp"
+        android:layout_marginBottom="-18dp"
+        android:elevation="4dp"
+        android:contentDescription="@string/add_life"
+        android:src="@drawable/ic_add"
+        app:layout_constraintBottom_toTopOf="@id/stats_lives_container"
+        app:layout_constraintStart_toStartOf="@id/stats_lives_container" />
+
+    <!-- Crown (Top center of Points card - Conditional) -->
+    <ImageView
+        android:id="@+id/iv_crown"
+        android:layout_width="24dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="-10dp"
+        android:elevation="4dp"
+        android:contentDescription="@string/crown"
+        android:src="@drawable/ic_crown_points"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/stats_points_container"
+        app:layout_constraintEnd_toEndOf="@id/stats_points_container"
+        app:layout_constraintStart_toStartOf="@id/stats_points_container"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

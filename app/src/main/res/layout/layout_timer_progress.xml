@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="32dp"
+        android:layout_gravity="start|center_vertical"
+        android:src="@drawable/ic_timer_arrow_left"
+        app:tint="@color/orange" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="18dp"
+        android:background="@drawable/bg_timer_track">
+
+        <ProgressBar
+            android:id="@+id/progress_timer"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="60000"
+            android:progress="60000"
+            android:progressDrawable="@drawable/progress_timer_drawable" />
+
+        <TextView
+            android:id="@+id/tv_timer"
+            style="@style/TextAppearance.Label.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="@color/on_primary"
+            tools:text="55 Sec" />
+    </FrameLayout>
+
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="32dp"
+        android:layout_gravity="end|center_vertical"
+        android:src="@drawable/ic_timer_arrow_right"
+        app:tint="@color/orange" />
+
+</FrameLayout>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/progress">
+        <clip android:clipOrientation="horizontal">
+            <shape android:shape="rectangle">
+                <size android:height="18dp" />
+            </shape>
+        </clip>
+    </item>
+    <item android:id="@android:id/progress">
+        <clip
+            android:clipOrientation="horizontal"
+            android:drawable="@drawable/vec_timer_fill" />
+    </item>
+</layer-list>

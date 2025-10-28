@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Background Border Shape -->
+    <ImageView
+        android:id="@+id/corners_cut_shape"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="13dp"
+        android:contentDescription="@string/card_background"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_dialog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Left Gradient -->
+    <View
+        android:id="@+id/gradient_left"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:rotation="180"
+        android:translationX="5dp"
+        app:layout_constraintDimensionRatio="56:1"
+        app:layout_constraintEnd_toStartOf="@id/heptagon_shape"
+        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+
+    <!-- Right Gradient -->
+    <View
+        android:id="@+id/gradient_right"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@drawable/bg_gradient_blue_fade"
+        android:translationX="-5dp"
+        app:layout_constraintDimensionRatio="56:1"
+        app:layout_constraintStart_toEndOf="@id/heptagon_shape"
+        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+
+    <!-- Heptagon Title Background -->
+    <ImageView
+        android:id="@+id/heptagon_shape"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:contentDescription="@null"
+        android:src="@drawable/heptagon_shape"
+        app:layout_constraintDimensionRatio="145:40"
+        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title Text -->
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        style="@style/TextAppearance.Title.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/character"
+        android:textColor="@color/on_primary"
+        app:layout_constraintBottom_toBottomOf="@id/heptagon_shape"
+        app:layout_constraintEnd_toEndOf="@id/heptagon_shape"
+        app:layout_constraintStart_toStartOf="@id/heptagon_shape"
+        app:layout_constraintTop_toTopOf="@id/heptagon_shape" />
+
+    <!-- Close Button -->
+    <ImageView
+        android:id="@+id/btn_close"
+        android:layout_width="22dp"
+        android:layout_height="26dp"
+        android:clickable="true"
+        android:contentDescription="@string/back"
+        android:focusable="true"
+        android:src="@drawable/ic_cancel"
+        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintTop_toTopOf="@id/corners_cut_shape" />
+
+    <!-- Character Info Card -->
+    <View
+        android:id="@+id/view_character_card"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/bg_character_card"
+        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintTop_toBottomOf="@id/heptagon_shape" />
+
+    <!-- Character Name -->
+    <TextView
+        android:id="@+id/tv_character_name"
+        style="@style/TextAppearance.Title.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="7dp"
+        android:maxLines="1"
+        android:textColor="@color/shade_primary"
+        tools:text="Rika"
+        app:layout_constraintStart_toStartOf="@id/view_character_card"
+        app:layout_constraintTop_toTopOf="@id/view_character_card" />
+
+    <!-- Character Age -->
+    <TextView
+        android:id="@+id/tv_character_age"
+        style="@style/TextAppearance.Label.XSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:maxLines="1"
+        android:textColor="@color/shade_secondary"
+        tools:text="Age: 12 Sunblooms"
+        app:layout_constraintBottom_toBottomOf="@id/view_character_card"
+        app:layout_constraintStart_toStartOf="@id/tv_character_name"
+        app:layout_constraintTop_toBottomOf="@id/tv_character_name" />
+
+    <!-- Character Image -->
+    <ImageView
+        android:id="@+id/iv_character"
+        android:layout_width="47dp"
+        android:layout_height="80dp"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="@string/character_image"
+        tools:src="@drawable/kaiyo_info"
+        app:layout_constraintBottom_toBottomOf="@id/view_character_card"
+        app:layout_constraintEnd_toEndOf="@id/view_character_card" />
+
+    <!-- Character Description -->
+    <TextView
+        android:id="@+id/tv_character_description"
+        style="@style/TextAppearance.Body.Small"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="24dp"
+        android:textColor="@color/shade_secondary"
+        tools:text="Nature's little explorer! Rika talks to mushrooms and swears squirrels give her battle advice. Always ready for an adventure."
+        app:layout_constraintBottom_toTopOf="@id/btn_ok"
+        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintStart_toStartOf="@id/corners_cut_shape"
+        app:layout_constraintTop_toBottomOf="@id/view_character_card" />
+
+    <!-- OK Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_ok"
+        style="@style/TextAppearance.Label.Medium"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/bg_button_secondary"
+        android:text="@string/ok"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toBottomOf="@id/corners_cut_shape"
+        app:layout_constraintEnd_toEndOf="@id/corners_cut_shape"
+        app:layout_constraintStart_toStartOf="@id/corners_cut_shape" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

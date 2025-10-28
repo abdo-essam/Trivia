@@ -1,36 +1,41 @@
 package com.qurio.trivia.utils
 
 object Constants {
-    const val MAX_LIVES = 4
+    const val QUESTION_TIME_LIMIT = 60000L
     const val QUESTIONS_PER_GAME = 12
-    const val QUESTION_TIME_LIMIT = 30_000L // 30 seconds
 
-    // Categories from Open Trivia DB
-    object Categories {
-        const val GENERAL_KNOWLEDGE = 9
-        const val SCIENCE_NATURE = 17
-        const val GEOGRAPHY = 22
-        const val HISTORY = 23
-        const val SPORTS = 21
-        const val FILM_TV = 11
-        const val MUSIC = 12
-        const val ART_LITERATURE = 25
-        const val FOOD_DRINK = 20
-        const val SOCIETY_CULTURE = 27
-    }
-
-    // Star ratings
     object Stars {
-        const val THREE_STARS = 3 // Perfect score
-        const val TWO_STARS = 2   // 80%+ correct
-        const val ONE_STAR = 1    // 50%+ correct
+        const val THREE_STARS = 3
+        const val TWO_STARS = 2
+        const val ONE_STAR = 1
     }
 
-    // Rewards
     object Rewards {
-        const val THREE_STAR_COINS = 500
-        const val TWO_STAR_COINS = 300
-        const val ONE_STAR_COINS = 100
-        const val LOSE_COINS = 1
+        const val THREE_STAR_COINS = 100
+        const val TWO_STAR_COINS = 50
+        const val ONE_STAR_COINS = 25
+        const val LOSE_COINS = 0
+    }
+
+    object BuyLife {
+        const val TAG = "BuyLifeDialog"
+        const val LIFE_COST = 200
+    }
+
+    object Sound {
+        const val SOUND_CORRECT = 1
+        const val SOUND_WRONG = 2
+        const val SOUND_DIALOG_OPEN = 3
+        const val SOUND_DIALOG_CLOSE = 4
+        const val SOUND_CLOCK_TICKING = 5
+        const val SOUND_CLOUD_SPREAD = 6
+    }
+
+    object Settings {
+        const val TAG = "SettingsDialog"
+        const val DEFAULT_SOUND_VOLUME = 80f
+        const val DEFAULT_MUSIC_VOLUME = 60f
+        const val MIN_VOLUME = 0f
+        const val MAX_VOLUME = 100f
     }
 }

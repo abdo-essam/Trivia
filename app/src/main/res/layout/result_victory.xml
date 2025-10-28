@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Blur Background -->
+    <ImageView
+        android:id="@+id/iv_blur_background"
+        android:layout_width="match_parent"
+        android:layout_height="154.54dp"
+        android:layout_marginHorizontal="14dp"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_result_shape" />
+
+    <!-- Ribbon with Text -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="109.76dp">
+
+        <ImageView
+            android:id="@+id/iv_ribbon_banner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:contentDescription="@null"
+            android:src="@drawable/banner_ribbon" />
+
+        <!-- Title with Shadow Effect -->
+        <TextView
+            android:id="@+id/tv_victory_title_shadow"
+            style="@style/TextAppearance.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="11.24dp"
+            android:text="@string/great_job"
+            android:textColor="#1980B2"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/tv_victory_title"
+            style="@style/TextAppearance.Headline.Medium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="8.24dp"
+            android:text="@string/great_job"
+            android:textColor="@color/on_primary" />
+
+    </FrameLayout>
+
+    <!-- Stars Container -->
+    <LinearLayout
+        android:id="@+id/layout_stars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="73dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_star1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_star2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="8dp"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_star3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/stars"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+</FrameLayout>

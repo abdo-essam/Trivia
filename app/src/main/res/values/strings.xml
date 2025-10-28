@@ -54,9 +54,6 @@
     <string name="time">Time</string>
     <string name="all">All</string>
 
-    <string name="character_image">Character avatar</string>
-    <string name="show_all">Show all</string>
-
     <!-- Streak -->
     <string name="fire_image">Fire icon</string>
     <string name="day_fire">Day fire icon</string>
@@ -65,8 +62,11 @@
     <string name="every_day_count">Every day count!</string>
     <string name="keep_it_up">KEEP IT UP!</string>
 
+    <string name="character_image">Character avatar</string>
+    <string name="loading_game">Loading Game</string>
+    <string name="show_all">Show all</string>
     <!-- Stats -->
-    <string name="lives">Lives</string>
+    <string name="lives">lives</string>
     <string name="coins">Coins</string>
     <string name="awards">Awards</string>
     <string name="crown">Crown</string>
@@ -75,4 +75,106 @@
     <string name="welcome_qurio_explorer">Welcome Qurio explorer</string>
     <string name="games">Games</string>
     <string name="last_games">Last Games</string>
+
+
+    <string name="no_games_yet">No Games Yet</string>
+    <string name="start_playing_to_see_history">Start playing to see your game history</string>
+
+    <!-- Dialogs -->
+    <string name="character">Character</string>
+    <string name="buy">Buy</string>
+    <string name="confirm">Confirm</string>
+    <string name="achievements">Achievements</string>
+    <string name="how_to_get">How to get:</string>
+    <string name="click_achievement_details">*Click on achievement to view details</string>
+    <string name="add_life">Add Life</string>
+    <string name="view_awards">View Awards</string>
+    <string name="points">Points</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="share_achievement_message">🏆 I just unlocked the "%1$s" achievement! %2$s</string>
+
+
+    <string name="insufficient_coins">Not enough coins!</string>
+
+    <!-- Results - Additional strings -->
+    <string name="share_win_with_friends">Share win with friends</string>
+    <string name="share_disappointment">Share disappointment with friends</string>
+    <string name="share_win_message">I just played %1$s trivia and got %2$d/%3$d correct! 🎉 Can you beat my score?</string>
+    <string name="share_lose_message">I just played %1$s trivia. Not my best game, but I\'ll try again! 💪</string>
+
+    <string name="timer_seconds_format">%d Sec</string>
+    <string name="question_counter">Q %1$d/%2$d</string>
+    <string name="floating_tag">Floating tag indicator</string>
+    <string name="selected">Selected</string>
+    <string name="buy_character">Buy Character</string>
+    <string name="lock_icon">Lock Icon</string>
+    <string name="ok">Ok</string>
+    <string name="difficulty_level">Difficulty Level</string>
+    <string name="buy_life">Buy Life</string>
+    <string name="x">X</string>
+    <string name="equal">=</string>
+    <string name="achievement_unlocked">Achievement Unlocked!</string>
+    <string name="unlock_achievement_first">Unlock this achievement first to share it!</string>
+    <string name="share_failed">Failed to share achievement</string>
+    <string name="onboarding_welcome_title">Welcome to Qurio</string>
+    <string name="onboarding_welcome_description">Welcome to the world of Qurio, where questions spark curiosity and prizes await the smartest. Ready to begin the challenge?</string>
+    <string name="onboarding_character_title">Choose your character</string>
+    <string name="onboarding_character_description">Each hero has their own unique style! Choose from unique characters and start your adventure in your own style.</string>
+    <string name="onboarding_challenge_title">Challenge and win</string>
+    <string name="onboarding_challenge_description">Answer quickly, earn points, and share with your friends! Each trivia category is a new experience.</string>
+    <string name="onboarding_collect_title">Collect them all!</string>
+    <string name="onboarding_collect_description">Unlock characters, earn badges, and climb the leaderboards. Qurio is merciless, but you can handle it.</string>
+
+    <!-- Day abbreviations -->
+    <string name="day_sunday_short">S</string>
+    <string name="day_monday_short">M</string>
+    <string name="day_tuesday_short">T</string>
+    <string name="day_wednesday_short">W</string>
+    <string name="day_thursday_short">Th</string>
+    <string name="day_friday_short">F</string>
+    <string name="day_saturday_short">S</string>
+
+    <string name="achievement_badge">Achievement Badge</string>
+    <string name="close_icon">Close Icon</string>
+    <string name="title">Title</string>
+    <string name="celebration">Celebration</string>
+    <string name="background_question_card">background_question_card</string>
+    <string name="header_question">header_question</string>
+    <string name="timer_decoration">timer_decoration</string>
+    <string name="timer_edge_decoration">timer_edge_decoration</string>
+    <string name="swipe_indicator">swipe_indicator</string>
+    <string name="character_avatar">character_avatar</string>
+    <string name="swipe_up_to_play">Swipe Up To Play</string>
+    <string name="previous">previous</string>
+    <string name="left_arrow">left_arrow</string>
+    <string name="righ_arrow">righ_arrow</string>
+    <string name="onboarding_illustration">onboarding_illustration</string>
+
+    <!-- Day array -->
+    <string-array name="day_labels_short">
+        <item>@string/day_sunday_short</item>
+        <item>@string/day_monday_short</item>
+        <item>@string/day_tuesday_short</item>
+        <item>@string/day_wednesday_short</item>
+        <item>@string/day_thursday_short</item>
+        <item>@string/day_friday_short</item>
+        <item>@string/day_saturday_short</item>
+    </string-array>
+
+
+    <!-- Achievement Strings -->
+    <string name="share_achievement">Share Achievement</string>
+    <string name="achievement_unlocked_message">I just unlocked the \'%1$s\' achievement in Qurio Trivia!</string>
+    <string name="can_you_unlock_it">Can you unlock it too?</string>
+
+    <!-- Character Strings -->
+    <string name="character_purchased">%1$s purchased successfully!</string>
+    <string name="insufficient_coins_message">You need %1$d more coins</string>
+
+    <!-- Generic Strings -->
+    <string name="how_to_get_it">How to get it:</string>
+    <string name="offline_error">Oops! It looks like you’re offline. Please check your internet connection to continue playing</string>
+
+
 </resources>

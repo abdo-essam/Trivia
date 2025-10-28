@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Single Glow Layer (simulates setShadowLayer) -->
+    <item
+        android:width="53dp"
+        android:height="56dp"
+        android:gravity="center">
+        <shape android:shape="oval">
+            <size
+                android:width="53dp"
+                android:height="56dp" />
+            <gradient
+                android:type="radial"
+                android:gradientRadius="16dp"
+                android:startColor="#8049BAF2"
+                android:centerColor="#4049BAF2"
+                android:endColor="#0049BAF2" />
+        </shape>
+    </item>
+
+    <!-- Hexagon Thumb -->
+    <item
+        android:width="33dp"
+        android:height="36dp"
+        android:gravity="center">
+        <vector
+            android:width="33dp"
+            android:height="36dp"
+            android:viewportWidth="33.999"
+            android:viewportHeight="36">
+            <path
+                android:fillColor="@color/primary"
+                android:pathData="M14.9999,5.1547C16.2375,4.4402 17.7623,4.4402 18.9999,5.1547L27.1242,9.8453C28.3618,10.5598 29.1242,11.8803 29.1242,13.3094V22.6906C29.1242,24.1197 28.3618,25.4402 27.1242,26.1547L18.9999,30.8453C17.7623,31.5598 16.2375,31.5598 14.9999,30.8453L6.8755,26.1547C5.6379,25.4402 4.8755,24.1197 4.8755,22.6906V13.3094C4.8755,11.8803 5.6379,10.5598 6.8755,9.8453L14.9999,5.1547Z" />
+        </vector>
+    </item>
+
+</layer-list>

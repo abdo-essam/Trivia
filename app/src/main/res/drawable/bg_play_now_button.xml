@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Hexagon shape with gradient fill and stroke -->
+    <item>
+        <shape android:shape="rectangle">
+            <!-- Gradient background (blue) -->
+            <gradient
+                android:angle="135"
+                android:startColor="#5DBBEB"
+                android:endColor="#3FA4D5"
+                android:type="linear" />
+
+            <!-- White stroke/border -->
+            <stroke
+                android:width="2dp"
+                android:color="#FFFFFF" />
+
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+
+    <!-- Inner shadow effect (optional, for depth) -->
+    <item
+        android:top="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="270"
+                android:startColor="#10000000"
+                android:endColor="#00000000"
+                android:type="linear" />
+            <corners android:radius="4dp" />
+        </shape>
+    </item>
+
+</layer-list>
